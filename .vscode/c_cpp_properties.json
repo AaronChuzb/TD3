@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "name": "ESP-IDF",
+      "compilerPath": "${config:idf.toolsPath}\\tools\\xtensa-esp32s3-elf\\esp-12.2.0_20230208\\xtensa-esp32s3-elf\\bin\\xtensa-esp32s3-elf-gcc.exe",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${config:idf.espIdfPath}/components/**",
+        "${config:idf.espIdfPathWin}/components/**",
+        "${config:idf.espAdfPath}/components/**",
+        "${config:idf.espAdfPathWin}/components/**",
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/components/espressif__esp_lcd_gc9b71/include",
+        "${workspaceFolder}/components/espressif__esp_lcd_touch/include",
+        "${workspaceFolder}/components/espressif__esp_lcd_touch_cst816s/include",
+        "${workspaceFolder}/components/lvgl",
+        "${workspaceFolder}/components/lvgl/demos",
+        "${workspaceFolder}/components/axp173/include",
+        "${workspaceFolder}/components/i2c/include"
+      ],
+      "browse": {
+        "path": [
+          "${config:idf.espIdfPath}/components",
+          "${config:idf.espIdfPathWin}/components",
+          "${config:idf.espAdfPath}/components/**",
+          "${config:idf.espAdfPathWin}/components/**",
+          "${workspaceFolder}",
+          "${workspaceFolder}/**"
+        ],
+        "limitSymbolsToIncludedHeaders": false
+      }
+    }
+  ],
+  "version": 4
+}

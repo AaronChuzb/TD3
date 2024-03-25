@@ -1,0 +1,20 @@
+idf_component_register(
+  SRC_DIRS
+  "."
+  "LCD"
+  "SD"
+  "UI"
+  "WIFI"
+  "UI/components"
+  "UI/fonts"
+  "UI/images"
+  "UI/screens"
+          
+  INCLUDE_DIRS 
+  "."
+  "LCD"
+  "SD"
+  "UI"
+  "WIFI"
+  "UI/components"
+)
