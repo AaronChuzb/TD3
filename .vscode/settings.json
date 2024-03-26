@@ -27,6 +27,8 @@
     "string_view": "c",
     "sdspi.h": "c",
     "sdmmc.h": "c",
-    "sdmmc_cmd.h": "c"
+    "sdmmc_cmd.h": "c",
+    "ledc.h": "c",
+    "compare": "c"
   }
 }

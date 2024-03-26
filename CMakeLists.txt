@@ -17,6 +17,7 @@ set(EXTRA_COMPONENT_DIRS
   "components/bmp280"
   "components/qmc5883l"
   "components/lsm6ds3"
+  "components/beep"
 )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
