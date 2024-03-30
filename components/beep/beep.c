@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-26 22:46:02
+ * @LastEditTime: 2024-03-31 00:54:23
  */
 #include "beep.h"
 
@@ -41,7 +41,7 @@ void init_beep()
   // ledc_set_fade_with_time(ledc_channel_beep[0].speed_mode,ledc_channel_beep[0].channel, 4000, 0);
   // // 开始渐变
   // ledc_fade_start(ledc_channel_beep[0].speed_mode,ledc_channel_beep[0].channel, LEDC_FADE_NO_WAIT);
-  ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_1, 2800);
+  ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_1, 0);
   
 }
 

@@ -375,7 +375,7 @@ void app_main()
   // vTaskDelay(6000 / portTICK_PERIOD_MS);
 
   init_sdmmc();
-  // init_beep();
+  init_beep();
   // printf("%d", sizeof(YUEPU));
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   vTaskDelay(3000 / portTICK_PERIOD_MS);
