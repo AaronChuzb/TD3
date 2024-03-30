@@ -268,9 +268,9 @@ void init_lcd()
   lv_init();
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
-  lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_DMA);
+  lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
   assert(buf1);
-  lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_DMA);
+  lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
   assert(buf2);
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);

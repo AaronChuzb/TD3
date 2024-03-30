@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-23 22:36:39
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-25 20:38:37
+ * @LastEditTime: 2024-03-30 20:02:51
  */
 #include "wifi.h"
 
@@ -66,11 +66,6 @@ void wifi_init_sta(void)
         .sta = {
             .ssid = EXAMPLE_ESP_WIFI_SSID,
             .password = EXAMPLE_ESP_WIFI_PASS,
-            /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (pasword len => 8).
-             * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
-             * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
-             * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
-             */
             .threshold.authmode = WIFI_AUTH_WPA2_PSK,
         },
     };
@@ -154,7 +149,7 @@ void wifi_scan_task()
 void init_wifi(void)
 {
   // wifi_scan_task();
-    //Initialize NVS
+    // Initialize NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
       ESP_ERROR_CHECK(nvs_flash_erase());

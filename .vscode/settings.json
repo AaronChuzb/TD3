@@ -12,7 +12,7 @@
     "interface/ftdi/esp32_devkitj_v1.cfg",
     "target/esp32s3.cfg"
   ],
-  "idf.portWin": "COM5",
+  "idf.portWin": "COM3",
   "idf.pythonBinPathWin": "c:\\esp-idf\\esp-idf_v5.1.2\\tools\\python_env\\idf5.1_py3.11_env\\Scripts\\python.exe",
   "idf.toolsPathWin": "c:\\esp-idf\\esp-idf_v5.1.2\\tools",
   "idf.flashType": "UART",
@@ -29,6 +29,10 @@
     "sdmmc.h": "c",
     "sdmmc_cmd.h": "c",
     "ledc.h": "c",
-    "compare": "c"
+    "compare": "c",
+    "freertos.h": "c",
+    "task.h": "c",
+    "math.h": "c",
+    "esp_system.h": "c"
   }
 }

@@ -12,13 +12,50 @@
 #include "blk.h"
 #include "bmp280.h"
 #include "ui.h"
-#include "qmc5883l.h"
 #include "lsm6ds3.h"
 #include "sdmmc.h"
 #include "wifi.h"
 #include "beep.h"
+#include "pcf8563.h"
+
+#include "esp_sntp.h"
 
 static const char *TAG = "main";
+
+static void esp_initialize_sntp(void)
+{
+  ESP_LOGI(TAG, "Initializing SNTP");
+  sntp_setoperatingmode(SNTP_OPMODE_POLL);
+  sntp_setservername(0, "ntp1.aliyun.com");
+  sntp_setservername(1, "ntp.ntsc.ac.cn");
+  sntp_init();
+}
+
+static void esp_wait_sntp_sync(void)
+{
+  char strftime_buf[64];
+  esp_initialize_sntp();
+
+  // wait for time to be set
+  time_t now = 0;
+  struct tm timeinfo = {0};
+  int retry = 0;
+
+  while (timeinfo.tm_year < (2030 - 1900))
+  {
+    ESP_LOGD(TAG, "Waiting for system time to be set... (%d)", ++retry);
+    vTaskDelay(100 / portTICK_PERIOD_MS); // 延迟100ms
+    time(&now);                           // 获得unix时间戳
+    localtime_r(&now, &timeinfo);         // 将unix时间戳转换成struct tm格式
+  }
+
+  // set timezone to China Standard Time 设置东八区
+  setenv("TZ", "CST-8", 1);
+  tzset();
+
+  strftime(strftime_buf, sizeof(strftime_buf), "%Y-%m-%d %H:%M:%S", &timeinfo); // 修改时间格式
+  ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
+}
 
 void bat_task(void *arg)
 {
@@ -250,7 +287,6 @@ struct YINFU MUSIC[512] = {
     {M6, 4 + 4 + 4},
     {P, 4}};
 
-
 struct YINFU YUEPU[128] = {
     {831, 300},
     {740, 300},
@@ -318,24 +354,39 @@ void midi_task(void *arg)
 
 void app_main()
 {
-  // init_lcd();
+
+  init_lcd();
   init_i2c();
   // i2c_scan_devices();
   init_axp173();
   init_bmp280();
   init_lsm6ds3();
+  // init_pcf8563();
   init_blk();
+  vTaskDelay(30 / portTICK_PERIOD_MS);
+  setBackLightLevel(10);
+  // vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+  // vTaskDelay(3000 / portTICK_PERIOD_MS);
+  // esp_wait_sntp_sync();
+
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // setBackLight(3000, 0);
   // vTaskDelay(6000 / portTICK_PERIOD_MS);
-  setBackLight(3000, 50);
+
   init_sdmmc();
-  init_beep();
-  printf("%d", sizeof(YUEPU));
+  // init_beep();
+  // printf("%d", sizeof(YUEPU));
+  //  vTaskDelay(6000 / portTICK_PERIOD_MS);
+  vTaskDelay(3000 / portTICK_PERIOD_MS);
   // init_wifi();
 
-  // xTaskCreate(bat_task, "bat_tash", 1024 * 2, NULL, 1, NULL);
-  xTaskCreate(midi_task, "midi_task", 1024 * 10, NULL, 2, NULL);
+  xTaskCreate(bat_task, "bat_tash", 1024 * 2, NULL, 2, NULL);
+  // xTaskCreate(midi_task, "midi_task", 1024 * 10, NULL, 2, NULL);
+  // DATATIME datetime;
+  // pcf8563_get_datetime(&datetime);
+  // ESP_LOGI(TAG, "%d", datetime.year);
+
   while (1)
   {
     // lsm6ds3_get_accelerometer

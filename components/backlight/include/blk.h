@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-20 22:25:20
+ * @LastEditTime: 2024-03-30 18:21:08
  */
 #pragma once
 
@@ -13,24 +13,18 @@ extern "C"
 {
 #endif
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <stdio.h>
-#include "driver/ledc.h"
+#include "driver/gpio.h"
 #include "esp_log.h"
+#include "esp_system.h"
 
 
-
-
-#define LEDC_HS_TIMER LEDC_TIMER_0
-#define LEDC_HS_MODE 0
-#define LEDC_HS_CH0_GPIO (20)
-#define LEDC_HS_CH0_CHANNEL LEDC_CHANNEL_0
-
-#define LEDC_TEST_CH_NUM (1)
-#define LEDC_TEST_DUTY (2000)      // 渐变的变大最终目标占空比
-#define LEDC_TEST_FADE_TIME (1000) // 变化时长
+#define BACKLIGHT_GPIO (20)
 
 void init_blk();
-void setBackLight(int time, uint16_t val);
+void setBackLightLevel(int level);
   
 
 #ifdef __cplusplus

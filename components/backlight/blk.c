@@ -1,54 +1,63 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-20 22:58:35
+ * @LastEditTime: 2024-03-30 18:21:35
  */
 #include "blk.h"
 
-ledc_channel_config_t ledc_channel[1];
+static const char *TAG = "BACKLIGHT";
+
+
+int clamp(int value, int min, int max)
+{
+  return (value < min) ? min : (value > max) ? max
+                                             : value;
+}
+
+int current = 0;
 
 void init_blk()
 {
-  ledc_timer_config_t ledc_timer = {
-      .duty_resolution = LEDC_TIMER_13_BIT, // PWM占空比分辨率
-      .freq_hz = 100,                       // PWM信号频率
-      .speed_mode = LEDC_LOW_SPEED_MODE,           // 定时器模式
-      .timer_num = LEDC_TIMER_0,           // 定时器序号
-      .clk_cfg = LEDC_AUTO_CLK,             // Auto select the source clock
-  };
-  // Set configuration of timer0 for high speed channels
-  ledc_timer_config(&ledc_timer);
-  // 配置定时器0的高速通道
-  ledc_channel_config_t ledc_channel[1] = {
-      {.channel = LEDC_HS_CH0_CHANNEL,
-       .duty = 0,
-       .gpio_num = LEDC_HS_CH0_GPIO,
-       .speed_mode = LEDC_LOW_SPEED_MODE,
-       .hpoint = 0,
-       .timer_sel = LEDC_TIMER_0}};
-
-  // 配置背光控制器
-  ledc_channel_config(&ledc_channel[0]);
-  // 初始化淡入淡出服务
-  ledc_fade_func_install(0); // 注册LEDC服务，在调用前使用，参数是作为是否允许中断
-  // 配置LEDC定时器
-  ledc_set_fade_with_time(ledc_channel[0].speed_mode,ledc_channel[0].channel, LEDC_TEST_DUTY, LEDC_TEST_FADE_TIME);
-  // 开始渐变
-  ledc_fade_start(ledc_channel[0].speed_mode,ledc_channel[0].channel, LEDC_FADE_NO_WAIT);
+  gpio_config_t io_conf;
+  // 禁用中断
+  io_conf.intr_type = GPIO_INTR_DISABLE;
+  // 设置为输出模式
+  io_conf.mode = GPIO_MODE_OUTPUT;
+  // 设置引脚
+  io_conf.pin_bit_mask = (1ULL << BACKLIGHT_GPIO);
+  // 设置为默认电平（可选）
+  io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+  io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+  gpio_config(&io_conf);
+  gpio_set_level(BACKLIGHT_GPIO, 0);
 }
 
-
-/**
- * @description: 设置背光亮度
- * @param {int} time 渐变时间
- * @param {uint16_t} val 亮度(0~100)
- * @return {*}
- */
-void setBackLight(int time, uint16_t val)
+void setBackLightLevel(int level)
 {
-  uint32_t duty = 3000 / 100 * val;
-  // 配置LEDC定时器
-  ledc_set_fade_with_time(ledc_channel[0].speed_mode,ledc_channel[0].channel, duty, time);
-  // 开始渐变
-  ledc_fade_start(ledc_channel[0].speed_mode,ledc_channel[0].channel, LEDC_FADE_NO_WAIT);
+  int value = clamp(level, 0, 15);
+  int i, num_clk, num_clk_to, num_clk_from;
+  if (value == 0)
+  {
+    gpio_set_level(BACKLIGHT_GPIO, 0);
+    vTaskDelay(3 / portTICK_PERIOD_MS);
+  }
+  else
+  {
+    if (current == 0)
+    {
+      gpio_set_level(BACKLIGHT_GPIO, 1);
+      current = 15;
+    }
+    num_clk_from = 15 - current;
+    num_clk_to = 15 - value;
+    num_clk = (15 + num_clk_to - num_clk_from) % 15;
+    for (i = 0; i < num_clk; i++)
+    {
+      gpio_set_level(BACKLIGHT_GPIO, 0);
+      gpio_set_level(BACKLIGHT_GPIO, 1);
+      if (i == 0)
+        esp_rom_delay_us(30);
+    }
+    current = value;
+  }
 }

@@ -15,9 +15,9 @@ set(EXTRA_COMPONENT_DIRS
   "components/axp173"
   "components/backlight"
   "components/bmp280"
-  "components/qmc5883l"
   "components/lsm6ds3"
   "components/beep"
+  "components/pcf8563"
 )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
