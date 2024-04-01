@@ -33,6 +33,9 @@
     "freertos.h": "c",
     "task.h": "c",
     "math.h": "c",
-    "esp_system.h": "c"
+    "esp_system.h": "c",
+    "sntp.h": "c",
+    "time.h": "c",
+    "esp_lcd_touch_cst816s.h": "c"
   }
 }

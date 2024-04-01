@@ -32,8 +32,8 @@ extern "C" {
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
-#define EXAMPLE_ESP_WIFI_SSID      "xxx"
-#define EXAMPLE_ESP_WIFI_PASS      "12345678"
+#define EXAMPLE_ESP_WIFI_SSID      "WYX"
+#define EXAMPLE_ESP_WIFI_PASS      "05210122"
 #define EXAMPLE_ESP_MAXIMUM_RETRY  5
 #define CONFIG_ESP_WIFI_AUTH_WPA_WPA2_PSK 1
 #define CONFIG_ESP_WPA3_SAE_PWE_HUNT_AND_PECK 1

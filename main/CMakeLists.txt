@@ -5,6 +5,7 @@ idf_component_register(
   "SD"
   "UI"
   "WIFI"
+  "SNTP"
   "UI/components"
   "UI/fonts"
   "UI/images"
@@ -16,5 +17,6 @@ idf_component_register(
   "SD"
   "UI"
   "WIFI"
+  "SNTP"
   "UI/components"
 )

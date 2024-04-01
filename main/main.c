@@ -17,68 +17,79 @@
 #include "wifi.h"
 #include "beep.h"
 #include "pcf8563.h"
+#include "sntp.h"
 
-#include "esp_sntp.h"
+
+
+// 定义按钮GPIO
+#define BUTTON_GPIO 41
+
+// 初始化按钮GPIO
+void button_init()
+{
+  gpio_config_t io_conf;
+  // 设置GPIO模式为输入
+  io_conf.mode = GPIO_MODE_INPUT;
+  // 设置GPIO引脚
+  io_conf.pin_bit_mask = (1ULL << BUTTON_GPIO);
+  // 使能上拉
+  io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+  gpio_config(&io_conf);
+}
+
+// 检测按钮是否被按下
+bool button_is_pressed(int gpio)
+{
+  return gpio_get_level(gpio) == 0;
+}
+
+// 任务：检测按钮并打印信息
+void button_task(void *pvParameter)
+{
+  button_init();
+  int flag = 0;
+  while (1)
+  {
+    if (button_is_pressed(BUTTON_GPIO))
+    {
+      printf("Button is pressed\n");
+      setBackLightLevel(0);
+      // flag ++;
+      // if(flag > 10 && flag < 1000){
+      //   flag = 0;
+      //   setBackLightLevel(0);
+      // }
+    }
+
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+  }
+}
 
 static const char *TAG = "main";
 
-static void esp_initialize_sntp(void)
-{
-  ESP_LOGI(TAG, "Initializing SNTP");
-  sntp_setoperatingmode(SNTP_OPMODE_POLL);
-  sntp_setservername(0, "ntp1.aliyun.com");
-  sntp_setservername(1, "ntp.ntsc.ac.cn");
-  sntp_init();
-}
 
-static void esp_wait_sntp_sync(void)
-{
-  char strftime_buf[64];
-  esp_initialize_sntp();
+// void bat_task(void *arg)
+// {
+//   while (1)
+//   {
+//     // 获取电量百分比
+//     float bat = getBatLevel();
+//     char str[10];
+//     sprintf(str, "%.1f%%", bat);
+//     lv_label_set_text(ui_W3_Num, str);
 
-  // wait for time to be set
-  time_t now = 0;
-  struct tm timeinfo = {0};
-  int retry = 0;
+//     char str1[10];
+//     float ax = lsm6ds3_get_accelerometer_x();
+//     sprintf(str1, "%.1f", ax);
+//     lv_label_set_text(ui_W1_Num, str1);
 
-  while (timeinfo.tm_year < (2030 - 1900))
-  {
-    ESP_LOGD(TAG, "Waiting for system time to be set... (%d)", ++retry);
-    vTaskDelay(100 / portTICK_PERIOD_MS); // 延迟100ms
-    time(&now);                           // 获得unix时间戳
-    localtime_r(&now, &timeinfo);         // 将unix时间戳转换成struct tm格式
-  }
-
-  // set timezone to China Standard Time 设置东八区
-  setenv("TZ", "CST-8", 1);
-  tzset();
-
-  strftime(strftime_buf, sizeof(strftime_buf), "%Y-%m-%d %H:%M:%S", &timeinfo); // 修改时间格式
-  ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
-}
-
-void bat_task(void *arg)
-{
-  while (1)
-  {
-    // 获取电量百分比
-    float bat = getBatLevel();
-    char str[10];
-    sprintf(str, "%.1f%%", bat);
-    lv_label_set_text(ui_W3_Num, str);
-
-    char str1[10];
-    float ax = lsm6ds3_get_accelerometer_x();
-    sprintf(str1, "%.1f", ax);
-    lv_label_set_text(ui_W1_Num, str1);
-
-    char str2[10];
-    float ay = lsm6ds3_get_accelerometer_y();
-    sprintf(str2, "%.1f", ay);
-    lv_label_set_text(ui_W2_Num, str2);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-  }
-}
+//     char str2[10];
+//     float ay = lsm6ds3_get_accelerometer_y();
+//     sprintf(str2, "%.1f", ay);
+//     lv_label_set_text(ui_W2_Num, str2);
+//     vTaskDelay(100 / portTICK_PERIOD_MS);
+//   }
+// }
 
 #define P 0
 #define L1 1
@@ -354,21 +365,21 @@ void midi_task(void *arg)
 
 void app_main()
 {
-
+  init_blk();
+  vTaskDelay(30 / portTICK_PERIOD_MS);
+  setBackLightLevel(0);
   init_lcd();
   init_i2c();
   // i2c_scan_devices();
   init_axp173();
   init_bmp280();
   init_lsm6ds3();
-  // init_pcf8563();
-  init_blk();
-  vTaskDelay(30 / portTICK_PERIOD_MS);
-  setBackLightLevel(10);
+  init_pcf8563();
+
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
 
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  // esp_wait_sntp_sync();
+  //
 
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // setBackLight(3000, 0);
@@ -379,9 +390,11 @@ void app_main()
   // printf("%d", sizeof(YUEPU));
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   vTaskDelay(3000 / portTICK_PERIOD_MS);
-  // init_wifi();
+  init_wifi();
+  sntp_setlocaltime();
 
-  xTaskCreate(bat_task, "bat_tash", 1024 * 2, NULL, 2, NULL);
+  // xTaskCreate(bat_task, "bat_tash", 1024 * 2, NULL, 2, NULL);
+  // xTaskCreate(button_task, "button_task", 2048 * 2, NULL, 5, NULL);
   // xTaskCreate(midi_task, "midi_task", 1024 * 10, NULL, 2, NULL);
   // DATATIME datetime;
   // pcf8563_get_datetime(&datetime);
@@ -393,6 +406,12 @@ void app_main()
     // lsm6ds3_get_accelerometer();
     // qmc5883l_raw_to_azimuth();
     // qmc5883l_azimuth_to_direction();
+    // time(&now);
+
+    // localtime_r(&now, &timeinfo);
+    // strftime(strftime_buf, sizeof(strftime_buf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+    // ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
+
     vTaskDelay(300 / portTICK_PERIOD_MS);
   }
 }

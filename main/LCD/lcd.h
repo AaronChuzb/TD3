@@ -25,7 +25,7 @@ extern "C" {
 
 
 
-#define LCD_HOST    SPI2_HOST
+#define LCD_HOST    SPI3_HOST
 #define TOUCH_HOST  I2C_NUM_0
 #define LCD_BIT_PER_PIXEL       (16)
 

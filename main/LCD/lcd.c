@@ -1,6 +1,6 @@
 #include "lcd.h"
 #include "ui.h"
-
+#include "blk.h"
 const char *TAG = "LCD";
 static SemaphoreHandle_t lvgl_mux = NULL;
 
@@ -268,9 +268,14 @@ void init_lcd()
   lv_init();
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
-  lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  // lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  // assert(buf1);
+  // lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  // assert(buf2);
+  // 内存申请到PSRAM
+  lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
   assert(buf1);
-  lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
   assert(buf2);
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);
@@ -308,6 +313,8 @@ void init_lcd()
   lvgl_mux = xSemaphoreCreateMutex();
   assert(lvgl_mux);
   xTaskCreate(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+  setBackLightLevel(10);
+  // xTaskCreatePinnedToCore(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, 1);
 
   ESP_LOGI(TAG, "运行LVGL实例\n");
 
