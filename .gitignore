@@ -1,8 +1,6 @@
 build/
 .vscode/
-# sdkconfig
-# sdkconfig.old
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/settings.json
-.vscode/tasks.json
+sdkconfig
+sdkconfig.old
+dependencies.lock
+
