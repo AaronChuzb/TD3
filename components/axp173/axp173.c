@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-20 22:42:57
+ * @LastEditTime: 2024-04-02 18:33:36
  */
 /*
  * @Date: 2024-01-31 16:12:07
@@ -165,12 +165,12 @@ void setCoulometer(enum COULOMETER_CTRL option, bool state)
   i2c_write_byte(0x34, 0xB8, buff);
 }
 
-inline uint32_t getCoulometerChargeData()
+ uint32_t getCoulometerChargeData()
 {
   return i2c_read_32bit(0x34, 0xB0);
 }
 
-inline uint32_t getCoulometerDischargeData()
+ uint32_t getCoulometerDischargeData()
 {
   return i2c_read_32bit(0x34, 0xB4);
 }
