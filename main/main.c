@@ -6,18 +6,15 @@
 
 #include <stdio.h>
 #include "lvgl.h"
-#include "lcd.h"
 #include "i2c.h"
 #include "axp173.h"
 #include "blk.h"
 #include "bmp280.h"
 #include "ui.h"
 #include "lsm6ds3.h"
-#include "sdmmc.h"
-#include "wifi.h"
+#include "HAL.h"
 #include "beep.h"
 #include "pcf8563.h"
-#include "sntp.h"
 
 
 

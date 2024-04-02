@@ -1,11 +1,8 @@
 idf_component_register(
   SRC_DIRS
   "."
-  "LCD"
-  "SD"
+  "HAL"
   "UI"
-  "WIFI"
-  "SNTP"
   "UI/components"
   "UI/fonts"
   "UI/images"
@@ -13,10 +10,7 @@ idf_component_register(
           
   INCLUDE_DIRS 
   "."
-  "LCD"
-  "SD"
+  "HAL"
   "UI"
-  "WIFI"
-  "SNTP"
   "UI/components"
 )

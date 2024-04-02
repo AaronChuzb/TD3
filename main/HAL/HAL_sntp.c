@@ -3,7 +3,7 @@
  * @LastEditors: AaronChu
  * @LastEditTime: 2024-04-01 22:33:14
  */
-#include "sntp.h"
+#include "HAL.h"
 
 void sntp_setlocaltime()
 {

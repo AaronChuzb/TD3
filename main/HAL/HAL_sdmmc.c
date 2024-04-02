@@ -1,13 +1,11 @@
 /*
  * @Date: 2024-03-09 19:37:00
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-23 22:30:27
+ * @LastEditTime: 2024-04-02 19:22:36
  */
-#include "sdmmc.h"
+#include "HAL.h"
 
 static const char *TAG = "SDMMC";
-
-// #define SOC_SDMMC_USE_GPIO_MATRIX
 
 sdmmc_card_t *card;
 
@@ -46,13 +44,8 @@ void sd_test(void)
 void init_sdmmc()
 {
   esp_err_t ret;
-
   esp_vfs_fat_sdmmc_mount_config_t mount_config = {
-#ifdef CONFIG_EXAMPLE_FORMAT_IF_MOUNT_FAILED
-      .format_if_mount_failed = true,
-#else
       .format_if_mount_failed = false,
-#endif
       .max_files = 5,
       .allocation_unit_size = 16 * 1024};
   const char mount_point[] = MOUNT_POINT;
@@ -63,12 +56,12 @@ void init_sdmmc()
   slot_config.width = 4;
   slot_config.cd = (GPIO_NUM_21);
 #ifdef SOC_SDMMC_USE_GPIO_MATRIX
-  slot_config.clk = CONFIG_EXAMPLE_PIN_CLK;
-  slot_config.cmd = CONFIG_EXAMPLE_PIN_CMD;
-  slot_config.d0 = CONFIG_EXAMPLE_PIN_D0;
-  slot_config.d1 = CONFIG_EXAMPLE_PIN_D1;
-  slot_config.d2 = CONFIG_EXAMPLE_PIN_D2;
-  slot_config.d3 = CONFIG_EXAMPLE_PIN_D3;
+  slot_config.clk = SDMMC_PIN_CLK;
+  slot_config.cmd = SDMMC_PIN_CMD;
+  slot_config.d0 = SDMMC_PIN_D0;
+  slot_config.d1 = SDMMC_PIN_D1;
+  slot_config.d2 = SDMMC_PIN_D2;
+  slot_config.d3 = SDMMC_PIN_D3;
 #endif
   slot_config.flags |= SDMMC_SLOT_FLAG_INTERNAL_PULLUP;
   ESP_LOGI(TAG, "SDIO初始化成功");
@@ -88,5 +81,4 @@ void init_sdmmc()
   //   vTaskDelay(1000 / portTICK_PERIOD_MS);
   // }
   sd_test();
-  
 }

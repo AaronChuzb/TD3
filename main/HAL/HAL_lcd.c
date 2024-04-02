@@ -1,4 +1,4 @@
-#include "lcd.h"
+#include "HAL.h"
 #include "ui.h"
 #include "blk.h"
 const char *TAG = "LCD";
