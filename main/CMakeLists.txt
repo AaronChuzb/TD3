@@ -2,15 +2,19 @@ idf_component_register(
   SRC_DIRS
   "."
   "HAL"
+  "Model"
   "View"
   "View/components"
   "View/fonts"
   "View/images"
   "View/screens"
+  "Controller"
           
   INCLUDE_DIRS 
   "."
   "HAL"
+  "Model"
   "View"
   "View/components"
+  "Controller"
 )
