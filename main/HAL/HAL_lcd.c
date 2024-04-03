@@ -6,6 +6,11 @@ static SemaphoreHandle_t lvgl_mux = NULL;
 
 static esp_lcd_touch_handle_t tp = NULL;
 
+static lv_disp_draw_buf_t disp_buf; // contains internal graphic buffer(s) called draw buffer(s)
+static lv_disp_drv_t disp_drv;      // contains callback functions
+
+esp_lcd_panel_handle_t panel_handle = NULL;
+
 static bool notify_lvgl_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx)
 {
   lv_disp_drv_t *disp_driver = (lv_disp_drv_t *)user_ctx;
@@ -178,9 +183,6 @@ static void lvgl_port_task(void *arg)
 void init_lcd()
 {
 
-  static lv_disp_draw_buf_t disp_buf; // contains internal graphic buffer(s) called draw buffer(s)
-  static lv_disp_drv_t disp_drv;      // contains callback functions
-
   ESP_LOGI(TAG, "初始化SPI总线");
 
   const spi_bus_config_t buscfg = GC9B71_PANEL_BUS_QSPI_CONFIG(PIN_NUM_LCD_PCLK,
@@ -206,7 +208,7 @@ void init_lcd()
   // Attach the LCD to the SPI bus
   esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_HOST, &io_config, &io_handle);
 
-  esp_lcd_panel_handle_t panel_handle = NULL;
+  
   const esp_lcd_panel_dev_config_t panel_config = {
       .reset_gpio_num = PIN_NUM_LCD_RST,
       .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,

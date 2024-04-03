@@ -1,9 +1,9 @@
 /*
  * @Date: 2024-04-02 21:33:12
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-03 17:12:48
+ * @LastEditTime: 2024-04-03 17:20:22
  */
-
+#include "HAL.h"
 
 #define P 0
 #define L1 1

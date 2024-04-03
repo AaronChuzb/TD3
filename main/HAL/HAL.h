@@ -49,6 +49,16 @@ extern "C" {
 
 #include "iot_button.h"
 
+#include "lvgl.h"
+#include "i2c.h"
+#include "axp173.h"
+#include "blk.h"
+#include "bmp280.h"
+#include "ui.h"
+#include "lsm6ds3.h"
+#include "beep.h"
+#include "pcf8563.h"
+
 
 
 // #define EXAMPLE_MAX_CHAR_SIZE    128
@@ -100,6 +110,9 @@ extern "C" {
 #define LVGL_TASK_MIN_DELAY_MS 1
 #define LVGL_TASK_STACK_SIZE   (8 * 1024)
 #define LVGL_TASK_PRIORITY     2
+
+// HAL
+void HAL_init();
 
 // SDMMC
 void init_sdmmc();
