@@ -12,6 +12,8 @@ extern "C" {
 #include "freertos/event_groups.h"
 #include "esp_log.h"
 #include "esp_err.h"
+#include "esp_sleep.h"
+#include "esp_pm.h"
 
 
 #include <sys/unistd.h>
@@ -44,6 +46,9 @@ extern "C" {
 
 #include "esp_lcd_gc9b71.h"
 #include "esp_lcd_touch_cst816s.h"
+
+#include "iot_button.h"
+
 
 
 // #define EXAMPLE_MAX_CHAR_SIZE    128
@@ -108,6 +113,12 @@ void init_wifi(void);
 
 // LCD
 void init_lcd(void);
+
+// BUTTON
+void button_init();
+
+// POWER
+void power_save_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -9,6 +9,7 @@ set(EXTRA_COMPONENT_DIRS
   "components/espressif__esp_lcd_touch"
   "components/espressif__esp_lcd_touch_cst816s"
   "components/espressif__esp_lvgl_port"
+  "components/espressif_button"
   "components/lvgl"
   "components/espressif__cmake_utilities"
   "components/i2c"
