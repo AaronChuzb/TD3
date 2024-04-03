@@ -84,7 +84,7 @@ extern "C" {
 
 // LCD
 
-#define LCD_HOST    SPI3_HOST
+#define LCD_HOST    SPI2_HOST
 #define TOUCH_HOST  I2C_NUM_0
 #define LCD_BIT_PER_PIXEL       (16)
 
@@ -110,7 +110,7 @@ extern "C" {
 #define LVGL_TICK_PERIOD_MS    2
 #define LVGL_TASK_MAX_DELAY_MS 500
 #define LVGL_TASK_MIN_DELAY_MS 1
-#define LVGL_TASK_STACK_SIZE   (8 * 1024)
+#define LVGL_TASK_STACK_SIZE   (4 * 1024)
 #define LVGL_TASK_PRIORITY     2
 
 // HAL
@@ -132,6 +132,7 @@ void init_lvgl_port();
 
 // BUTTON
 void button_init();
+bool button_is_pressed1(int gpio);
 
 // POWER
 void power_save_init(void);

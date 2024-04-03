@@ -31,7 +31,7 @@ esp_err_t button_gpio_init(const button_gpio_config_t *config)
         gpio_conf.pull_up_en = GPIO_PULLUP_DISABLE;
     } else {
         gpio_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-        gpio_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+        gpio_conf.pull_up_en = GPIO_PULLUP_DISABLE;
     }
     gpio_config(&gpio_conf);
 

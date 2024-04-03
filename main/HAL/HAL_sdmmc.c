@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-09 19:37:00
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-03 12:50:13
+ * @LastEditTime: 2024-04-03 20:34:58
  */
 #include "HAL.h"
 
@@ -112,5 +112,5 @@ void init_sdmmc()
   // }
   sd_test();
   // 列出所有文件
-  list_directory(MOUNT_POINT);
+  // list_directory(MOUNT_POINT);
 }

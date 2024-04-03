@@ -283,7 +283,7 @@ void init_lvgl_port()
   assert(buf2);
 
   // initialize LVGL draw buffers
-  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES);
+  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);
 
   ESP_LOGI(TAG, "注册显示驱动至LVGL");
   lv_disp_drv_init(&disp_drv);

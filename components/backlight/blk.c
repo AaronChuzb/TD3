@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-30 18:21:35
+ * @LastEditTime: 2024-04-04 01:29:40
  */
 #include "blk.h"
 
@@ -40,6 +40,7 @@ void setBackLightLevel(int level)
   {
     gpio_set_level(BACKLIGHT_GPIO, 0);
     vTaskDelay(3 / portTICK_PERIOD_MS);
+    current = 0;
   }
   else
   {
@@ -51,6 +52,7 @@ void setBackLightLevel(int level)
     num_clk_from = 15 - current;
     num_clk_to = 15 - value;
     num_clk = (15 + num_clk_to - num_clk_from) % 15;
+    printf("num_clk, %d", num_clk);
     for (i = 0; i < num_clk; i++)
     {
       gpio_set_level(BACKLIGHT_GPIO, 0);
