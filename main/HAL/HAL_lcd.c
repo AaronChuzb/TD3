@@ -6,7 +6,6 @@ static SemaphoreHandle_t lvgl_mux = NULL;
 
 static esp_lcd_touch_handle_t tp = NULL;
 
-
 static bool notify_lvgl_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx)
 {
   lv_disp_drv_t *disp_driver = (lv_disp_drv_t *)user_ctx;
@@ -273,10 +272,11 @@ void init_lcd()
   // lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
   // assert(buf2);
   // 内存申请到PSRAM
-  lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
+  lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
   assert(buf1);
-  lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
+  lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
   assert(buf2);
+
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);
 

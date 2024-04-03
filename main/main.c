@@ -360,8 +360,12 @@ void midi_task(void *arg)
   }
 }
 
+// extern lv_color_t* buf1;
+// extern lv_color_t* buf2;
+
 void app_main()
 {
+  
   init_blk();
   vTaskDelay(30 / portTICK_PERIOD_MS);
   setBackLightLevel(0);
@@ -389,6 +393,14 @@ void app_main()
   vTaskDelay(3000 / portTICK_PERIOD_MS);
   init_wifi();
   sntp_setlocaltime();
+  // 获取剩余内存大小
+    int freeHeap = esp_get_free_heap_size();
+   
+ 
+    // 打印剩余内存大小
+    printf("Free heap: %d bytes\n", freeHeap);
+    // 获取PSRAM的剩余内存大小
+    printf("PSRAM free size: %d bytes\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
 
   // xTaskCreate(bat_task, "bat_tash", 1024 * 2, NULL, 2, NULL);
   // xTaskCreate(button_task, "button_task", 2048 * 2, NULL, 5, NULL);
