@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-09 19:37:00
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-02 19:22:36
+ * @LastEditTime: 2024-04-03 12:50:13
  */
 #include "HAL.h"
 
@@ -39,6 +39,36 @@ void sd_test(void)
     *pos = '\0';
   }
   ESP_LOGI(TAG, "读出内容: '%s'", line);
+}
+
+void list_directory(const char *path)
+{
+  FF_DIR dir;
+  FILINFO fno;
+  FRESULT res;
+
+  res = f_opendir(&dir, path);
+  if (res != FR_OK)
+  {
+    printf("打开目录失败. Error: %d\n", res);
+    return;
+  }
+
+  printf("列出目录中的文件 '%s':\n", path);
+  for (;;)
+  {
+    res = f_readdir(&dir, &fno);
+    if (res != FR_OK || fno.fname[0] == 0)
+    {
+      break;
+    }
+    if (fno.fname[0] == '.')
+    {
+      continue;
+    }
+    printf("  %s\n", fno.fname);
+  }
+  f_closedir(&dir);
 }
 
 void init_sdmmc()
@@ -81,4 +111,6 @@ void init_sdmmc()
   //   vTaskDelay(1000 / portTICK_PERIOD_MS);
   // }
   sd_test();
+  // 列出所有文件
+  list_directory(MOUNT_POINT);
 }
