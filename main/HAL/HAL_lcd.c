@@ -1,6 +1,6 @@
 #include "HAL.h"
-#include "ui.h"
-#include "blk.h"
+
+
 const char *TAG = "LCD";
 static SemaphoreHandle_t lvgl_mux = NULL;
 

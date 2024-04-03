@@ -49,12 +49,14 @@ extern "C" {
 
 #include "iot_button.h"
 
+#include "ui.h"
+
 #include "lvgl.h"
 #include "i2c.h"
 #include "axp173.h"
 #include "blk.h"
 #include "bmp280.h"
-#include "ui.h"
+
 #include "lsm6ds3.h"
 #include "beep.h"
 #include "pcf8563.h"
