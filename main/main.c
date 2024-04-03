@@ -360,9 +360,6 @@ void midi_task(void *arg)
   }
 }
 
-// extern lv_color_t* buf1;
-// extern lv_color_t* buf2;
-
 void app_main()
 {
   
@@ -370,6 +367,7 @@ void app_main()
   vTaskDelay(30 / portTICK_PERIOD_MS);
   setBackLightLevel(0);
   init_lcd();
+  init_lvgl_port();
   init_i2c();
   // i2c_scan_devices();
   init_axp173();

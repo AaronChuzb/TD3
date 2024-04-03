@@ -262,7 +262,10 @@ void init_lcd()
 
   ESP_LOGI(TAG, "初始化触摸控制器");
   esp_lcd_touch_new_i2c_cst816s(tp_io_handle, &tp_cfg, &tp);
+}
 
+void init_lvgl_port()
+{
   ESP_LOGI(TAG, "初始化LVGL");
   lv_init();
   // alloc draw buffers used by LVGL

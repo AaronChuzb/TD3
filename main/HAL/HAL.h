@@ -113,6 +113,7 @@ void init_wifi(void);
 
 // LCD
 void init_lcd(void);
+void init_lvgl_port();
 
 // BUTTON
 void button_init();
