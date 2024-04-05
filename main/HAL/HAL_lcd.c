@@ -1,6 +1,7 @@
 #include "HAL.h"
 
 
+
 const char *TAG = "LCD";
 static SemaphoreHandle_t lvgl_mux = NULL;
 
@@ -272,18 +273,20 @@ void init_lvgl_port()
   lv_init();
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
-  // lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
-  // assert(buf1);
-  // lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
-  // assert(buf2);
-  // 内存申请到PSRAM
-  lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
+  // 只要开了DMA这里申请的内存都在片内
+  lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf1);
-  lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
+  lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf2);
+  
+  // 只要开了DMA这里申请的内存都在片内
+  // lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t) / 4, MALLOC_CAP_DMA);
+  // assert(buf1);
+  // lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t) / 4, MALLOC_CAP_DMA);
+  // assert(buf2);
 
   // initialize LVGL draw buffers
-  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);
+  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 4);
 
   ESP_LOGI(TAG, "注册显示驱动至LVGL");
   lv_disp_drv_init(&disp_drv);
@@ -317,7 +320,11 @@ void init_lvgl_port()
 
   lvgl_mux = xSemaphoreCreateMutex();
   assert(lvgl_mux);
-  xTaskCreate(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+   // Allocate memory for task stack
+  
+  // xTaskCreate(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
+  // 将堆栈放到外部内存使用
+  xTaskCreateWithCaps(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, MALLOC_CAP_SPIRAM);
   setBackLightLevel(10);
   // xTaskCreatePinnedToCore(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, 1);
 
@@ -330,7 +337,7 @@ void init_lvgl_port()
     // lv_demo_music();        /* A modern, smartphone-like music player demo. */
     // lv_demo_stress();       /* A stress test for LVGL. */
     // lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
-    ui_init();
+    init_view();
     // Release the mutex
     lvgl_unlock();
   }

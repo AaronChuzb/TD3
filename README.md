@@ -67,3 +67,33 @@
 │  sdkconfig.temp  
 ```
 
+# 项目开发过程的问题记录
+
+## lvgl使用fatfs
+
+1. menuconfig勾选
+
+`3rd Party Libraries`目录下`File system on top of FatFS`，同时`Set an upper cased letter on which the drive will accessible (e.g. 'A' i.e. 65)
+`改成`48`，`>0 to cache this number of bytes in lv_fs_read()`改成`10240`也就是10k
+
+2. cmake修改
+
+`components\lvgl\env_support\cmake\esp.cmake`这个文件内需要在`idf_component_register`的`REQUIRES`内添加`fatfs`才不会报`ff.h`文件找不到的问题
+
+3. 解决` unknown type name 'DIR';`问题
+
+`components\lvgl\src\extra\libs\fsdrv\lv_fs_fatfs.c`文件添加头文件`#include <dirent.h>`
+
+## FreeRTOS如何使用外部内存的问题
+
+参考[官方文档](https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/migration-guides/release-5.x/5.1/system.html)的说明，由于允许将 FreeRTOS 对象（如队列和信号量）放置在外部 RAM 中可能会出现问题，例如如果在访问这些对象时 cache 被禁用（如在 SPI flash 写入操作期间），则会导致 cache 访问错误（详细信息请参阅 严重错误）。
+
+但是需要使用外部内存堆栈的原因是给lvgl创建刷新任务，是任务所以不会存在产生严重错误的问题。
+
+根据附加API的说法添加freertos/esp_additions/include/freertos/idf_additions.h 头文件，包含了 ESP-IDF 添加的与 FreeRTOS 相关的辅助函数。通过 #include "freertos/idf_additions.h" 可添加此头文件。然后就可以使用xTaskCreateWithCaps创建任务。相比于动态创建任务只需要在最后添加一个申请内存方式即可
+
+
+
+
+
+

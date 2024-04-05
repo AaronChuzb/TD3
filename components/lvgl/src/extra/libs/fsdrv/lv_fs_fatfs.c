@@ -8,6 +8,7 @@
  *********************/
 #include "../../../lvgl.h"
 
+#include <dirent.h>
 #if LV_USE_FS_FATFS
 #include "ff.h"
 

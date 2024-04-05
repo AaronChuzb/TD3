@@ -4,10 +4,8 @@ idf_component_register(
   "HAL"
   "Model"
   "View"
-  "View/components"
-  "View/fonts"
-  "View/images"
-  "View/screens"
+  "View/lv_port/lv_fonts"
+  "View/Home"
   "Controller"
           
   INCLUDE_DIRS 
@@ -15,6 +13,7 @@ idf_component_register(
   "HAL"
   "Model"
   "View"
-  "View/components"
+  "View/lv_port/lv_fonts"
+  "View/Home"
   "Controller"
 )

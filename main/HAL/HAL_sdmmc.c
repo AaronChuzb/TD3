@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-09 19:37:00
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-03 20:34:58
+ * @LastEditTime: 2024-04-05 00:52:49
  */
 #include "HAL.h"
 
@@ -13,7 +13,7 @@ void sd_test(void)
 {
 
   const char *file_hello = MOUNT_POINT "/hello.txt";
-
+ 
   ESP_LOGI(TAG, "打开文件 %s", file_hello);
   FILE *file = fopen(file_hello, "w");
   if (file == NULL)
@@ -112,5 +112,5 @@ void init_sdmmc()
   // }
   sd_test();
   // 列出所有文件
-  // list_directory(MOUNT_POINT);
+  list_directory("/");
 }

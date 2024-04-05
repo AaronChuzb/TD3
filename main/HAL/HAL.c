@@ -3,6 +3,7 @@
 
 void HAL_init() {
   init_blk();
+  init_sdmmc();
   init_lcd();
   init_lvgl_port();
   
@@ -20,7 +21,7 @@ void HAL_init() {
   //  vTaskDelay(3000 / portTICK_PERIOD_MS);
   //  setBackLightLevel(5);
 
-  init_sdmmc();
+  
   // init_beep();
   button_init();
   // printf("%d", sizeof(YUEPU));

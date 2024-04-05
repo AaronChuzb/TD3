@@ -10,6 +10,7 @@ extern "C" {
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
+#include "freertos/idf_additions.h" // 使用外部内存任务堆栈的头文件
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_sleep.h"
@@ -42,14 +43,14 @@ extern "C" {
 #include "esp_lcd_panel_ops.h"
 
 #include "lvgl.h"
-#include "lv_demos.h"
+// #include "lv_demos.h"
 
 #include "esp_lcd_gc9b71.h"
 #include "esp_lcd_touch_cst816s.h"
 
 #include "iot_button.h"
 
-#include "ui.h"
+#include "home.h"
 
 #include "lvgl.h"
 #include "i2c.h"
@@ -65,7 +66,7 @@ extern "C" {
 
 // #define EXAMPLE_MAX_CHAR_SIZE    128
 // SDMMC
-#define MOUNT_POINT "/sdcard"
+#define MOUNT_POINT "/sd"
 
 #define SDMMC_PIN_CLK  (GPIO_NUM_5)
 #define SDMMC_PIN_CMD  (GPIO_NUM_6)
@@ -110,8 +111,17 @@ extern "C" {
 #define LVGL_TICK_PERIOD_MS    2
 #define LVGL_TASK_MAX_DELAY_MS 500
 #define LVGL_TASK_MIN_DELAY_MS 1
-#define LVGL_TASK_STACK_SIZE   (4 * 1024)
-#define LVGL_TASK_PRIORITY     2
+#define LVGL_TASK_STACK_SIZE   (480 * 1024) // 使用外部内存 我他妈直接给480k
+#define LVGL_TASK_PRIORITY     5
+
+
+
+#ifndef ft_open   //自定义 FATFS打开文件使用， ftopen(fd, path, FA_READ)
+#define ft_open(fd, path, mode) (fd =heap_caps_malloc(sizeof(FIL), MALLOC_CAP_SPIRAM), (f_open(fd, (path), mode)==0)?(0):(free(fd),-1) )//自带申请一个内存 并且打开失败时自动释放内存
+#endif
+#ifndef ft_close  //自定义 FATFS关闭文件使用，ftclose(fd)
+#define ft_close(fd) (f_close(fd), free(fd) )//自带释放一个内存
+#endif
 
 // HAL
 void HAL_init();

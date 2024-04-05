@@ -14,6 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "../../../lv_conf_internal.h"
+#define LV_USE_FS_FATFS 1
 
 /*********************
  *      DEFINES
@@ -35,6 +36,7 @@ void lv_fs_fatfs_init(void);
 void lv_fs_littlefs_init(void);
 lv_fs_drv_t * lv_fs_littlefs_set_driver(char label, void * lfs_p);
 #endif
+
 
 #if LV_USE_FS_STDIO != '\0'
 void lv_fs_stdio_init(void);

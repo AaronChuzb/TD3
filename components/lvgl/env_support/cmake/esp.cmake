@@ -1,3 +1,27 @@
+# rlottie
+# add_subdirectory(rlottie)
+# include_directories(${LVGL_ROOT_DIR}/rlottie/inc)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE MinSizeRel)
+endif()
+
+set(BUILD_SHARED_LIBS OFF)
+
+option(LOTTIE_MODULE "Enable LOTTIE MODULE SUPPORT" OFF)
+option(LOTTIE_THREAD "Enable LOTTIE THREAD SUPPORT" OFF)
+option(LOTTIE_CACHE "Enable LOTTIE CACHE SUPPORT" ON)
+option(LOTTIE_TEST "Build LOTTIE AUTOTESTS" OFF)
+option(LOTTIE_CCACHE "Enable LOTTIE ccache SUPPORT" OFF)
+option(LOTTIE_ASAN "Compile with asan" OFF)
+
+
+file(GLOB_RECURSE RLOTTIE_SRCS ${LVGL_ROOT_DIR}/rlottie/src/*.cpp)
+set(RLOTTIE_INCS
+    ${LVGL_ROOT_DIR}/rlottie/inc/
+    ${LVGL_ROOT_DIR}/rlottie/src/vector/
+)
+
+
 file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c)
 
 idf_build_get_property(LV_MICROPYTHON LV_MICROPYTHON)
@@ -40,12 +64,14 @@ else()
     set_source_files_properties(${DEMO_MUSIC_SOURCES} COMPILE_FLAGS "-Wno-format")
   endif()
 
-  idf_component_register(SRCS ${SOURCES} ${EXAMPLE_SOURCES} ${DEMO_SOURCES}
+  idf_component_register(SRCS ${SOURCES} ${EXAMPLE_SOURCES} ${DEMO_SOURCES} ${RLOTTIE_SRCS}
       INCLUDE_DIRS ${LVGL_ROOT_DIR} ${LVGL_ROOT_DIR}/src ${LVGL_ROOT_DIR}/../
-                   ${LVGL_ROOT_DIR}/examples ${LVGL_ROOT_DIR}/demos
-      REQUIRES esp_timer)
-endif()
+                   ${LVGL_ROOT_DIR}/examples ${LVGL_ROOT_DIR}/demos ${RLOTTIE_INCS}
+      REQUIRES esp_timer fatfs heap)
 
+      
+
+endif()
 target_compile_definitions(${COMPONENT_LIB} PUBLIC "-DLV_CONF_INCLUDE_SIMPLE")
 
 if(CONFIG_LV_ATTRIBUTE_FAST_MEM_USE_IRAM)
