@@ -50,7 +50,7 @@ extern "C" {
 
 #include "iot_button.h"
 
-#include "home.h"
+#include "View.h"
 
 #include "lvgl.h"
 #include "i2c.h"

@@ -5,7 +5,8 @@ idf_component_register(
   "Model"
   "View"
   "View/lv_port/lv_fonts"
-  "View/Home"
+  "View/Pages/StartUp"
+  "View/Pages/Home"
   "Controller"
           
   INCLUDE_DIRS 
@@ -14,6 +15,7 @@ idf_component_register(
   "Model"
   "View"
   "View/lv_port/lv_fonts"
-  "View/Home"
+  "View/Pages/StartUp"
+  "View/Pages/Home"
   "Controller"
 )
