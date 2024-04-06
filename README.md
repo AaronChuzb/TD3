@@ -1,3 +1,6 @@
+# TD3-TouchDisplay3.0
+<img src="image/README/1712408203453.png" width="400px" />
+
 # TD3项目配置
 
 1. 基于`esp-idf5.1.2`版本开发，后续可能会更换威更新的idf版本
