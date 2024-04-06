@@ -93,6 +93,53 @@
 根据附加API的说法添加freertos/esp_additions/include/freertos/idf_additions.h 头文件，包含了 ESP-IDF 添加的与 FreeRTOS 相关的辅助函数。通过 #include "freertos/idf_additions.h" 可添加此头文件。然后就可以使用xTaskCreateWithCaps创建任务。相比于动态创建任务只需要在最后添加一个申请内存方式即可
 
 
+## 移植rlottie问题
+
+1. 将`rlottie`文件夹放入lvgl根目录
+
+2. 编辑`components\lvgl\env_support\cmake`目录下的`esp.cmake`文件，在文件最上方添加
+
+```
+# rlottie
+# add_subdirectory(rlottie)
+# include_directories(${LVGL_ROOT_DIR}/rlottie/inc)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE MinSizeRel)
+endif()
+
+set(BUILD_SHARED_LIBS OFF)
+
+option(LOTTIE_MODULE "Enable LOTTIE MODULE SUPPORT" OFF)
+option(LOTTIE_THREAD "Enable LOTTIE THREAD SUPPORT" OFF)
+option(LOTTIE_CACHE "Enable LOTTIE CACHE SUPPORT" ON)
+option(LOTTIE_TEST "Build LOTTIE AUTOTESTS" OFF)
+option(LOTTIE_CCACHE "Enable LOTTIE ccache SUPPORT" OFF)
+option(LOTTIE_ASAN "Compile with asan" OFF)
+
+
+file(GLOB_RECURSE RLOTTIE_SRCS ${LVGL_ROOT_DIR}/rlottie/src/*.cpp)
+set(RLOTTIE_INCS
+    ${LVGL_ROOT_DIR}/rlottie/inc/
+    ${LVGL_ROOT_DIR}/rlottie/src/vector/
+)
+
+```
+修改`idf_component_register`行为
+
+```
+idf_component_register(SRCS ${SOURCES} ${EXAMPLE_SOURCES} ${DEMO_SOURCES} ${RLOTTIE_SRCS}
+      INCLUDE_DIRS ${LVGL_ROOT_DIR} ${LVGL_ROOT_DIR}/src ${LVGL_ROOT_DIR}/../
+                   ${LVGL_ROOT_DIR}/examples ${LVGL_ROOT_DIR}/demos ${RLOTTIE_INCS}
+      REQUIRES esp_timer fatfs heap)
+```
+其中heap为本次添加
+
+2. 修改`components\lvgl\rlottie\src\vector\stb\stb_image.h`文件内的内容,注释第3818行内容
+
+```
+// stbi__errpuc("outofmem", "Out of memory");
+```
+
 
 
 
