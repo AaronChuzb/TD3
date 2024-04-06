@@ -67,6 +67,98 @@
 │  sdkconfig.temp  
 ```
 
+# 页面管理框架的介绍
+这个页面管理框架是我从老的TD3-App项目移植过来的，原项目基于Arduino平台开发，所以使用的是c++，但是idf是c的，虽然idf支持c++混编但是太麻烦所以改成c，失去了类跟命名空间。
+
+## 如何添加页面
+
+1. 在`main\View\Pages`目录下新建你的页面文件夹，文件夹包含xxx.c文件和xxx.h文件，xxx为你的页面名。
+
+其中.c文件需要遵循标准模板如下：
+
+```
+#include "View/Pages/Home/Home.h"
+
+// 声明页面结构体
+
+struct PageType Home;
+
+static void event_btn1_handler(lv_event_t *e)
+{
+  lv_event_code_t code = lv_event_get_code(e); // 获取回调事件
+  if (code == LV_EVENT_CLICKED)
+  { // 点击事件
+    // Page_Push("Settings");
+    // Page_Push("Settings");
+  }
+}
+
+
+static void Created()
+{
+  lv_obj_t * obj1;
+  obj1 = lv_obj_create(Home.PageContent);
+  lv_obj_set_size(obj1, 100, 150);
+  lv_obj_set_pos(obj1, 5, 35);
+  lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
+}
+
+static void Update(void)
+{
+
+}
+
+static void Destroy(void)
+{
+
+}
+
+static void Method(void *btn, int event)
+{
+
+}
+
+void Home_Init()
+{
+  strcpy(Home.name, "Home");
+  Home.show_status_bar = 1;
+  Home.BeforeEnter = NULL;
+  Home.Created = Created;
+  Home.Update = Update;
+  Home.Destroy = Destroy;
+  Home.Method = Method;
+  Home.PageContent = create_new_screen();
+  Page_Register(Home);
+}
+```
+
+只需要将文件中的全部`Home`替换成其他名字即可。
+
+.h文件就比较简单,同样是将Home全部换成自己的，然后条件编译那里的大写HOME也改掉就行。
+
+```
+#ifndef HOME_H
+#define HOME_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "View/Page.h"
+
+
+void Home_Init();
+
+
+#ifdef __cplusplus
+} /*extern "C"*/
+#endif
+
+#endif
+```
+
+2. 修改`main\CMakeLists.txt`添加`"View/Pages/xxx"`其中xxx为你的页面目录名，至于为什么不写一个统一的cmake文件需要时遵循idf的项目标准，其实时不会，对就是“不会”。
+
 # 项目开发过程的问题记录
 
 ## lvgl使用fatfs
