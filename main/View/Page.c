@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-05 23:13:24
+ * @LastEditTime: 2024-04-06 21:37:22
  */
 #include "View/Page.h"
 
@@ -20,6 +20,9 @@ lv_style_t dark_style;
 lv_obj_t *label_wifi = NULL;
 lv_obj_t *label_batchar = NULL;
 lv_obj_t *panel = NULL;
+// 状态栏初始化
+static lv_style_t obj_layout_style; // 容器的样式
+
 
 void my_timer(lv_timer_t *timer)
 {
@@ -135,15 +138,7 @@ static void status_bar_out()
 // 页面状态栏创建
 void Page_StatusBar_Init(lv_obj_t *pageContent)
 {
-  // 状态栏初始化
-  static lv_style_t obj_layout_style; // 容器的样式
-  lv_style_init(&obj_layout_style);
-  lv_style_set_pad_all(&obj_layout_style, 0);
-  // lv_style_set_bg_opa(&obj_layout_style, 50);
-  lv_style_set_text_font(&obj_layout_style, &lv_font_montserrat_18);
-  lv_style_set_border_side(&obj_layout_style, LV_BORDER_SIDE_NONE);
-  lv_style_set_radius(&obj_layout_style, 0);
-  lv_style_set_text_color(&obj_layout_style, lv_color_hex(0xffffff));
+ 
   panel = lv_obj_create(pageContent);
   lv_obj_set_size(panel, LV_HOR_RES, 25);
   lv_obj_add_style(panel, &obj_layout_style, 0);
@@ -176,12 +171,21 @@ void Page_Init()
   cur_page.Destroy = NULL;
   StackTop = 0;
   lv_timer_t *timer = lv_timer_create(update_statusbar, 100, NULL);
+
+  // 初始化状态栏
+  lv_style_init(&obj_layout_style);
+  lv_style_set_pad_all(&obj_layout_style, 0);
+  // lv_style_set_bg_opa(&obj_layout_style, 50);
+  lv_style_set_text_font(&obj_layout_style, &lv_font_montserrat_18);
+  lv_style_set_border_side(&obj_layout_style, LV_BORDER_SIDE_NONE);
+  lv_style_set_radius(&obj_layout_style, 0);
+  lv_style_set_text_color(&obj_layout_style, lv_color_hex(0xffffff));
 }
 
 // 注册页面
 bool Page_Register(struct PageType Page)
 {
-  printf("222");
+  printf("Page register: %s\n", Page.name);
   PageList[page_index] = Page;
   page_index++;
   return true;
@@ -190,7 +194,7 @@ bool Page_Register(struct PageType Page)
 // 页面入栈
 bool Page_Push(char *name)
 {
-  printf("333");
+  printf("Page push: %s\n", name);
   struct PageType page;
   // 在路由表中查找改页面，未找到跳转失败。
   for (int i = 0; i < PageNum; i++)
@@ -201,6 +205,7 @@ bool Page_Push(char *name)
       break;
     }
   }
+  printf("Find page and push to page:%s", page.name);
   // 防止堆栈溢出
   if (StackTop >= PageNum - 1)
   {
@@ -244,7 +249,7 @@ bool Page_Push(char *name)
 // 页面入栈
 bool Page_Replace(char *name)
 {
-  printf("444");
+   printf("Page replace: %s\n", name);
   struct PageType page;
   // 在路由表中查找改页面，未找到跳转失败。
   for (int i = 0; i < PageNum; i++)
@@ -255,10 +260,9 @@ bool Page_Replace(char *name)
       break;
     }
   }
-  printf("555 %s", page.name);
+  printf("Find page and replace to page:%s", page.name);
   if (StackTop >= PageNum - 1)
   {
-    printf("777");
     return false;
   }
   isChanging = true;
@@ -267,7 +271,6 @@ bool Page_Replace(char *name)
   old_page = cur_page;
   cur_page = new_page;
   cur_page.Created();
-  printf("666 %s", cur_page.name);
   // 如果旧页面有状态栏，显示移除动画
   if (old_page.show_status_bar == 1)
   {

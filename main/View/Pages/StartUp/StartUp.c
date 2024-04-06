@@ -51,7 +51,6 @@ static void Method(void *btn, int event)
 
 void StartUp_Init()
 {
-  printf("111");
   strcpy(StartUp.name, "StartUp");
   StartUp.show_status_bar = 1;
   StartUp.BeforeEnter = NULL;
