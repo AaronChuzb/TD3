@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-25 21:33:18
+ * @LastEditTime: 2024-04-07 18:23:47
  */
 #include "lsm6ds3.h"
 // #include <math.h>
@@ -41,7 +41,7 @@ esp_err_t lsm6ds3_get_gyroscope()
   gx = (float)(((int16_t)(data[1] << 8) | data[0]) * g_fact);
   gy = (float)(((int16_t)(data[3] << 8) | data[2]) * g_fact);
   gz = (float)(((int16_t)(data[5] << 8) | data[4]) * g_fact);
-  ESP_LOGI(TAG, "陀螺仪数据: gx: %.1f, gy: %.1f, gz: %.1f", gx, gy, gz);
+  ESP_LOGI(TAG, "加速度数据: gx: %.1f, gy: %.1f, gz: %.1f", gx, gy, gz);
   return ret;
 }
 
@@ -54,7 +54,7 @@ esp_err_t lsm6ds3_get_accelerometer()
   ax = (float)(((int16_t)(data[1] << 8) | data[0]) * x_fact);
   ay = (float)(((int16_t)(data[3] << 8) | data[2]) * x_fact);
   az = (float)(((int16_t)(data[5] << 8) | data[4]) * x_fact);
-  ESP_LOGI(TAG, "加速度数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
+  ESP_LOGI(TAG, "陀螺仪数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
   return ret;
 }
 

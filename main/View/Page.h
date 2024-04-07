@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-05 21:58:46
+ * @LastEditTime: 2024-04-07 19:00:13
  */
 #ifndef PAGE_H
 #define PAGE_H
@@ -42,6 +42,7 @@ bool Page_Register(struct PageType Page);            // 注册页面
 bool Page_Push(char *name);                   // 页面跳转
 bool Page_Replace(char *name);                // 页面跳转
 bool Page_Back(uint16_t delt);                // 返回页数
+bool Page_refresh();
 lv_obj_t *create_new_screen();
 void Page_Update();
 

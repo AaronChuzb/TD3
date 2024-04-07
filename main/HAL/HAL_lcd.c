@@ -40,7 +40,7 @@ static void lvgl_update_cb(lv_disp_drv_t *drv)
   case LV_DISP_ROT_NONE:
     // Rotate LCD display
     esp_lcd_panel_swap_xy(panel_handle, false);
-    esp_lcd_panel_mirror(panel_handle, false, false);
+    esp_lcd_panel_mirror(panel_handle, true, false);
 
     // Rotate LCD touch
     esp_lcd_touch_set_mirror_y(tp, false);
@@ -50,7 +50,7 @@ static void lvgl_update_cb(lv_disp_drv_t *drv)
   case LV_DISP_ROT_90:
     // Rotate LCD display
     esp_lcd_panel_swap_xy(panel_handle, true);
-    esp_lcd_panel_mirror(panel_handle, true, true);
+    esp_lcd_panel_mirror(panel_handle, false, false);
 
     // Rotate LCD touch
     esp_lcd_touch_set_mirror_y(tp, false);
@@ -69,7 +69,7 @@ static void lvgl_update_cb(lv_disp_drv_t *drv)
   case LV_DISP_ROT_270:
     // Rotate LCD display
     esp_lcd_panel_swap_xy(panel_handle, true);
-    esp_lcd_panel_mirror(panel_handle, false, false);
+    esp_lcd_panel_mirror(panel_handle, true, true);
 
     // Rotate LCD touch
     esp_lcd_touch_set_mirror_y(tp, false);
@@ -271,6 +271,7 @@ void init_lvgl_port()
 {
   ESP_LOGI(TAG, "初始化LVGL");
   lv_init();
+  
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
   // 只要开了DMA这里申请的内存都在片内
@@ -279,12 +280,6 @@ void init_lvgl_port()
   lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf2);
   
-  // 只要开了DMA这里申请的内存都在片内
-  // lv_color_t *buf1 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t) / 4, MALLOC_CAP_DMA);
-  // assert(buf1);
-  // lv_color_t *buf2 = heap_caps_malloc(LCD_H_RES * LCD_V_RES * sizeof(lv_color_t) / 4, MALLOC_CAP_DMA);
-  // assert(buf2);
-
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 4);
 
@@ -327,7 +322,7 @@ void init_lvgl_port()
   xTaskCreateWithCaps(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, MALLOC_CAP_SPIRAM);
   setBackLightLevel(10);
   // xTaskCreatePinnedToCore(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, 1);
-
+  
   ESP_LOGI(TAG, "运行LVGL实例\n");
 
   // Lock the mutex due to the LVGL APIs are not thread-safe

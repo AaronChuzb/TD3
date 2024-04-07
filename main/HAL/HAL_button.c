@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-04 01:30:46
+ * @LastEditTime: 2024-04-07 19:50:23
  */
 
 #include "HAL.h"
@@ -47,15 +47,18 @@ void button_event_cb(void *arg, void *data)
   // ESP_LOGI(TAG, "Wake up from light sleep, reason %d", 1);
   // }
   printf("Button is pressed, %d\n", flag);
-  if(flag == 1){
+  if (flag == 1)
+  {
     setBackLightLevel(0);
+    // lv_disp_set_rotation(lv_disp_get_default(), LV_DISP_ROT_180);
     flag = 0;
-  } else {
-    
+  }
+  else
+  {
+    // lv_disp_set_rotation(lv_disp_get_default(), LV_DISP_ROT_NONE);
     setBackLightLevel(10);
     flag = 1;
   }
-  
 }
 
 /**
@@ -75,10 +78,10 @@ void button_init()
       .type = BUTTON_TYPE_GPIO,
       .short_press_time = 100,
       .gpio_button_config = {
-          .gpio_num = 41,           // 按钮所使用的GPIO号
+          .gpio_num = 41,                      // 按钮所使用的GPIO号
           .active_level = BUTTON_ACTIVE_LEVEL, // 按钮激活时的电平
 
-                                               // .enable_power_save = false,      // 启用省电模式
+          // .enable_power_save = false,      // 启用省电模式
       },
   };
   // 创建按钮实例

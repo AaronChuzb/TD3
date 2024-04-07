@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 13:28:43
+ * @LastEditTime: 2024-04-07 19:05:15
  */
 #include "View/Page.h"
 
@@ -22,7 +22,6 @@ lv_obj_t *label_batchar = NULL;
 lv_obj_t *panel = NULL;
 // 状态栏初始化
 static lv_style_t obj_layout_style; // 容器的样式
-
 
 void my_timer(lv_timer_t *timer)
 {
@@ -139,7 +138,7 @@ static void status_bar_out()
 // 页面状态栏创建
 void Page_StatusBar_Init(lv_obj_t *pageContent)
 {
- 
+
   panel = lv_obj_create(pageContent);
   lv_obj_set_size(panel, LV_HOR_RES, 25);
   lv_obj_add_style(panel, &obj_layout_style, 0);
@@ -251,7 +250,7 @@ bool Page_Push(char *name)
 // 页面入栈
 bool Page_Replace(char *name)
 {
-   printf("Page replace: %s\n", name);
+  printf("Page replace: %s\n", name);
   struct PageType page;
   // 在路由表中查找改页面，未找到跳转失败。
   for (int i = 0; i < PageNum; i++)
@@ -342,6 +341,19 @@ bool Page_Back(uint16_t delt)
   isChanging = false;
   // 添加手势监听
   lv_obj_add_event_cb(cur_page.PageContent, gesture_event, LV_EVENT_GESTURE, NULL);
+  return true;
+}
+
+bool Page_refresh()
+{
+  lv_obj_clean(cur_page.PageContent);
+  cur_page.Created();
+  if (cur_page.show_status_bar == 1)
+  {
+    Page_StatusBar_Init(cur_page.PageContent);
+    status_bar_in();
+  }
+  lv_scr_load(cur_page.PageContent);
   return true;
 }
 
