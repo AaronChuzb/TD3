@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-06 21:37:22
+ * @LastEditTime: 2024-04-07 13:28:43
  */
 #include "View/Page.h"
 
@@ -119,6 +119,7 @@ static void status_bar_in()
   lv_anim_set_exec_cb(&a, anim_y_cb);
   lv_anim_set_path_cb(&a, lv_anim_path_linear);
   // 页面切换动画执行完毕之后再执行出现动画
+  // 避开卡顿加载动画
   lv_anim_set_delay(&a, 300);
   lv_anim_start(&a);
 }
@@ -170,7 +171,7 @@ void Page_Init()
   cur_page.Created = NULL;
   cur_page.Destroy = NULL;
   StackTop = 0;
-  lv_timer_t *timer = lv_timer_create(update_statusbar, 100, NULL);
+  // lv_timer_t *timer = lv_timer_create(update_statusbar, 100, NULL);
 
   // 初始化状态栏
   lv_style_init(&obj_layout_style);
@@ -230,7 +231,8 @@ bool Page_Push(char *name)
     Page_StatusBar_Init(cur_page.PageContent);
     status_bar_in();
   }
-  lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, false); // 不要删除旧屏幕对象指针，会导致返回页面空指针异常
+  lv_scr_load(cur_page.PageContent);
+  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, false); // 不要删除旧屏幕对象指针，会导致返回页面空指针异常
 
   if (old_page.Destroy != NULL)
   {
@@ -290,7 +292,8 @@ bool Page_Replace(char *name)
     lv_timer_t *timer = lv_timer_create(my_timer, 300, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
-  lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, true);
+  lv_scr_load(cur_page.PageContent);
+  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, true);
 
   isChanging = false;
   // 添加手势监听
@@ -325,7 +328,8 @@ bool Page_Back(uint16_t delt)
     Page_StatusBar_Init(cur_page.PageContent);
     status_bar_in();
   }
-  lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, false);
+  lv_scr_load(cur_page.PageContent);
+  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, false);
 
   if (old_page.Destroy != NULL)
   {

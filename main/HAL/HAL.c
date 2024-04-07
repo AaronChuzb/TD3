@@ -27,13 +27,15 @@ void HAL_init() {
   // printf("%d", sizeof(YUEPU));
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  init_wifi();
-  sntp_setlocaltime();
+  // init_wifi();
+  // sntp_setlocaltime();
   // 获取剩余内存大小
   int freeHeap = esp_get_free_heap_size();
-
-  // 打印剩余内存大小
+  int psramFreeH = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
+  int inside = (freeHeap - psramFreeH) / 1024;
+  // // 打印剩余内存大小
   printf("Free heap: %d bytes\n", freeHeap);
   // 获取PSRAM的剩余内存大小
   printf("PSRAM free size: %d bytes\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+  ESP_LOGI("HAL", "内部内存剩余: %d Kbytes", inside);
 }
