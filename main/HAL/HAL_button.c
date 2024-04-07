@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 19:50:23
+ * @LastEditTime: 2024-04-07 23:59:57
  */
 
 #include "HAL.h"
@@ -50,6 +50,7 @@ void button_event_cb(void *arg, void *data)
   if (flag == 1)
   {
     setBackLightLevel(0);
+    // lv_msg_send(MSG_NEW_TEMPERATURE, &flag);
     // lv_disp_set_rotation(lv_disp_get_default(), LV_DISP_ROT_180);
     flag = 0;
   }

@@ -3,8 +3,9 @@
 
 void HAL_init() {
   init_blk();
-  init_sdmmc();
   init_lcd();
+  // 由于需要挂载字库到PSRAM所以先初始化SDMMC
+  init_sdmmc();
   init_lvgl_port();
   
   init_i2c();
@@ -27,8 +28,8 @@ void HAL_init() {
   // printf("%d", sizeof(YUEPU));
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  // init_wifi();
-  // sntp_setlocaltime();
+  init_wifi();
+  sntp_setlocaltime();
   // 获取剩余内存大小
   int freeHeap = esp_get_free_heap_size();
   int psramFreeH = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);

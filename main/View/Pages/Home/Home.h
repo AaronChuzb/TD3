@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include "View/Page.h"
+#include "Page.h"
+
 
 
 void Home_Init();

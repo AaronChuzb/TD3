@@ -50,7 +50,7 @@ extern "C" {
 
 #include "iot_button.h"
 
-#include "View.h"
+
 
 #include "lvgl.h"
 #include "i2c.h"
@@ -61,6 +61,9 @@ extern "C" {
 #include "lsm6ds3.h"
 #include "beep.h"
 #include "pcf8563.h"
+
+#include "View.h"
+#include "Message.h"
 
 
 

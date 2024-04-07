@@ -1,4 +1,4 @@
-﻿#include "View/lv_port/lv_fonts/lv_custom_fonts.h"
+﻿#include "Fonts.h"
 
 LV_FONT_DECLARE(lv_youyuan_21)
 lv_style_t font_style_youyuan_21;

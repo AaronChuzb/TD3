@@ -10,7 +10,7 @@
  *---------------------------------------------------------------
  */
 
-#include "View/lv_port/lv_fonts/lv_custom_fonts.h"
+#include "Fonts.h"
 
 typedef struct
 {

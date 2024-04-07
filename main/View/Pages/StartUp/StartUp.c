@@ -1,11 +1,11 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 13:39:19
+ * @LastEditTime: 2024-04-07 23:51:57
  */
 
-#include "View/Pages/StartUp/StartUp.h"
-#include "View/lv_port/lv_fonts/lv_custom_fonts.h"
+#include "StartUp.h"
+
 
 // 声明页面结构体
 

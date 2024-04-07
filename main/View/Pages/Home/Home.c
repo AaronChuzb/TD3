@@ -1,18 +1,17 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 13:35:26
+ * @LastEditTime: 2024-04-08 00:07:01
  */
 
-#include "View/Pages/Home/Home.h"
-#include "View/lv_port/lv_fonts/lv_custom_fonts.h"
+#include "Home.h"
 
 
 // 声明页面结构体
 
 struct PageType Home;
 
-lv_obj_t * obj1;
+lv_obj_t *obj1;
 
 static void event_btn1_handler(lv_event_t *e)
 {
@@ -46,16 +45,14 @@ static void button_anim_in()
 
 static void Created()
 {
-    
-  
+
   obj1 = lv_obj_create(Home.PageContent);
   lv_obj_set_size(obj1, 100, 150);
   lv_obj_set_pos(obj1, 5, -150);
   lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
-   lv_obj_t *label = lv_label_create(Home.PageContent);
-    button_anim_in();
-
+  lv_obj_t *label = lv_label_create(Home.PageContent);
+  button_anim_in();
   lv_label_set_text(label, "ni");
   lv_obj_add_style(label, &font_style_youyuan_21, 0);
   lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 50);
@@ -64,17 +61,14 @@ static void Created()
 
 static void Update(void)
 {
-
 }
 
 static void Destroy(void)
 {
-
 }
 
 static void Method(void *btn, int event)
 {
-
 }
 
 void Home_Init()

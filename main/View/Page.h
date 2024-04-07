@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 19:00:13
+ * @LastEditTime: 2024-04-07 23:51:43
  */
 #ifndef PAGE_H
 #define PAGE_H
@@ -19,6 +19,12 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include "Fonts.h"
+#include "StatusBar.h"
+#include "Message.h"
+
+
+
 
 
 // 生命周期钩子
