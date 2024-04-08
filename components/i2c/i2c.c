@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-01-31 16:12:07
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-02-03 19:54:49
+ * @LastEditTime: 2024-04-08 13:15:53
  */
 #include "i2c.h"
 
@@ -104,17 +104,16 @@ esp_err_t i2c_write_byte(uint8_t addr, uint8_t reg, uint8_t data)
  * @param {uint8_t} data 数据
  * @return {*}
  */
-esp_err_t i2c_write_data(uint8_t addr, uint8_t reg, uint8_t data, int dataLen)
+esp_err_t i2c_write_data(uint8_t addr, const void *reg, const void *data, int dataLen)
 {
   esp_err_t err;
   i2c_cmd_handle_t cmd = i2c_cmd_link_create();
   i2c_master_start(cmd);
   i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, 1);
   if(reg != NULL){
-    i2c_master_write_byte(cmd, reg, 1);
+    i2c_master_write_byte(cmd, (void *)reg, 1);
   }
-  // i2c_master_write_byte(cmd, data, 1);
-  i2c_master_write(cmd, data, (size_t)dataLen, 1);
+  i2c_master_write(cmd, (void *)data, (size_t)dataLen, 1);
   i2c_master_stop(cmd);
   err = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, 1000 / portTICK_PERIOD_MS);
   i2c_cmd_link_delete(cmd);

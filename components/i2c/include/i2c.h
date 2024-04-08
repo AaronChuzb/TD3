@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:44:58
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-18 22:38:57
+ * @LastEditTime: 2024-04-08 13:16:20
  */
 /*
  * @Date: 2024-01-31 16:12:11
@@ -30,7 +30,8 @@ extern "C" {
 void init_i2c(void);
 esp_err_t i2c_check_dev(uint8_t addr);
 esp_err_t i2c_write_byte(uint8_t addr, uint8_t reg, uint8_t data);
-esp_err_t i2c_write_data(uint8_t addr, uint8_t reg, uint8_t data, int dataLen);
+// esp_err_t i2c_write_data(uint8_t addr, uint8_t reg, uint8_t data, int dataLen);
+esp_err_t i2c_write_data(uint8_t addr, const void *reg, const void *data, int dataLen);
 esp_err_t i2c_read_data(uint8_t addr, uint8_t reg, uint8_t *buff, int size);
 uint8_t i2c_read_8bit(uint8_t addr, uint8_t reg);
 uint16_t i2c_read_12bit(uint8_t addr, uint8_t reg);

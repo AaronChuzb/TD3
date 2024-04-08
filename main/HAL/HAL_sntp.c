@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-01 22:09:39
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-01 22:33:14
+ * @LastEditTime: 2024-04-08 13:19:19
  */
 #include "HAL.h"
 
@@ -25,6 +25,18 @@ static void time_sync_cb(struct timeval *tv)
   localtime_r(&now, &timeinfo);
   strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
   ESP_LOGI("SNTP", "The current date/time in Shanghai is: %s", strftime_buf);
+  // 将对时的时间存入pcf8563时钟芯片
+
+
+  printf("%d\n", timeinfo.tm_year);
+  pcf8563_set_time(&timeinfo);
+  vTaskDelay(3000 / portTICK_PERIOD_MS);
+  struct tm timechip;
+  pcf8563_get_time(&timechip);
+  char time_str[30];
+  sprintf(time_str, "%d-%d-%d %d:%d:%d", timechip.tm_year, timechip.tm_mon, timechip.tm_mday, timechip.tm_hour, timechip.tm_min, timechip.tm_sec);
+  ESP_LOGI("SNTP", "The current date/time in pcf8563 is: %s", time_str);
+  
 }
 
 void init_sntp()
@@ -34,4 +46,5 @@ void init_sntp()
   sntp_setoperatingmode(SNTP_OPMODE_POLL);
   sntp_setservername(0, "ntp1.aliyun.com");
   sntp_init();
+ 
 }

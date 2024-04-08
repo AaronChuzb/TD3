@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-30 18:49:43
+ * @LastEditTime: 2024-04-08 13:18:50
  */
 #pragma once
 
@@ -21,21 +21,10 @@ extern "C"
 // #include <sys/time.h>
 
 #define REG_ID 0x51
-#define BinToBCD(bin) ((((bin) / 10) << 4) + ((bin) % 10))
-
-typedef struct {
-    uint8_t second;
-    uint8_t minute;
-    uint8_t hour;
-    uint8_t day;
-    uint8_t weekday;
-    uint8_t month;
-    uint16_t year;
-} DATATIME;
 
 void init_pcf8563();
-esp_err_t pcf8563_set_datetime(DATATIME *dateTime);
-esp_err_t pcf8563_get_datetime(DATATIME *dateTime);
+esp_err_t pcf8563_set_time(struct tm *time);
+esp_err_t pcf8563_get_time(struct tm *time);
 // void setBackLightLevel(int level);
   
 

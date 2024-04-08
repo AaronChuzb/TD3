@@ -1,11 +1,21 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-30 18:55:44
+ * @LastEditTime: 2024-04-08 13:23:37
  */
 #include "pcf8563.h"
 
 static const char *TAG = "PCF8563";
+
+esp_err_t pcf8563_reset()
+{
+  uint8_t data[2];
+  data[0] = 0;
+  data[1] = 0;
+  i2c_write_byte(REG_ID, 0x00, 0);
+  i2c_write_byte(REG_ID, 0x01, 0);
+  return ESP_OK;
+}
 
 void init_pcf8563()
 {
@@ -13,72 +23,60 @@ void init_pcf8563()
   {
     ESP_LOGI(TAG, "检测不到I2C地址0x51, PCF8563初始化失败");
   }
-  static bool init = false;
-  // if (!init)
-  // {
-  //   uint8_t tmp = 0b00000000;
-  //   i2c_write_byte(REG_ID, 0x00, &tmp);
-  //   mode &= 0b00010011;
-  //   ret = PCF_Write(0x01, &mode, 1);
-  //   if (ret != ESP_OK)
-  //   {
-  //     return -2;
-  //   }
-  //   init = true;
-  // }
+  // 获取时钟芯片时间
+  struct tm timechip;
+  pcf8563_get_time(&timechip);
 }
 
-esp_err_t pcf8563_set_datetime(DATATIME *dateTime)
+uint8_t bcd2dec(uint8_t val)
 {
-  if (dateTime->second >= 60 || dateTime->minute >= 60 || dateTime->hour >= 24 || dateTime->day > 32 || dateTime->weekday > 6 || dateTime->month > 12 || dateTime->year < 1900 || dateTime->year >= 2100)
-  {
-    return ESP_FAIL;
-  }
-  uint8_t buffer[7];
-  buffer[0] = BinToBCD(dateTime->second) & 0x7F;
-  buffer[1] = BinToBCD(dateTime->minute) & 0x7F;
-  buffer[2] = BinToBCD(dateTime->hour) & 0x3F;
-  buffer[3] = BinToBCD(dateTime->day) & 0x3F;
-  buffer[4] = BinToBCD(dateTime->weekday) & 0x07;
-  buffer[5] = BinToBCD(dateTime->month) & 0x1F;
-  if (dateTime->year >= 2000)
-  {
-    buffer[5] |= 0x80;
-    buffer[6] = BinToBCD(dateTime->year - 2000);
-  }
-  else
-  {
-    buffer[6] = BinToBCD(dateTime->year - 1900);
-  }
-  esp_err_t ret = i2c_write_data(REG_ID, 0x02, buffer, sizeof(buffer));
-  return ret;
+  return (val >> 4) * 10 + (val & 0x0f);
 }
 
-esp_err_t pcf8563_get_datetime(DATATIME *dateTime)
+uint8_t dec2bcd(uint8_t val)
 {
-  uint8_t buffer[7];
-  esp_err_t ret;
-  ret = i2c_read_data(REG_ID, 0x02, buffer, sizeof(buffer));
-  if (ret != ESP_OK)
-  {
-    return ret;
-  }
-  dateTime->second = (((buffer[0] >> 4) & 0x07) * 10) + (buffer[0] & 0x0F);
-  dateTime->minute = (((buffer[1] >> 4) & 0x07) * 10) + (buffer[1] & 0x0F);
-  dateTime->hour = (((buffer[2] >> 4) & 0x03) * 10) + (buffer[2] & 0x0F);
-  dateTime->day = (((buffer[3] >> 4) & 0x03) * 10) + (buffer[3] & 0x0F);
-  dateTime->weekday = (buffer[4] & 0x07);
-  dateTime->month = ((buffer[5] >> 4) & 0x01) * 10 + (buffer[5] & 0x0F);
-  dateTime->year = 1900 + ((buffer[6] >> 4) & 0x0F) * 10 + (buffer[6] & 0x0F);
-  if (buffer[5] & 0x80)
-  {
-    dateTime->year += 100;
-  }
+  return ((val / 10) << 4) + (val % 10);
+}
 
-  if (buffer[0] & 0x80) // Clock integrity not guaranted
-  {
-    return ESP_FAIL;
-  }
+esp_err_t pcf8563_set_time(struct tm *time)
+{
+  uint8_t data[7];
+  data[0] = dec2bcd(time->tm_sec);
+  data[1] = dec2bcd(time->tm_min);
+  data[2] = dec2bcd(time->tm_hour);
+  data[3] = dec2bcd(time->tm_mday);
+  data[4] = dec2bcd(time->tm_wday);    // tm_wday is 0 to 6
+  data[5] = dec2bcd(time->tm_mon); // tm_mon is 0 to 11
+  data[6] = dec2bcd(time->tm_year);
+  esp_err_t err = i2c_write_data(REG_ID, 0x02, data, sizeof(data));
+  // printf("write status %d\n", err);
+  return err;
+}
+
+esp_err_t pcf8563_get_time(struct tm *time)
+{
+
+  uint8_t data[7];
+
+  /* read time */
+  esp_err_t res = i2c_read_data(REG_ID, 0x02, data, sizeof(data));
+  if (res != ESP_OK)
+    return res;
+  // printf("status %d\n", res);
+  // /* convert to unix time structure */
+  // ESP_LOGI("", "data=%02x %02x %02x %02x %02x %02x %02x",
+  //          data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
+  time->tm_sec = bcd2dec(data[0] & 0x7F);
+  time->tm_min = bcd2dec(data[1] & 0x7F);
+  time->tm_hour = bcd2dec(data[2] & 0x3F);
+  time->tm_mday = bcd2dec(data[3] & 0x3F);
+  time->tm_wday = bcd2dec(data[4] & 0x07);    // tm_wday is 0 to 6
+  time->tm_mon = bcd2dec(data[5] & 0x1F); // tm_mon is 0 to 11
+  time->tm_year = bcd2dec(data[6]) + 1900;
+  time->tm_isdst = 0;
+  ESP_LOGI(TAG, "读取片内时钟：%d-%d-%d %d:%d:%d", time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
   return ESP_OK;
 }
+
+
 
