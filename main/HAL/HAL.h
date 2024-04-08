@@ -81,7 +81,7 @@ extern "C" {
 
 // WiFi
 
-#define WIFI_SSID      "WYX"
+#define WIFI_SSID      "AaronChu"
 #define WIFI_PASS      "05210122"
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1

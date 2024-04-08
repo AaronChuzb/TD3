@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 00:25:25
+ * @LastEditTime: 2024-04-08 17:39:11
  */
 
 #include "StatusBar.h"
@@ -79,6 +79,13 @@ static void wifi_msg_event_cb(lv_event_t *e)
   }
 }
 
+static void time_msg_event_cb(lv_event_t *e)
+{
+  lv_obj_t *label = lv_event_get_target(e);
+  lv_msg_t *m = lv_event_get_msg(e);
+  lv_label_set_text(label, lv_msg_get_payload(m));
+}
+
 // 页面状态栏创建
 void status_bar_init(lv_obj_t *pageContent)
 {
@@ -106,6 +113,11 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_t *label_time = lv_label_create(panel);
   lv_label_set_text(label_time, "00:00");
 
+  // 设置消息回调
+  lv_obj_add_event_cb(label_time, time_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
+  // 订阅消息
+  lv_msg_subsribe_obj(MSG_TIME_SET, label_time, NULL);
+
   lv_obj_t *label_bat = lv_label_create(panel);
   lv_label_set_text(label_bat, LV_SYMBOL_BATTERY_EMPTY);
   lv_obj_set_size(label_bat, 50, 25);
@@ -117,5 +129,4 @@ void status_bar_init(lv_obj_t *pageContent)
   // lv_obj_set_style_text_font(label_batchar, &lv_font_montserrat_14, 0);
   lv_label_set_text(label_batchar, LV_SYMBOL_CHARGE);
   lv_obj_center(label_batchar);
-  
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 00:00:18
+ * @LastEditTime: 2024-04-08 17:34:59
  */
 
 
@@ -21,6 +21,8 @@ extern "C" {
 // 定义所有的消息类型
 #define MSG_WIFI_IS_CONNECTED     1
 #define MSG_WIFI_NOT_CONNECTED     2
+
+#define MSG_TIME_SET    3
 
 #ifdef __cplusplus
 } /* extern "C" */

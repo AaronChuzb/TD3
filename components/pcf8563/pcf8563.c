@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 13:23:37
+ * @LastEditTime: 2024-04-08 18:20:00
  */
 #include "pcf8563.h"
 
@@ -74,7 +74,7 @@ esp_err_t pcf8563_get_time(struct tm *time)
   time->tm_mon = bcd2dec(data[5] & 0x1F); // tm_mon is 0 to 11
   time->tm_year = bcd2dec(data[6]) + 1900;
   time->tm_isdst = 0;
-  ESP_LOGI(TAG, "读取片内时钟：%d-%d-%d %d:%d:%d", time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
+  // ESP_LOGI(TAG, "读取片内时钟：%d-%d-%d %d:%d:%d", time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec);
   return ESP_OK;
 }
 
