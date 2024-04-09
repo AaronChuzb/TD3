@@ -1,42 +1,40 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-03 10:03:24
+ * @LastEditTime: 2024-04-09 17:12:18
  */
 
 #include "Model.h"
 
-// 初始化消息队列
-void initModel(void)
+// 全局消息队列的句柄
+extern QueueHandle_t message_queue;
+
+void Queue_init(void)
 {
-  // 创建消息队列
-  sensorQueue = xQueueCreate(QUEUE_LENGTH, sizeof(SensorMessage));
+  message_queue = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
 }
 
-// 硬件采集任务
-void vHardwareTask(void *pvParameters)
+void Model_receive_message_task(void *pvParameters)
 {
+  int flag = 0;
   while (1)
   {
-    // 模拟从硬件中采集数据
-    int data = 0;
-
-    // 创建一个消息结构体
-    SensorMessage message;
-    message.sensorData = data;
-
-    // 将消息发送到消息队列
-    xQueueSend(sensorQueue, &message, portMAX_DELAY);
-
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    if (xQueueReceive(message_queue, &flag, portMAX_DELAY) == pdPASS)
+    {
+      if(flag == RESUME_TASK){
+        printf("恢复任务\n");
+      } else {
+        printf("挂起任务\n");
+      }
+      
+    }
+    vTaskDelay(300 / portTICK_PERIOD_MS);
   }
 }
 
-// 更新传感器数据
-void updateSensorData(int data)
+void Model_init(void)
 {
-  SensorMessage message;
-  message.sensorData = data;
-  // 将消息发送到消息队列
-  xQueueSend(sensorQueue, &message, portMAX_DELAY);
+  statusbar_viewmodel_init();
+  Queue_init();
+  xTaskCreate(Model_receive_message_task, "Model_receive_message_task", 1024 * 2, NULL, 2, NULL);
 }

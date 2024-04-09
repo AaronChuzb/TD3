@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-05 21:49:40
+ * @LastEditTime: 2024-04-09 16:52:50
  */
 
 #ifndef MODEL_H
@@ -11,25 +11,31 @@
 extern "C" {
 #endif
 
+#ifdef LV_LVGL_H_INCLUDE_SIMPLE
+#include "lvgl.h"
+#else
+#include "lvgl/lvgl.h"
+#endif
+
 #include "stdio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
+#include "HAL.h"
 
-// 定义消息队列长度
+#include "Message.h"
+
 #define QUEUE_LENGTH 5
+#define QUEUE_ITEM_SIZE 10
 
-// 定义消息结构体
-typedef struct {
-    int sensorData;
-} SensorMessage;
 
-// 创建消息队列句柄
-QueueHandle_t sensorQueue;
+void statusbar_viewmodel_init(void);
+void statusbar_task_suspend(void);
+void statusbar_task_resume(void);
+void Model_init(void);
 
-void initModel(void);
-void updateSensorData(int data);
+
 
 
 #ifdef __cplusplus

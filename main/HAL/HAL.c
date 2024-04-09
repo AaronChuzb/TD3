@@ -9,39 +9,15 @@ void HAL_init() {
   init_lvgl_port();
   
   init_i2c();
-  // i2c_scan_devices();
+
   init_axp173();
   init_bmp280();
   init_lsm6ds3();
   init_pcf8563();
-//    DATETIME set_time;
-//   set_time.year = 124 + 1900;
-//   set_time.month = 3;
-//   set_time.day = 8;
-//   set_time.hour = 11;
-//   set_time.weekday = 1;
-//   set_time.minute = 48;
-//   set_time.second = 20;
-//   // 更新芯片时间
-//   pcf8563_set_datetime(&set_time);
-// vTaskDelay(3000 / portTICK_PERIOD_MS);
-//  DATETIME pcf8563_time;
-//   pcf8563_get_datetime(&pcf8563_time);
-//   char time_str[30];
-//   sprintf(time_str, "%d-%d-%d %d:%d:%d", pcf8563_time.year, pcf8563_time.month + 1, pcf8563_time.day, pcf8563_time.hour, pcf8563_time.minute, pcf8563_time.second);
-//   ESP_LOGI("SNTP", "The current date/time in pcf8563 is: %s", time_str);
-  // setBackLightLevel(10);
-  // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  //  setBackLightLevel(2);
-  //  vTaskDelay(3000 / portTICK_PERIOD_MS);
-  //  setBackLightLevel(0);
-  //  vTaskDelay(3000 / portTICK_PERIOD_MS);
-  //  setBackLightLevel(5);
 
-  
   // init_beep();
   button_init();
-  // printf("%d", sizeof(YUEPU));
+
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // init_wifi();

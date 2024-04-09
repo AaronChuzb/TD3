@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 23:59:57
+ * @LastEditTime: 2024-04-09 17:10:54
  */
 
 #include "HAL.h"
@@ -10,6 +10,8 @@
 #define BUTTON_ACTIVE_LEVEL 0
 
 static const char *TAG = "button_power_save";
+
+QueueHandle_t message_queue;
 
 const char *button_event_table[] = {
     "BUTTON_PRESS_DOWN",
@@ -35,30 +37,17 @@ int flag = 1;
  */
 void button_event_cb(void *arg, void *data)
 {
-  // 打印按钮事件的名称
-  // ESP_LOGI(TAG, "Button event %s", button_event_table[(button_event_t)data]);
-
-  // 获取设备唤醒的原因
-  // esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
-
-  // // 如果唤醒原因已定义，打印唤醒原因
-  // if (cause != ESP_SLEEP_WAKEUP_UNDEFINED)
-  // {
-  // ESP_LOGI(TAG, "Wake up from light sleep, reason %d", 1);
-  // }
-  printf("Button is pressed, %d\n", flag);
-  if (flag == 1)
+  if (flag == RESUME_TASK)
   {
     setBackLightLevel(0);
-    // lv_msg_send(MSG_NEW_TEMPERATURE, &flag);
-    // lv_disp_set_rotation(lv_disp_get_default(), LV_DISP_ROT_180);
-    flag = 0;
+    flag = SUSPEND_TASK;
+    xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
   }
   else
   {
-    // lv_disp_set_rotation(lv_disp_get_default(), LV_DISP_ROT_NONE);
     setBackLightLevel(10);
-    flag = 1;
+    flag = RESUME_TASK;
+    xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
   }
 }
 

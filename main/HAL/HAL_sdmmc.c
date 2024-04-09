@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-09 19:37:00
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-05 00:52:49
+ * @LastEditTime: 2024-04-09 14:19:53
  */
 #include "HAL.h"
 
@@ -104,13 +104,7 @@ void init_sdmmc()
   ESP_LOGI(TAG, "文件系统挂载成功");
 
   sdmmc_card_print_info(stdout, card);
-  // while (1)
-  // {
-  //   /* code */
-  //   sd_test();
-  //   vTaskDelay(1000 / portTICK_PERIOD_MS);
-  // }
   sd_test();
   // 列出所有文件
-  list_directory("/");
+  // list_directory("/");
 }

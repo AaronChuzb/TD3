@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 17:39:11
+ * @LastEditTime: 2024-04-09 12:56:59
  */
 
 #include "StatusBar.h"
@@ -111,22 +111,24 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_msg_subsribe_obj(MSG_WIFI_NOT_CONNECTED, label_wifi, NULL);
 
   lv_obj_t *label_time = lv_label_create(panel);
-  lv_label_set_text(label_time, "00:00");
+  lv_label_set_text(label_time, "");
 
   // 设置消息回调
   lv_obj_add_event_cb(label_time, time_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_TIME_SET, label_time, NULL);
 
-  lv_obj_t *label_bat = lv_label_create(panel);
+  lv_obj_t *label_bat_group = lv_label_create(panel);
+  lv_label_set_text(label_bat_group, "");
+  lv_obj_set_size(label_bat_group, 50, 25);
+  lv_obj_center(label_bat_group);
+  // lv_obj_set_align(label_bat_group, LV_ALIGN_CENTER);
+  lv_obj_t *label_bat = lv_label_create(label_bat_group);
+
   lv_label_set_text(label_bat, LV_SYMBOL_BATTERY_EMPTY);
-  lv_obj_set_size(label_bat, 50, 25);
   lv_obj_center(label_bat);
-  // lv_obj_set_style_pad_left(label_bat, 15, 0);
-  // lv_obj_align(label_bat, LV_ALIGN_CENTER, 0, 0);
-  lv_obj_set_align(label_bat, LV_ALIGN_CENTER);
-  lv_obj_t *label_batchar = lv_label_create(label_bat);
-  // lv_obj_set_style_text_font(label_batchar, &lv_font_montserrat_14, 0);
+
+  lv_obj_t *label_batchar = lv_label_create(label_bat_group);
   lv_label_set_text(label_batchar, LV_SYMBOL_CHARGE);
   lv_obj_center(label_batchar);
 }
