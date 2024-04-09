@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-02 18:33:36
+ * @LastEditTime: 2024-04-09 14:20:16
  */
 /*
  * @Date: 2024-01-31 16:12:07
@@ -246,7 +246,7 @@ float getTSTemp()
 void init_axp173()
 {
   // 多设备共用一组i2c设置个延时再去初始化
-  vTaskDelay(50 / portTICK_PERIOD_MS);
+  // vTaskDelay(50 / portTICK_PERIOD_MS);
   if(i2c_check_dev(0x34) != ESP_OK){
     ESP_LOGI(TAG, "检测不到I2C地址0x34, AXP173初始化失败");
   } else {

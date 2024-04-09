@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 18:23:47
+ * @LastEditTime: 2024-04-09 14:20:40
  */
 #include "lsm6ds3.h"
 // #include <math.h>
@@ -88,7 +88,7 @@ float lsm6ds3_get_accelerometer_y() {
 void                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     init_lsm6ds3()
 {
   // 多设备共用一组i2c设置个延时再去初始化
-  vTaskDelay(100 / portTICK_PERIOD_MS);
+  // vTaskDelay(100 / portTICK_PERIOD_MS);
   if (i2c_check_dev(REG_ID) != ESP_OK)
   {
     ESP_LOGI(TAG, "检测不到I2C地址0x6B, LSM6DS3初始化失败");
