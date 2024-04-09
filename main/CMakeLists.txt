@@ -7,7 +7,6 @@ idf_component_register(
   "View/Fonts"
   "View/Pages/StartUp"
   "View/Pages/Home"
-  "Controller"
           
   INCLUDE_DIRS 
   "."
@@ -17,5 +16,4 @@ idf_component_register(
   "View/Fonts"
   "View/Pages/StartUp"
   "View/Pages/Home"
-  "Controller"
 )
