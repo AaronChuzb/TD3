@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 14:20:24
+ * @LastEditTime: 2024-04-09 22:28:32
  */
 #include "bmp280.h"
 #include <math.h>
@@ -157,7 +157,7 @@ void init_bmp280()
   {
     ESP_LOGI(TAG, "BMP280初始化成功");
     bmp280_restart();
-    // vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(50 / portTICK_PERIOD_MS);
     // 0x55： 0b01010101 16倍气压过采样，2倍温度过采样，force mode
     i2c_write_byte(REG_ID, 0xF4, 0x55);
     // 0x10： 0b00010000 使用force mode不关心采样间隔时间，全填0，滤波器使用16倍，不使用SPI模式不关心，写0

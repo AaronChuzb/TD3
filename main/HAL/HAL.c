@@ -9,9 +9,9 @@ void HAL_init() {
   init_lvgl_port();
   
   init_i2c();
-
-  init_axp173();
   init_bmp280();
+  init_axp173();
+  
   init_lsm6ds3();
   init_pcf8563();
 

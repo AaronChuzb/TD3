@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 12:56:59
+ * @LastEditTime: 2024-04-09 22:48:17
  */
 
 #include "StatusBar.h"
@@ -14,6 +14,9 @@ static lv_style_t obj_layout_style;
 
 // 记住wifi的状态，防止页面切换丢失
 static char *wifi_status = "";
+
+// 记住时间状态
+static char *time_str = "";
 
 void status_bar_style_init()
 {
@@ -83,6 +86,7 @@ static void time_msg_event_cb(lv_event_t *e)
 {
   lv_obj_t *label = lv_event_get_target(e);
   lv_msg_t *m = lv_event_get_msg(e);
+  time_str = lv_msg_get_payload(m);
   lv_label_set_text(label, lv_msg_get_payload(m));
 }
 
@@ -111,7 +115,7 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_msg_subsribe_obj(MSG_WIFI_NOT_CONNECTED, label_wifi, NULL);
 
   lv_obj_t *label_time = lv_label_create(panel);
-  lv_label_set_text(label_time, "");
+  lv_label_set_text(label_time, time_str);
 
   // 设置消息回调
   lv_obj_add_event_cb(label_time, time_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);

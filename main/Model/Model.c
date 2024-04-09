@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 17:12:18
+ * @LastEditTime: 2024-04-09 23:34:27
  */
 
 #include "Model.h"
@@ -23,8 +23,10 @@ void Model_receive_message_task(void *pvParameters)
     {
       if(flag == RESUME_TASK){
         printf("恢复任务\n");
+        statusbar_task_resume();
       } else {
         printf("挂起任务\n");
+        statusbar_task_suspend();
       }
       
     }

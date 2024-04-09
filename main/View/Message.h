@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 17:34:59
+ * @LastEditTime: 2024-04-09 22:34:34
  */
 
 
@@ -23,6 +23,10 @@ extern "C" {
 #define MSG_WIFI_NOT_CONNECTED     2
 
 #define MSG_TIME_SET    3
+
+#define MSG_BAT1_SET 4
+#define MSG_BAT2_SET 5
+#define MSG_BAT3_SET 6
 
 #ifdef __cplusplus
 } /* extern "C" */
