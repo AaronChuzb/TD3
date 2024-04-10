@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 23:42:18
+ * @LastEditTime: 2024-04-10 22:56:54
  */
 #include "Page.h"
 
@@ -18,12 +18,8 @@ uint16_t page_index = 0;
 lv_style_t light_style;
 lv_style_t dark_style;
 
-
-
 void my_timer(lv_timer_t *timer)
 {
-  // lv_obj_clean(timer->user_data);
-  // lv_obj_t *page = (lv_obj_t *)timer->user_data;
   lv_obj_clean((lv_obj_t *)timer->user_data);
 }
 
@@ -66,7 +62,6 @@ void Page_Init()
   cur_page.Created = NULL;
   cur_page.Destroy = NULL;
   StackTop = 0;
-  // lv_timer_t *timer = lv_timer_create(update_statusbar, 100, NULL);
   // 初始化状态栏样式
   status_bar_style_init();
 }
@@ -120,14 +115,13 @@ bool Page_Push(char *name)
     status_bar_in();
   }
   lv_scr_load(cur_page.PageContent);
-  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, false); // 不要删除旧屏幕对象指针，会导致返回页面空指针异常
 
   if (old_page.Destroy != NULL)
   {
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 300, old_page.PageContent);
+    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   isChanging = false;
@@ -177,11 +171,10 @@ bool Page_Replace(char *name)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 300, old_page.PageContent);
+    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   lv_scr_load(cur_page.PageContent);
-  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, true);
 
   isChanging = false;
   // 添加手势监听
@@ -224,7 +217,7 @@ bool Page_Back(uint16_t delt)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 300, old_page.PageContent);
+    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   isChanging = false;

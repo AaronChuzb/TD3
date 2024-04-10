@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 23:34:27
+ * @LastEditTime: 2024-04-10 21:44:38
  */
 
 #include "Model.h"
@@ -28,7 +28,6 @@ void Model_receive_message_task(void *pvParameters)
         printf("挂起任务\n");
         statusbar_task_suspend();
       }
-      
     }
     vTaskDelay(300 / portTICK_PERIOD_MS);
   }

@@ -75,9 +75,11 @@ extern "C"
 #define SDMMC_PIN_D2 (GPIO_NUM_8)
 #define SDMMC_PIN_D3 (GPIO_NUM_7)
 
+#define SDMMC_PIN_CD (GPIO_NUM_21)
+
   // WiFi
 
-#define WIFI_SSID "AaronChu"
+#define WIFI_SSID "WYX"
 #define WIFI_PASS "05210122"
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -128,6 +130,7 @@ extern "C"
 
   // SDMMC
   void init_sdmmc();
+  bool is_sd_present();
 
   // SNTP
   void sntp_setlocaltime();
