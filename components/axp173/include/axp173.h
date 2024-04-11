@@ -80,6 +80,7 @@ extern "C"
   void setCoulometer(enum COULOMETER_CTRL option, bool state);
   float getCoulometerData();
   float getBatVoltage();
+  float getBatLevelWithColumeter();
   float getBatCurrent();
   float getBatLevel();
   float getBatPower();

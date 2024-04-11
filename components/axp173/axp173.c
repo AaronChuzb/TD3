@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 21:27:50
+ * @LastEditTime: 2024-04-11 23:18:38
  */
 /*
  * @Date: 2024-01-31 16:12:07
@@ -14,6 +14,8 @@ static const char *TAG = "AXP173";
 
 static float charger_level = 0.0;
 static float discharge_level = 100.0;
+
+static float max_bat_capacity = 300.0;
 
 inline uint16_t _getMin(uint16_t a, uint16_t b)
 {
@@ -226,6 +228,17 @@ float getBatLevel()
     percentage = discharge_level;
   }
   return percentage;
+}
+
+/**
+ * @description: 利用库仑计计算剩余电量（实际并不准却，需要校准库仑计，还需要再最低电量重置库仑计）
+ * @return {*}
+ */
+float getBatLevelWithColumeter()
+{
+  const float columeter = getCoulometerData();
+  float real_columeter = _getMinFloat(max_bat_capacity, columeter);
+  return real_columeter / max_bat_capacity * 100;
 }
 
 float getBatPower()
