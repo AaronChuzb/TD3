@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 23:06:57
+ * @LastEditTime: 2024-04-11 23:48:56
  */
 
 #include "StatusBar.h"
@@ -14,6 +14,7 @@ lv_obj_t *label_batchar = NULL;
 // 状态栏动画
 lv_anim_t panel_in;
 lv_anim_t panel_out;
+lv_anim_t charge_opacity;
 
 // 状态栏容器的样式
 static lv_style_t obj_layout_style;
@@ -84,6 +85,7 @@ void status_bar_out(void)
   lv_anim_set_path_cb(&panel_out, lv_anim_path_linear);
   lv_anim_set_delay(&panel_out, 300);
   lv_anim_start(&panel_out);
+  lv_anim_del(&charge_opacity, NULL);
 }
 
 static void msg_event_cb(lv_event_t *e)
@@ -189,14 +191,14 @@ void status_bar_init(lv_obj_t *pageContent)
   // lv_obj_set_align(label_bat_group, LV_ALIGN_CENTER);
 
   label_batchar = lv_label_create(label_bat_group);
-  lv_label_set_text(label_batchar, LV_SYMBOL_CHARGE);
+  lv_label_set_text(label_batchar, "");
   // 设置消息回调
   lv_obj_add_event_cb(label_batchar, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_CHARGE_SET, label_batchar, NULL);
 
   // 设置充电图标的闪烁动画
-  lv_anim_t charge_opacity;
+  
   lv_anim_init(&charge_opacity);
   lv_anim_set_time(&charge_opacity, 250);
   lv_anim_set_var(&charge_opacity, label_batchar);
