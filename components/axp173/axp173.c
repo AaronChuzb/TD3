@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-10 23:21:28
+ * @LastEditTime: 2024-04-11 21:27:50
  */
 /*
  * @Date: 2024-01-31 16:12:07
@@ -11,6 +11,9 @@
 #include "axp173.h"
 
 static const char *TAG = "AXP173";
+
+static float charger_level = 0.0;
+static float discharge_level = 100.0;
 
 inline uint16_t _getMin(uint16_t a, uint16_t b)
 {
@@ -22,9 +25,21 @@ inline uint16_t _getMax(uint16_t a, uint16_t b)
   return ((a) > (b) ? (a) : (b));
 }
 
+
 uint16_t _getMid(uint16_t input, uint16_t min, uint16_t max)
 {
   return _getMax(_getMin(input, max), min);
+}
+
+
+inline float _getMinFloat(float a, float b)
+{
+  return ((a) < (b) ? (a) : (b));
+}
+
+inline float _getMaxFloat(float a, float b)
+{
+  return ((a) > (b) ? (a) : (b));
 }
 
 bool isACINExist()
@@ -201,7 +216,16 @@ float getBatLevel()
 {
   const float batVoltage = getBatVoltage();
   const float batPercentage = (batVoltage < 3.248088) ? (0) : (batVoltage - 3.120712) * 100;
-  return (batPercentage <= 100) ? batPercentage : 100;
+  // 防止电量上下跳变
+  float percentage = (batPercentage <= 100.00) ? batPercentage : 100.00;
+  if(isCharging()){
+    charger_level = _getMaxFloat(percentage, charger_level);
+    percentage = charger_level;
+  } else {
+    discharge_level = _getMinFloat(percentage, discharge_level);
+    percentage = discharge_level;
+  }
+  return percentage;
 }
 
 float getBatPower()
