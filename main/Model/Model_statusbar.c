@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-10 22:55:20
+ * @LastEditTime: 2024-04-11 23:18:58
  */
 
 #include "Model.h"
@@ -16,6 +16,7 @@ inline float _getMin(float a, float b)
 void tash_update_statusbar(void *pvParameters)
 {
   char msg[20];
+  char msg_battery[20];
   char msg1[20];
   char msg2[20];
   char msg3[20];
@@ -27,12 +28,13 @@ void tash_update_statusbar(void *pvParameters)
     pcf8563_get_time(&timechip1);
     sprintf(msg, "%02d:%02d", timechip1.tm_hour, timechip1.tm_min);
     lv_msg_send(MSG_TIME_SET, msg);
-
-    battery_level = _getMin(getBatLevel(), battery_level);
+    battery_level = getBatLevelWithColumeter();
+    sprintf(msg_battery, "%d%%", (int)battery_level);
+    lv_msg_send(MSG_BAT_SET, msg_battery);
+    
     // 更新充电状态
     if (isCharging())
     {
-      battery_level = 100.00;
       lv_msg_send(MSG_CHARGE_SET, LV_SYMBOL_CHARGE);
     }
     else
