@@ -15,7 +15,6 @@ extern "C" {
  *********************/
 
 #include "../../../lvgl.h"
-#define LV_USE_GIF 1
 #if LV_USE_GIF
 
 #include "gifdec.h"
