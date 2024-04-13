@@ -5,6 +5,7 @@ idf_component_register(
   "Model"
   "View"
   "View/Fonts"
+  "View/Assets"
   "View/Pages/StartUp"
   "View/Pages/Home"
           
@@ -14,6 +15,7 @@ idf_component_register(
   "Model"
   "View"
   "View/Fonts"
+  "View/Assets"
   "View/Pages/StartUp"
   "View/Pages/Home"
 )

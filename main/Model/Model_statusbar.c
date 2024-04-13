@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 23:18:58
+ * @LastEditTime: 2024-04-13 16:28:02
  */
 
 #include "Model.h"
@@ -17,9 +17,6 @@ void tash_update_statusbar(void *pvParameters)
 {
   char msg[20];
   char msg_battery[20];
-  char msg1[20];
-  char msg2[20];
-  char msg3[20];
   struct tm timechip1;
   float battery_level = 100.0;
   while (1)
@@ -28,10 +25,20 @@ void tash_update_statusbar(void *pvParameters)
     pcf8563_get_time(&timechip1);
     sprintf(msg, "%02d:%02d", timechip1.tm_hour, timechip1.tm_min);
     lv_msg_send(MSG_TIME_SET, msg);
-    battery_level = getBatLevelWithColumeter();
-    sprintf(msg_battery, "%d%%", (int)battery_level);
-    lv_msg_send(MSG_BAT_SET, msg_battery);
-    
+    battery_level = getBatLevel();
+    int level = (int)battery_level;
+    // printf("battery level: %d\n", level);
+    if(level >= 0 && level < 20){
+      lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_EMPTY);
+    } else if(level >= 20 && level < 40){
+      lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_1);
+    } else if(level >= 40 && level < 60){
+      lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_2);
+    } else if(level >= 60 && level < 80){
+      lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_3);
+    } else if(level >= 80 && level <= 100){
+      lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_FULL);
+    }
     // 更新充电状态
     if (isCharging())
     {
@@ -50,15 +57,6 @@ void tash_update_statusbar(void *pvParameters)
     {
       lv_msg_send(MSG_SDCARD_MOUNT, "");
     }
-    float coulometer_data = getCoulometerData();
-    float battery_data = getBatVoltage();
-    
-    sprintf(msg1, "%.2f", coulometer_data);
-    sprintf(msg2, "%.2f", battery_data);
-    sprintf(msg3, "%.2f", battery_level);
-    lv_msg_send(MSG_BAT1_SET, msg1);
-    lv_msg_send(MSG_BAT2_SET, msg2);
-    lv_msg_send(MSG_BAT3_SET, msg3);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 22:41:48
+ * @LastEditTime: 2024-04-13 16:28:29
  */
 
 #include "StartUp.h"
@@ -43,17 +43,18 @@ static void button_anim_in()
 }
 
 
-static void label_msg_event_cb(lv_event_t *e)
-{
-  lv_obj_t *label = lv_event_get_target(e);
-  lv_msg_t *m = lv_event_get_msg(e);
-  lv_label_set_text(label, lv_msg_get_payload(m));
-}
-
 static void Created()
 {
 
-  
+  // lv_obj_t *page_bg = lv_img_create(StartUp.PageContent);
+  // lv_img_set_src(page_bg, &background);
+  // lv_obj_set_width(page_bg, LV_SIZE_CONTENT);  /// 1
+  // lv_obj_set_height(page_bg, LV_SIZE_CONTENT); /// 1
+  // lv_obj_set_align(page_bg, LV_ALIGN_CENTER);
+  // lv_obj_add_flag(page_bg, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST); /// Flags
+  // lv_obj_clear_flag(page_bg, LV_OBJ_FLAG_SCROLLABLE);   
+  // lv_obj_set_y(page_bg, -30);
+  // lv_img_set_zoom(page_bg, 155);                     /// Flags
   obj2 = lv_obj_create(StartUp.PageContent);
   lv_obj_set_size(obj2, 100, 150);
   lv_obj_set_pos(obj2, -100, 35);
@@ -65,32 +66,6 @@ static void Created()
   lv_label_set_text(label, "入口页");
   lv_obj_add_style(label, &font_style_youyuan_21, 0);
   lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 50);
-
-
-   lv_obj_t *label1 = lv_label_create(obj2);
-   lv_obj_t *label2 = lv_label_create(obj2);
-   lv_obj_t *label3 = lv_label_create(obj2);
-   lv_obj_set_pos(label1, 5, 5);
-   lv_obj_set_pos(label2, 5, 25);
-   lv_obj_set_pos(label3, 5, 45);
-
-   // 设置消息回调
-  lv_obj_add_event_cb(label1, label_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
-  // 订阅消息
-  lv_msg_subsribe_obj(MSG_BAT1_SET, label1, NULL);
-
-   // 设置消息回调
-  lv_obj_add_event_cb(label2, label_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
-  // 订阅消息
-  lv_msg_subsribe_obj(MSG_BAT2_SET, label2, NULL);
-
-   // 设置消息回调
-  lv_obj_add_event_cb(label3, label_msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
-  // 订阅消息
-  lv_msg_subsribe_obj(MSG_BAT3_SET, label3, NULL);
-
-
-   
 
 }
 

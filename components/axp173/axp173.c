@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 23:18:38
+ * @LastEditTime: 2024-04-13 13:43:42
  */
 /*
  * @Date: 2024-01-31 16:12:07
@@ -294,7 +294,7 @@ void init_axp173()
     setADCEnable(ADC_BAT_C, true);
     setCoulometer(COULOMETER_ENABLE, true);
     // 设置280mA充电电流
-    setChargeCurrent(CHG_360mA);
+    setChargeCurrent(CHG_190mA);
     // 加上负载会有0.2V左右的压降，所以提高输出
     // setOutputVoltage(OP_DCDC1, 3100);
     ESP_LOGI(TAG, "电池电压：%.1f(V)", getBatVoltage());

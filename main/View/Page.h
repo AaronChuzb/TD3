@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 23:51:43
+ * @LastEditTime: 2024-04-13 15:34:19
  */
 #ifndef PAGE_H
 #define PAGE_H
@@ -26,7 +26,7 @@ extern "C" {
 
 
 
-
+LV_IMG_DECLARE(background);
 // 生命周期钩子
 typedef void (*EventHook)(void);
 // 回调钩子

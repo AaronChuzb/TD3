@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 23:48:56
+ * @LastEditTime: 2024-04-13 16:25:57
  */
 
 #include "StatusBar.h"
@@ -11,6 +11,8 @@ lv_obj_t *panel = NULL;
 lv_obj_t *label_wifi = NULL;
 lv_obj_t *label_time = NULL;
 lv_obj_t *label_batchar = NULL;
+lv_obj_t *label_sdcard = NULL;
+lv_obj_t *label_level = NULL;
 // 状态栏动画
 lv_anim_t panel_in;
 lv_anim_t panel_out;
@@ -28,7 +30,7 @@ static char *sdcard_status = "";
 static char *time_str = "00:00";
 
 // 记住电量状态
-static char *battery_str = "0%";
+static char *battery_str = LV_SYMBOL_BATTERY_EMPTY;
 
 void status_bar_style_init()
 {
@@ -76,6 +78,9 @@ void status_bar_out(void)
   lv_msg_unsubscribe_obj(MSG_WIFI_IS_CONNECTED, label_wifi);
   lv_msg_unsubscribe_obj(MSG_WIFI_NOT_CONNECTED, label_wifi);
   lv_msg_unsubscribe_obj(MSG_TIME_SET, label_time);
+  lv_msg_unsubscribe_obj(MSG_SDCARD_MOUNT, label_sdcard);
+  lv_msg_unsubscribe_obj(MSG_CHARGE_SET, label_batchar);
+  lv_msg_unsubscribe_obj(MSG_BAT_SET, label_level);
   lv_anim_init(&panel_out);
   lv_anim_set_ready_cb(&panel_out, anim_finish_cb);
   lv_anim_set_var(&panel_out, panel);
@@ -85,7 +90,7 @@ void status_bar_out(void)
   lv_anim_set_path_cb(&panel_out, lv_anim_path_linear);
   lv_anim_set_delay(&panel_out, 300);
   lv_anim_start(&panel_out);
-  lv_anim_del(&charge_opacity, NULL);
+  // lv_anim_del(&charge_opacity, NULL);
 }
 
 static void msg_event_cb(lv_event_t *e)
@@ -142,7 +147,7 @@ void status_bar_init(lv_obj_t *pageContent)
   // 硬件模块
   lv_obj_t *label_wifi_group = lv_label_create(panel);
   lv_label_set_text(label_wifi_group, "");
-  lv_obj_set_size(label_wifi_group, 60, 25);
+  lv_obj_set_size(label_wifi_group, 50, 25);
   lv_obj_set_flex_flow(label_wifi_group, LV_FLEX_FLOW_ROW);
   lv_obj_set_flex_align(label_wifi_group, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
@@ -164,13 +169,14 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_msg_subsribe_obj(MSG_WIFI_IS_CONNECTED, label_wifi, NULL);
   lv_msg_subsribe_obj(MSG_WIFI_NOT_CONNECTED, label_wifi, NULL);
   // SD卡
-  lv_obj_t *label_sdcard = lv_label_create(label_wifi_group);
+  label_sdcard = lv_label_create(label_wifi_group);
   lv_label_set_text(label_sdcard, sdcard_status);
   // lv_obj_set_flex_grow(label_sdcard, 2);
   // 设置消息回调
   lv_obj_add_event_cb(label_sdcard, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_SDCARD_MOUNT, label_sdcard, NULL);
+  
 
   // 时间模块
   label_time = lv_label_create(panel);
@@ -179,45 +185,52 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_add_event_cb(label_time, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_TIME_SET, label_time, NULL);
+  
 
   // 电量模块
   lv_obj_t *label_bat_group = lv_label_create(panel);
   lv_label_set_text(label_bat_group, "");
-  lv_obj_set_size(label_bat_group, 60, 25);
+  lv_obj_set_size(label_bat_group, 50, 25);
   lv_obj_center(label_bat_group);
   lv_obj_set_layout(label_bat_group, LV_LAYOUT_FLEX);
   lv_obj_set_flex_flow(label_bat_group, LV_FLEX_FLOW_ROW);
   lv_obj_set_flex_align(label_bat_group, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
   // lv_obj_set_align(label_bat_group, LV_ALIGN_CENTER);
 
+
+
   label_batchar = lv_label_create(label_bat_group);
+ 
   lv_label_set_text(label_batchar, "");
   // 设置消息回调
   lv_obj_add_event_cb(label_batchar, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_CHARGE_SET, label_batchar, NULL);
-
+  //  lv_obj_set_align(label_batchar, LV_ALIGN_CENTER);
   // 设置充电图标的闪烁动画
-  
-  lv_anim_init(&charge_opacity);
-  lv_anim_set_time(&charge_opacity, 250);
-  lv_anim_set_var(&charge_opacity, label_batchar);
-  lv_anim_set_exec_cb(&charge_opacity, anim_opacity_cb);
-  lv_anim_set_values(&charge_opacity, 0, 255);
-  lv_anim_set_path_cb(&charge_opacity, lv_anim_path_linear);
-  lv_anim_set_delay(&charge_opacity, 0);
-  lv_anim_set_playback_time(&charge_opacity, 250);
-  lv_anim_set_playback_delay(&charge_opacity, 250);
-  lv_anim_set_repeat_count(&charge_opacity, LV_ANIM_REPEAT_INFINITE);
-  lv_anim_set_repeat_delay(&charge_opacity, 500);
-  lv_anim_set_early_apply(&charge_opacity, true);
-  lv_anim_start(&charge_opacity);
 
-  lv_obj_t *label_level = lv_label_create(label_bat_group);
+  // lv_anim_init(&charge_opacity);
+  // lv_anim_set_time(&charge_opacity, 250);
+  // lv_anim_set_var(&charge_opacity, label_batchar);
+  // lv_anim_set_exec_cb(&charge_opacity, anim_opacity_cb);
+  // lv_anim_set_values(&charge_opacity, 0, 255);
+  // lv_anim_set_path_cb(&charge_opacity, lv_anim_path_linear);
+  // lv_anim_set_delay(&charge_opacity, 0);
+  // lv_anim_set_playback_time(&charge_opacity, 250);
+  // lv_anim_set_playback_delay(&charge_opacity, 250);
+  // lv_anim_set_repeat_count(&charge_opacity, LV_ANIM_REPEAT_INFINITE);
+  // lv_anim_set_repeat_delay(&charge_opacity, 500);
+  // lv_anim_set_early_apply(&charge_opacity, true);
+  // lv_anim_start(&charge_opacity);
+
+
+  label_level = lv_label_create(label_bat_group);
   lv_label_set_text(label_level, battery_str);
 
   // 设置消息回调
   lv_obj_add_event_cb(label_level, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_BAT_SET, label_level, NULL);
+
+  
 }

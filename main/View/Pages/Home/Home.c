@@ -1,11 +1,10 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 22:35:11
+ * @LastEditTime: 2024-04-13 16:02:15
  */
 
 #include "Home.h"
-
 
 // 声明页面结构体
 
@@ -42,21 +41,27 @@ static void button_anim_in()
   lv_anim_start(&a);
 }
 
-
 static void Created()
 {
+  // lv_obj_t *page_bg = lv_img_create(Home.PageContent);
+  // lv_img_set_src(page_bg, &background);
+  // lv_obj_set_width(page_bg, LV_SIZE_CONTENT);  /// 1
+  // lv_obj_set_height(page_bg, LV_SIZE_CONTENT); /// 1
+  // lv_obj_set_align(page_bg, LV_ALIGN_CENTER);
+  // lv_obj_add_flag(page_bg, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST); /// Flags
+  // lv_obj_clear_flag(page_bg, LV_OBJ_FLAG_SCROLLABLE);                        /// Flags
+  // lv_obj_set_y(page_bg, -30);
+  // lv_img_set_zoom(page_bg, 155);  
+  // obj1 = lv_obj_create(Home.PageContent);
+  // lv_obj_set_size(obj1, 100, 150);
+  // lv_obj_set_pos(obj1, 5, -150);
+  // lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
-  obj1 = lv_obj_create(Home.PageContent);
-  lv_obj_set_size(obj1, 100, 150);
-  lv_obj_set_pos(obj1, 5, -150);
-  lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
-
-  lv_obj_t *label = lv_label_create(Home.PageContent);
-  button_anim_in();
-  lv_label_set_text(label, "ni");
-  lv_obj_add_style(label, &font_style_youyuan_21, 0);
-  lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 50);
-
+  // lv_obj_t *label = lv_label_create(Home.PageContent);
+  // button_anim_in();
+  // lv_label_set_text(label, "ni");
+  // lv_obj_add_style(label, &font_style_youyuan_21, 0);
+  // lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 50);
 }
 
 static void Update(void)

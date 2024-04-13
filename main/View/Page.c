@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-10 22:56:54
+ * @LastEditTime: 2024-04-13 15:35:48
  */
 #include "Page.h"
 
@@ -54,7 +54,6 @@ lv_obj_t *create_new_screen()
   lv_obj_set_size(main_obj, LV_HOR_RES, LV_VER_RES);
   return main_obj;
 }
-
 
 void Page_Init()
 {
