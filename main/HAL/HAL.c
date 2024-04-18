@@ -15,7 +15,7 @@ void HAL_init() {
   init_lsm6ds3();
   init_pcf8563();
 
-  // init_beep();
+  init_beep();
   button_init();
 
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
@@ -31,6 +31,7 @@ void HAL_init() {
   // 获取PSRAM的剩余内存大小
   printf("PSRAM free size: %d bytes\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
   ESP_LOGI("HAL", "内部内存剩余: %d Kbytes", inside);
+  // init_tone();
   
 
 }

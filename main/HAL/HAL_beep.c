@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-02 21:33:12
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-03 17:20:22
+ * @LastEditTime: 2024-04-18 19:19:54
  */
 #include "HAL.h"
 
@@ -278,4 +278,9 @@ void midi_task(void *arg)
       vTaskSuspend(NULL);
     }
   }
+}
+
+void init_tone()
+{
+  xTaskCreateWithCaps(midi_task, "midi", 1024 * 30, NULL, 3, NULL, MALLOC_CAP_SPIRAM);
 }

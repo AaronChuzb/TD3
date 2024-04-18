@@ -149,6 +149,9 @@ extern "C"
   // POWER
   void power_save_init(void);
 
+  // BEEP
+  void init_tone();
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
