@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-11 21:34:31
+ * @LastEditTime: 2024-04-19 23:33:53
  */
 
 
@@ -29,6 +29,8 @@ extern "C" {
 #define MSG_BAT1_SET 7
 #define MSG_BAT2_SET 8
 #define MSG_BAT3_SET 9
+
+#define MSG_MAC_SET 10
 
 #ifdef __cplusplus
 } /* extern "C" */

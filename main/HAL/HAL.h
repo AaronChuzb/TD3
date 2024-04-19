@@ -17,6 +17,7 @@ extern "C"
 #include "esp_err.h"
 #include "esp_sleep.h"
 #include "esp_pm.h"
+#include "esp_system.h"
 
 #include <sys/unistd.h>
 #include <sys/stat.h>
@@ -29,6 +30,7 @@ extern "C"
 
 #include "esp_system.h"
 #include "esp_wifi.h"
+#include "esp_mac.h"
 #include "esp_event.h"
 #include "nvs_flash.h"
 #include "lwip/err.h"
