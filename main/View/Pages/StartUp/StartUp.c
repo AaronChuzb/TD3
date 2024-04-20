@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-19 23:53:21
+ * @LastEditTime: 2024-04-21 00:34:54
  */
 
 #include "StartUp.h"
@@ -71,13 +71,19 @@ void toEightDigitString(unsigned int value, char *encryptedString)
 
 static void lv_keyboard_def_event(lv_event_t *e)
 {
-  const char *input_text = lv_textarea_get_text(ta);
-  printf("input_text: %s\n", input_text);
-  printf("pwd: %s\n", pwd);
-  if (strcmp(pwd, input_text) == 0)
-  {
-    Page_Push("Home");
-  }
+  // const char *input_text = lv_textarea_get_text(ta);
+  // if (strcmp(pwd, input_text) == 0)
+  // {
+  //   init_wifi();
+  // }
+  Page_Push("Home");
+  // const char *input_text = lv_textarea_get_text(ta);
+  // printf("input_text: %s\n", input_text);
+  // printf("pwd: %s\n", pwd);
+  // if (strcmp(pwd, input_text) == 0)
+  // {
+  //   Page_Push("Home");
+  // }
 }
 
 static void msg_event_cb(lv_event_t *e)
@@ -99,7 +105,7 @@ static void msg_event_cb(lv_event_t *e)
     toEightDigitString(obfuscatedValue, encryptedMAC);
     // sprintf(pwd, "%s", encryptedMAC);
     strcpy(pwd, encryptedMAC);
-    
+
     printf("Encrypted MAC: %s\n", encryptedMAC);
     break;
   default:
