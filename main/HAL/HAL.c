@@ -22,7 +22,7 @@ void HAL_init()
 
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  // init_wifi();
+  init_wifi();
   // sntp_setlocaltime();
   // 获取剩余内存大小
   int freeHeap = esp_get_free_heap_size();
