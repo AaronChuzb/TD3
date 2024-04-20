@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-13 15:35:48
+ * @LastEditTime: 2024-04-21 01:01:27
  */
 #include "Page.h"
 
@@ -18,9 +18,12 @@ uint16_t page_index = 0;
 lv_style_t light_style;
 lv_style_t dark_style;
 
-void my_timer(lv_timer_t *timer)
+lv_timer_t *timer;
+
+void obj_clean_event_cb(lv_timer_t *timer)
 {
   lv_obj_clean((lv_obj_t *)timer->user_data);
+  lv_timer_reset(timer);
 }
 
 static void gesture_event(lv_event_t *e)
@@ -50,7 +53,7 @@ static void gesture_event(lv_event_t *e)
 lv_obj_t *create_new_screen()
 {
   lv_obj_t *main_obj = lv_obj_create(NULL);
-  lv_obj_clean(main_obj);
+  // lv_obj_clean(main_obj);
   lv_obj_set_size(main_obj, LV_HOR_RES, LV_VER_RES);
   return main_obj;
 }
@@ -120,7 +123,7 @@ bool Page_Push(char *name)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
+    timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   isChanging = false;
@@ -170,7 +173,7 @@ bool Page_Replace(char *name)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
+    timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   lv_scr_load(cur_page.PageContent);
@@ -216,7 +219,7 @@ bool Page_Back(uint16_t delt)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    lv_timer_t *timer = lv_timer_create(my_timer, 150, old_page.PageContent);
+    timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     lv_timer_set_repeat_count(timer, 1);
   }
   isChanging = false;
