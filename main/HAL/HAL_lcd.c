@@ -1,7 +1,5 @@
 #include "HAL.h"
 
-
-
 const char *TAG = "LCD";
 static SemaphoreHandle_t lvgl_mux = NULL;
 
@@ -209,7 +207,6 @@ void init_lcd()
   // Attach the LCD to the SPI bus
   esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_HOST, &io_config, &io_handle);
 
-  
   const esp_lcd_panel_dev_config_t panel_config = {
       .reset_gpio_num = PIN_NUM_LCD_RST,
       .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,
@@ -271,7 +268,7 @@ void init_lvgl_port()
 {
   ESP_LOGI(TAG, "初始化LVGL");
   lv_init();
-  
+
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
   // 只要开了DMA这里申请的内存都在片内
@@ -279,7 +276,7 @@ void init_lvgl_port()
   assert(buf1);
   lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf2);
-  
+
   // initialize LVGL draw buffers
   lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 4);
 
@@ -315,14 +312,14 @@ void init_lvgl_port()
 
   lvgl_mux = xSemaphoreCreateMutex();
   assert(lvgl_mux);
-   // Allocate memory for task stack
-  
+  // Allocate memory for task stack
+
   // xTaskCreate(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL);
   // 将堆栈放到外部内存使用
   xTaskCreateWithCaps(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, MALLOC_CAP_SPIRAM);
   setBackLightLevel(10);
   // xTaskCreatePinnedToCore(lvgl_port_task, "LVGL", LVGL_TASK_STACK_SIZE, NULL, LVGL_TASK_PRIORITY, NULL, 1);
-  
+
   ESP_LOGI(TAG, "运行LVGL实例\n");
 
   // Lock the mutex due to the LVGL APIs are not thread-safe
@@ -332,8 +329,10 @@ void init_lvgl_port()
     // lv_demo_music();        /* A modern, smartphone-like music player demo. */
     // lv_demo_stress();       /* A stress test for LVGL. */
     // lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
+    // lv_example_meter_3();
     init_view();
     // Release the mutex
+
     lvgl_unlock();
   }
 }

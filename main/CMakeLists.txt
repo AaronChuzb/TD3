@@ -7,6 +7,7 @@ idf_component_register(
   "View/Fonts"
   "View/Assets"
   "View/Pages/StartUp"
+  "View/Pages/Auth"
   "View/Pages/Home"
           
   INCLUDE_DIRS 
@@ -17,5 +18,7 @@ idf_component_register(
   "View/Fonts"
   "View/Assets"
   "View/Pages/StartUp"
+  "View/Pages/Auth"
   "View/Pages/Home"
 )
+fatfs_create_spiflash_image(storage ../storage FLASH_IN_PROJECT)

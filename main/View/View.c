@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-05 23:26:27
+ * @LastEditTime: 2024-04-25 22:23:39
  */
 #include "View/View.h"
 
@@ -13,6 +13,7 @@ void init_view(void)
   Page_Init();
   // 注册页面
   StartUp_Init();
+  Auth_Init();
   Home_Init();
 
 

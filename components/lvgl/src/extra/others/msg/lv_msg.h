@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+#define  LV_USE_MSG 1
 /*********************
  *      INCLUDES
  *********************/

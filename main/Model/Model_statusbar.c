@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-13 16:28:02
+ * @LastEditTime: 2024-04-26 23:51:32
  */
 
 #include "Model.h"
@@ -28,15 +28,24 @@ void tash_update_statusbar(void *pvParameters)
     battery_level = getBatLevel();
     int level = (int)battery_level;
     // printf("battery level: %d\n", level);
-    if(level >= 0 && level < 20){
+    if (level >= 0 && level < 20)
+    {
       lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_EMPTY);
-    } else if(level >= 20 && level < 40){
+    }
+    else if (level >= 20 && level < 40)
+    {
       lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_1);
-    } else if(level >= 40 && level < 60){
+    }
+    else if (level >= 40 && level < 60)
+    {
       lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_2);
-    } else if(level >= 60 && level < 80){
+    }
+    else if (level >= 60 && level < 80)
+    {
       lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_3);
-    } else if(level >= 80 && level <= 100){
+    }
+    else if (level >= 80 && level <= 100)
+    {
       lv_msg_send(MSG_BAT_SET, LV_SYMBOL_BATTERY_FULL);
     }
     // 更新充电状态
@@ -61,11 +70,34 @@ void tash_update_statusbar(void *pvParameters)
   }
 }
 
+void connect_wifi(void *pvParameters)
+{
+  init_wifi();
+  get_sram_size();
+  vTaskDelete(NULL);
+}
+
+void event_handle_cb(void *s, lv_msg_t *m)
+{
+  LV_UNUSED(s);
+  switch (lv_msg_get_id(m))
+  {
+  case MSG_CONNECT_WIFI:
+  
+    xTaskCreate(connect_wifi, "connect_wifi", 1024 * 5, NULL, 1, NULL);
+    break;
+
+  default:
+    break;
+  }
+}
+
 void statusbar_viewmodel_init(void)
 {
   // xTaskCreate(tash_update_statusbar, "tash_update_statusbar", 1024 * 10, NULL, 1, &tash_update_statusbar_handle);
   // 使用外部内存
   xTaskCreateWithCaps(tash_update_statusbar, "tash_update_statusbar", 20 * 1024, NULL, 1, &tash_update_statusbar_handle, MALLOC_CAP_SPIRAM);
+  lv_msg_subsribe(MSG_CONNECT_WIFI, event_handle_cb, NULL);
 }
 
 void statusbar_task_suspend(void)

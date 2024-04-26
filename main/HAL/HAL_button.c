@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-18 19:39:02
+ * @LastEditTime: 2024-04-25 21:33:20
  */
 
 #include "HAL.h"
@@ -42,7 +42,7 @@ void button_event_cb(void *arg, void *data)
     // setChargeEnable(false);
     setBackLightLevel(0);
     flag = SUSPEND_TASK;
-    // xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
+    xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
     // setCoulometer(COULOMETER_RESET, true);
   }
   else
@@ -50,7 +50,7 @@ void button_event_cb(void *arg, void *data)
     // setChargeEnable(true);
     setBackLightLevel(10);
     flag = RESUME_TASK;
-    // xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
+    xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
     // setBackLightLevel(10);
     // setCoulometer(COULOMETER_RESET, false);
   }

@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-21 01:12:55
+ * @LastEditTime: 2024-04-26 22:54:34
  */
 #include "Page.h"
 
@@ -24,6 +24,11 @@ void obj_clean_event_cb(lv_timer_t *timer)
 {
   lv_obj_clean((lv_obj_t *)timer->user_data);
   lv_timer_reset(timer);
+}
+
+void my_screen_clean_up(void * scr)
+{
+  lv_obj_clean(scr);  
 }
 
 static void gesture_event(lv_event_t *e)
@@ -125,7 +130,8 @@ bool Page_Push(char *name)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    lv_obj_clean(old_page.PageContent);
+    
+    lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   isChanging = false;
   // 添加手势监听
@@ -176,7 +182,7 @@ bool Page_Replace(char *name)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    lv_obj_clean(old_page.PageContent);
+    lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   lv_scr_load(cur_page.PageContent);
 
@@ -223,7 +229,7 @@ bool Page_Back(uint16_t delt)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    lv_obj_clean(old_page.PageContent);
+    lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   isChanging = false;
   // 添加手势监听

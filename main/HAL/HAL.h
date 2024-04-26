@@ -24,6 +24,7 @@ extern "C"
 #include "esp_sntp.h"
 #include <time.h>
 
+#include "esp_vfs.h"
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 #include "driver/sdmmc_host.h"
@@ -118,7 +119,7 @@ extern "C"
 #define LVGL_TASK_PRIORITY 5
 
 #define SUSPEND_TASK 0
-#define RESUME_TASK  1
+#define RESUME_TASK 1
 
 #ifndef ft_open                                                                                                                                 // 自定义 FATFS打开文件使用， ftopen(fd, path, FA_READ)
 #define ft_open(fd, path, mode) (fd = heap_caps_malloc(sizeof(FIL), MALLOC_CAP_SPIRAM), (f_open(fd, (path), mode) == 0) ? (0) : (free(fd), -1)) // 自带申请一个内存 并且打开失败时自动释放内存
@@ -129,6 +130,7 @@ extern "C"
 
   // HAL
   void HAL_init();
+  void get_sram_size();
 
   // SDMMC
   void init_sdmmc();
@@ -153,6 +155,9 @@ extern "C"
 
   // BEEP
   void init_tone();
+
+  // FLASH
+  void init_falsh(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

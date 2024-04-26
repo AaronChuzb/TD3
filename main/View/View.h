@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 23:53:41
+ * @LastEditTime: 2024-04-25 22:24:33
  */
 
 
@@ -22,6 +22,7 @@ extern "C" {
 
 #include "Page.h"
 #include "StartUp.h"
+#include "Auth.h"
 #include "Home.h"
 
 //本文件是用于挂载自定义字体的文件
