@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-26 23:23:05
+ * @LastEditTime: 2024-04-27 00:02:48
  */
 
 
@@ -33,7 +33,9 @@ extern "C" {
 #define MSG_MAC_SET 10
 
 #define MSG_CONNECT_WIFI 11
-#define MSG_DISCONNECT_WIFI 10
+#define MSG_DISCONNECT_WIFI 12
+
+#define MSG_GET_SRAM 13
 
 #ifdef __cplusplus
 } /* extern "C" */

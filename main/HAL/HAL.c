@@ -18,6 +18,7 @@ void get_sram_size() {
 void HAL_init()
 {
   init_blk();
+  init_uarts();
   init_lcd();
   // 由于需要挂载字库到PSRAM所以先初始化SDMMC
   init_sdmmc();
@@ -58,6 +59,8 @@ void HAL_init()
   lv_msg_send(MSG_MAC_SET, macAddress);
 
   init_falsh();
+
+  
   
   
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-26 23:51:32
+ * @LastEditTime: 2024-04-27 00:03:26
  */
 
 #include "Model.h"
@@ -83,10 +83,12 @@ void event_handle_cb(void *s, lv_msg_t *m)
   switch (lv_msg_get_id(m))
   {
   case MSG_CONNECT_WIFI:
-  
+
     xTaskCreate(connect_wifi, "connect_wifi", 1024 * 5, NULL, 1, NULL);
     break;
-
+  case MSG_GET_SRAM:
+    get_sram_size();
+    break;
   default:
     break;
   }
@@ -98,6 +100,7 @@ void statusbar_viewmodel_init(void)
   // 使用外部内存
   xTaskCreateWithCaps(tash_update_statusbar, "tash_update_statusbar", 20 * 1024, NULL, 1, &tash_update_statusbar_handle, MALLOC_CAP_SPIRAM);
   lv_msg_subsribe(MSG_CONNECT_WIFI, event_handle_cb, NULL);
+  lv_msg_subsribe(MSG_GET_SRAM, event_handle_cb, NULL);
 }
 
 void statusbar_task_suspend(void)

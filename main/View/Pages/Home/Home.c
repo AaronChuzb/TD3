@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-26 22:57:12
+ * @LastEditTime: 2024-04-27 17:07:35
  */
 
 #include "Home.h"
@@ -11,6 +11,10 @@
 struct PageType Home;
 
 lv_obj_t *obj1;
+lv_obj_t *obj5;
+
+// 记住时间状态
+static char *time_str = "00:00";
 
 static void event_btn1_handler(lv_event_t *e)
 {
@@ -19,6 +23,17 @@ static void event_btn1_handler(lv_event_t *e)
   { // 点击事件
     // Page_Back(1);
     Page_Push("Auth");
+  }
+}
+
+static void event_btn2_handler(lv_event_t *e)
+{
+  lv_event_code_t code = lv_event_get_code(e); // 获取回调事件
+  if (code == LV_EVENT_CLICKED)
+  { // 点击事件
+    // Page_Back(1);
+    // Page_Push("Auth");
+    lv_msg_send(MSG_GET_SRAM, NULL);
   }
 }
 
@@ -42,8 +57,20 @@ static void button_anim_in()
 }
 
 
-
-
+static void msg_event_cb(lv_event_t *e)
+{
+  lv_obj_t *label = lv_event_get_target(e);
+  lv_msg_t *m = lv_event_get_msg(e);
+  switch (lv_msg_get_id(m))
+  {
+  case MSG_TIME_SET:
+    time_str = lv_msg_get_payload(m);
+    lv_label_set_text(label, time_str);
+    break;
+  default:
+    break;
+  }
+}
 
 static void Created()
 {
@@ -55,20 +82,29 @@ static void Created()
   // lv_obj_add_flag(page_bg, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST); /// Flags
   // lv_obj_clear_flag(page_bg, LV_OBJ_FLAG_SCROLLABLE);                        /// Flags
   // lv_obj_set_y(page_bg, -30);
-  // lv_img_set_zoom(page_bg, 155);  
-  
+  // lv_img_set_zoom(page_bg, 155);
+
   obj1 = lv_obj_create(Home.PageContent);
   lv_obj_set_size(obj1, 100, 150);
   lv_obj_set_pos(obj1, 5, -150);
   lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
+  obj5 = lv_obj_create(Home.PageContent);
+  lv_obj_set_size(obj5, 100, 150);
+  lv_obj_set_pos(obj5, 200, 35);
+  lv_obj_add_event_cb(obj5, event_btn2_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
+
   lv_obj_t *label = lv_label_create(Home.PageContent);
+  lv_label_set_text(label, time_str);
+  lv_obj_add_style(label, &font_style_gigi_72, 0);
+  lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, -50);
+
+  // 设置消息回调
+  lv_obj_add_event_cb(label, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
+  // 订阅消息
+  lv_msg_subsribe_obj(MSG_TIME_SET, label, NULL);
+
   button_anim_in();
-  lv_label_set_text(label, "ni");
-  lv_obj_add_style(label, &font_style_youyuan_21, 0);
-  lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 50);
-  
-  
 }
 
 static void Update(void)

@@ -19,6 +19,8 @@ extern "C"
 #include "esp_pm.h"
 #include "esp_system.h"
 
+#include "driver/uart.h"
+
 #include <sys/unistd.h>
 #include <sys/stat.h>
 #include "esp_sntp.h"
@@ -65,6 +67,8 @@ extern "C"
 
 #include "View.h"
 #include "Message.h"
+
+
 
 // #define EXAMPLE_MAX_CHAR_SIZE    128
 // SDMMC
@@ -158,6 +162,9 @@ extern "C"
 
   // FLASH
   void init_falsh(void);
+
+  // UART
+  void init_uarts(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/
