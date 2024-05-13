@@ -59,6 +59,7 @@ void HAL_init()
   lv_msg_send(MSG_MAC_SET, macAddress);
 
   init_falsh();
+  get_sram_size();
 
   
   

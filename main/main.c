@@ -13,14 +13,15 @@ void app_main()
   Model_init();
   // init_tone();
   
-  while (1)
-  {
-    // if(is_sd_present()){
-    //   printf("sd card is present\n");
-    // } else {
-    //   printf("sd card is not present\n");
+  // while (1)
+  // {
+  //   // if(is_sd_present()){
+  //   //   printf("sd card is present\n");
+  //   // } else {
+  //   //   printf("sd card is not present\n");
 
-    // }
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-  }
+  //   // }
+  //   // get_sram_size();
+  //   vTaskDelay(1000 / portTICK_PERIOD_MS);
+  // }
 }

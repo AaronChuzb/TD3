@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-27 21:39:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-27 22:05:47
+ * @LastEditTime: 2024-05-13 23:10:38
  */
 
 #include "HAL.h"
@@ -19,7 +19,7 @@ static void rx_task(void *arg)
 
   while (1)
   {
-    const int rxBytes = uart_read_bytes(UART_NUM_0, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
+    const int rxBytes = uart_read_bytes(UART_NUM_0, data, RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
     if (rxBytes > 0)
     {
       data[rxBytes] = 0;

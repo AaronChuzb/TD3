@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-25 21:33:20
+ * @LastEditTime: 2024-05-13 22:59:42
  */
 
 #include "HAL.h"
@@ -37,16 +37,23 @@ int flag = 1;
  */
 void button_event_cb(void *arg, void *data)
 {
+  // esp_pm_config_t pm_config = {};
+  // pm_config.max_freq_mhz = 40;
+  // esp_err_t err = esp_pm_configure(&pm_config);
   if (flag == RESUME_TASK)
   {
     // setChargeEnable(false);
     setBackLightLevel(0);
     flag = SUSPEND_TASK;
     xQueueSendToBack(message_queue, &flag, portMAX_DELAY);
+
     // setCoulometer(COULOMETER_RESET, true);
   }
   else
   {
+    // esp_pm_config_t pm_config = {};
+    // pm_config.max_freq_mhz = 240;
+    // esp_err_t err = esp_pm_configure(&pm_config);
     // setChargeEnable(true);
     setBackLightLevel(10);
     flag = RESUME_TASK;

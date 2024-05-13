@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-13 15:34:19
+ * @LastEditTime: 2024-05-13 21:04:31
  */
 #ifndef PAGE_H
 #define PAGE_H
@@ -27,6 +27,13 @@ extern "C" {
 
 
 LV_IMG_DECLARE(background);
+LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
+LV_IMG_DECLARE(ui_img_gyro_png);    // assets/gyro.png
+LV_IMG_DECLARE(ui_img_press_png);    // assets/press.png
+LV_IMG_DECLARE(ui_img_sdcard_png);    // assets/sdcard.png
+LV_IMG_DECLARE(ui_img_setting_png);    // assets/setting.png
+LV_IMG_DECLARE(ui_img_time_png);    // assets/time.png
+LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
 // 生命周期钩子
 typedef void (*EventHook)(void);
 // 回调钩子
