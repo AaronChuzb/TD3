@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-13 22:24:45
+ * @LastEditTime: 2024-05-16 22:54:25
  */
 
 #include "Home.h"
@@ -143,6 +143,21 @@ static void scroll_end_event(lv_event_t *e)
   }
 }
 
+static void boxarea_event_cb(lv_event_t *e)
+{
+  lv_obj_t *box = lv_event_get_target(e); // 获取事件的初始对象
+  lv_event_code_t code = lv_event_get_code(e);
+  if (lv_obj_is_scrolling(box))
+  {
+    return;
+  }
+  if (code == LV_EVENT_CLICKED)
+  { // 点击事件
+    // Page_Back(1);
+    Page_Push("Auth");
+  }
+}
+
 /**
  * Translate the object as they scroll
  */
@@ -153,8 +168,8 @@ void lvgl_scroll_test(void)
   lv_obj_set_style_bg_color(cont, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES - 25);
-  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 25);
+  lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES);
+  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 0);
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
@@ -194,39 +209,54 @@ void lvgl_scroll_test(void)
   LV_IMG_DECLARE(ui_img_time_png);    // assets/time.png
   LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
                                       // 生命周期钩子
-  const lv_img_dsc_t *image_descs[] = {
-      &ui_img_battery_png,
-      &ui_img_gyro_png,
-      &ui_img_press_png,
-      &ui_img_sdcard_png,
-      &ui_img_setting_png,
-      &ui_img_time_png,
-      &ui_img_wifi_png,
-      // Add more image descriptors as needed
+
+  // 定义结构体
+
+  struct ButtonData
+  {
+    char *title;
+    lv_img_dsc_t *img;
+    char *text_descs[];
   };
+
+  const struct ButtonData button_data[7] = {
+      {"电池信息", &ui_img_battery_png},
+      {"陀螺仪", &ui_img_gyro_png},
+      {"压力传感器", &ui_img_press_png},
+      {"储存卡", &ui_img_sdcard_png},
+      {"设置", &ui_img_setting_png},
+      {"RTC时钟", &ui_img_time_png},
+      {"WiFi", &ui_img_wifi_png},
+  };
+
   uint32_t i;
-  for (i = 0; i < 7; i++)
+  for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
   {
     lv_obj_t *btn = lv_btn_create(cont);
     lv_obj_set_width(btn, lv_pct(50));
-    lv_obj_set_height(btn, lv_pct(85));
+    lv_obj_set_height(btn, lv_pct(90));
     lv_obj_add_style(btn, &style_btn, LV_STATE_USER_1);
     lv_obj_set_style_bg_opa(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_t *label = lv_label_create(btn);
-    lv_label_set_text_fmt(label, "Button %" LV_PRIu32, i);
+    lv_obj_add_style(label, &font_style_youyuan_21, 0);
+    lv_label_set_text(label, button_data[i].title);
     lv_obj_set_align(label, LV_ALIGN_TOP_MID);
     lv_obj_set_style_pad_left(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_top(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     lv_obj_t *img = lv_img_create(btn);
-    lv_img_set_src(img, image_descs[i]);
-
+    lv_img_set_src(img, button_data[i].img);
     lv_obj_set_width(img, LV_SIZE_CONTENT);  /// 64
     lv_obj_set_height(img, LV_SIZE_CONTENT); /// 64
     lv_obj_set_align(img, LV_ALIGN_LEFT_MID);
-    lv_obj_align(img, LV_ALIGN_LEFT_MID, 10, -15);
+    lv_obj_align(img, LV_ALIGN_LEFT_MID, 18, -10);
+
+    lv_obj_t *boxarea = lv_obj_create(btn);
+    lv_obj_set_align(boxarea, LV_ALIGN_RIGHT_MID);
+    lv_obj_align(boxarea, LV_ALIGN_RIGHT_MID, -15, 10);
+    lv_obj_set_height(boxarea, 260); /// 64
+    lv_obj_add_event_cb(boxarea, boxarea_event_cb, LV_EVENT_ALL, NULL);
   }
 
   /*---------------------------------------- 指定中心显示界面 ----------------------------------------*/
