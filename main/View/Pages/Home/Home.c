@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-16 22:54:25
+ * @LastEditTime: 2024-05-19 17:20:08
  */
 
 #include "Home.h"
@@ -282,9 +282,150 @@ void lvgl_scroll_test(void)
   lv_obj_add_state(lv_obj_get_child(cont, mid_btn_index), LV_STATE_USER_1);
 }
 
+static void scroll_event_cb(lv_event_t *e)
+{
+  lv_obj_t *cont = lv_event_get_target(e);
+
+  lv_area_t cont_a;
+  lv_obj_get_coords(cont, &cont_a);
+  lv_coord_t cont_x_center = cont_a.x1 + lv_area_get_width(&cont_a) / 2;
+
+  lv_coord_t r = lv_obj_get_width(cont) * 7 / 10;
+  uint32_t i;
+  uint32_t child_cnt = lv_obj_get_child_cnt(cont);
+  for (i = 0; i < child_cnt; i++)
+  {
+    lv_obj_t *child = lv_obj_get_child(cont, i);
+    lv_area_t child_a;
+    lv_obj_get_coords(child, &child_a);
+
+    lv_coord_t child_x_center = child_a.x1 + lv_area_get_width(&child_a) / 2;
+
+    lv_coord_t diff_x = child_x_center - cont_x_center;
+    diff_x = LV_ABS(diff_x);
+
+    /*Get the x of diff_y on a circle.*/
+    lv_coord_t x;
+    /*If diff_y is out of the circle use the last point of the circle (the radius)*/
+    if (diff_x >= r)
+    {
+      x = r;
+    }
+    else
+    {
+      /*Use Pythagoras theorem to get x from radius and y*/
+      uint32_t x_sqr = r * r - diff_x * diff_x;
+      lv_sqrt_res_t res;
+      lv_sqrt(x_sqr, &res, 0x8000); /*Use lvgl's built in sqrt root function*/
+      x = r - res.i;
+    }
+
+    /*Translate the item by the calculated X coordinate*/
+    lv_obj_set_style_translate_y(child, x, 0);
+
+    /*Use some opacity with larger translations*/
+    // lv_opa_t opa = lv_map(x, 0, r, LV_OPA_TRANSP, LV_OPA_COVER);
+    // lv_obj_set_style_opa(child, LV_OPA_COVER - opa, 0);
+  }
+}
+
+void home_menu()
+{
+  LV_IMG_DECLARE(ui_img_battery_png); // assets/battery.png
+  LV_IMG_DECLARE(ui_img_gyro_png);    // assets/gyro.png
+  LV_IMG_DECLARE(ui_img_press_png);   // assets/press.png
+  LV_IMG_DECLARE(ui_img_sdcard_png);  // assets/sdcard.png
+  LV_IMG_DECLARE(ui_img_setting_png); // assets/setting.png
+  LV_IMG_DECLARE(ui_img_time_png);    // assets/time.png
+  LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
+                                      // 生命周期钩子
+
+  // 定义结构体
+
+  struct ButtonData
+  {
+    char *title;
+    lv_img_dsc_t *img;
+    char *text_descs[];
+  };
+
+  const struct ButtonData button_data[7] = {
+      {"电池信息", &ui_img_battery_png},
+      {"陀螺仪", &ui_img_gyro_png},
+      {"压力传感器", &ui_img_press_png},
+      {"储存卡", &ui_img_sdcard_png},
+      {"设置", &ui_img_setting_png},
+      {"RTC时钟", &ui_img_time_png},
+      {"WiFi", &ui_img_wifi_png},
+  };
+
+  lv_obj_t *cont = lv_obj_create(Home.PageContent);
+  lv_obj_set_style_radius(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_bg_color(cont, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES - 25);
+  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 25);
+
+  lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
+
+  lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_SCROLL, NULL); // 为了方便实现，先把滚动的动画屏蔽
+                                                                     //  lv_obj_add_event_cb(cont, scroll_end_event, LV_EVENT_SCROLL_END, NULL);
+
+  // lv_obj_set_style_radius(cont, LV_RADIUS_CIRCLE, 0);
+  lv_obj_set_style_clip_corner(cont, true, 0);
+  lv_obj_set_scroll_dir(cont, LV_DIR_HOR);
+  lv_obj_set_scroll_snap_x(cont, LV_SCROLL_SNAP_CENTER);
+  lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
+
+  uint32_t i;
+  for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
+  {
+    lv_obj_t *btn = lv_btn_create(cont);
+    lv_obj_set_width(btn, lv_pct(40));
+    lv_obj_set_height(btn, lv_pct(40));
+    lv_obj_set_style_border_width(btn, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(btn, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_t *label = lv_label_create(btn);
+    // lv_obj_add_style(label, &font_style_youyuan_21, 0);
+    // lv_label_set_text(label, button_data[i].title);
+    // lv_obj_set_align(label, LV_ALIGN_TOP_MID);
+    lv_obj_t *img = lv_img_create(btn);
+    lv_img_set_src(img, button_data[i].img);
+    lv_obj_set_width(img, LV_SIZE_CONTENT);  /// 64
+    lv_obj_set_height(img, LV_SIZE_CONTENT); /// 64
+    lv_obj_set_align(img, LV_ALIGN_CENTER);
+    lv_obj_align(img, LV_ALIGN_CENTER, 0, -0);
+  }
+
+  /*---------------------------------------- 指定中心显示界面 ----------------------------------------*/
+  lv_coord_t mid_btn_index = (lv_obj_get_child_cnt(cont) - 1) / 2; // 如果界面为偶数，将中间数向下取整的界面设置为中间界面
+  lv_coord_t child_cnt = lv_obj_get_child_cnt(cont);               // 获取子界面的数量
+
+  int roll_direction = mid_btn_index - mid_btn_index; // 确定滚动方向
+
+  /* 通过循环将指定界面移到中心位置 */
+  for (lv_coord_t i = 0; i < LV_ABS(roll_direction); i++)
+  {
+    if (roll_direction > 0)
+    {
+      lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0); // 将最后一个界面的索引更改为 0 （移至第一个界面）
+    }
+    else
+    {
+      lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1); // 将第一个界面的索引值改为最大值（移至最后一个界面）
+    }
+  }
+
+  /*当按钮数为偶数时，确保按钮居中*/
+  lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_ON); // 滚动到一个对象，直到它在其父对象上可见
+}
+
 static void Created()
 {
-  lvgl_scroll_test();
+  // lvgl_scroll_test();
+  home_menu();
   // lv_obj_t *page_bg = lv_img_create(Home.PageContent);
   // lv_img_set_src(page_bg, &background);
   // lv_obj_set_width(page_bg, LV_SIZE_CONTENT);  /// 1
