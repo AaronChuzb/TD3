@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-19 17:20:08
+ * @LastEditTime: 2024-05-29 17:16:25
  */
 
 #include "Home.h"
@@ -71,78 +71,6 @@ static void msg_event_cb(lv_event_t *e)
   }
 }
 
-/**
- * @brief 滚动结束后的事件
- * @param event
- */
-static void scroll_end_event(lv_event_t *e)
-{
-  lv_obj_t *cont = lv_event_get_target(e); // 获取事件的初始对象
-
-  /* 获取事件的事件代码 */
-  if (lv_event_get_code(e) == LV_EVENT_SCROLL_END)
-  {
-    /* 判断是否在滚动中 */
-    if (lv_obj_is_scrolling(cont))
-    {
-      return;
-    }
-
-    lv_coord_t child_cnt = lv_obj_get_child_cnt(cont); // 获取子界面的数量
-    lv_coord_t mid_btn_index = (child_cnt - 1) / 2;    // 中间界面的位置
-
-    /* 获取父对象y轴的中心坐标值 */
-    lv_area_t cont_a;
-    lv_obj_get_coords(cont, &cont_a);                                       // 将cont对象的坐标复制到cont_a
-    lv_coord_t cont_y_center = cont_a.y1 + lv_area_get_height(&cont_a) / 2; // 获取界面的高像素大小/2
-    // printf("cont_y_center %d", cont_y_center);
-    /* 注意，这里的中心显示界面的坐标不在正中心，所以这里加上了差值 */
-    // cont_y_center += 169;
-
-    /* 遍历子界面 */
-    for (lv_coord_t i = 0; i < child_cnt; i++)
-    {
-      lv_obj_t *child = lv_obj_get_child(cont, i); // 通过索引获取子对象
-
-      /* 获取子对象y轴的中心坐标值 */
-      lv_area_t child_a;
-      lv_obj_get_coords(child, &child_a);
-      lv_coord_t child_y_center = child_a.y1 + lv_area_get_height(&child_a) / 2; // 获取界面中按钮高像素值的大小/2
-      /* 子界面的坐标与父界面的坐标相等时，说明当前界面在父界面中显示 */
-      if (child_y_center == cont_y_center)
-      {
-        /* 当前显示界面的索引 */
-        lv_coord_t current_btn_index = lv_obj_get_index(child);
-
-        /* 判断界面移动的数据，并将当前界面的索引改为中间位置 */
-        /* 因为是在滑动结束后实现的，建议界面较多的情况下使用此方式，当界面较少，一次滑动太多界面时，容易滑倒边界出现卡顿现象 */
-        lv_coord_t move_btn_quantity = LV_ABS(current_btn_index - mid_btn_index);
-        for (lv_coord_t j = 0; j < move_btn_quantity; j++)
-        {
-          /* 向上滑动 */
-          if (current_btn_index < mid_btn_index)
-          {
-            lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0);            // 将最后一个界面索引改为第一个界面
-            lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF); // lv_obj_get_child 通过子索引获取对象的子对象
-          }
-          /* 向下滑动 */
-          if (current_btn_index > mid_btn_index)
-          {
-            lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1);            // 将第一个界面的索引值改为最后一个界面
-            lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF); // lv_obj_get_child 通过子索引获取对象的子对象
-          }
-        }
-        /* 保证界面居中显示 */
-        lv_obj_set_style_translate_y(lv_obj_get_child(cont, mid_btn_index), 0, 0);
-        lv_obj_clear_state(lv_obj_get_child(cont, mid_btn_index - 1), LV_STATE_USER_1);
-        lv_obj_add_state(lv_obj_get_child(cont, mid_btn_index), LV_STATE_USER_1);
-        lv_obj_clear_state(lv_obj_get_child(cont, mid_btn_index + 1), LV_STATE_USER_1);
-        break;
-      }
-    }
-  }
-}
-
 static void boxarea_event_cb(lv_event_t *e)
 {
   lv_obj_t *box = lv_event_get_target(e); // 获取事件的初始对象
@@ -158,137 +86,13 @@ static void boxarea_event_cb(lv_event_t *e)
   }
 }
 
-/**
- * Translate the object as they scroll
- */
-void lvgl_scroll_test(void)
-{
-  lv_obj_t *cont = lv_obj_create(Home.PageContent);
-  lv_obj_set_style_radius(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_style_bg_color(cont, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES);
-  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 0);
-  lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
-  lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-  // lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_SCROLL, NULL);       // 为了方便实现，先把滚动的动画屏蔽
-  lv_obj_add_event_cb(cont, scroll_end_event, LV_EVENT_SCROLL_END, NULL);
-
-  // lv_obj_set_style_radius(cont, LV_RADIUS_CIRCLE, 0);
-  lv_obj_set_style_clip_corner(cont, true, 0);
-  lv_obj_set_scroll_dir(cont, LV_DIR_VER);
-  lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER);
-  lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
-
-  static lv_style_t style_btn;
-  lv_style_init(&style_btn);
-  // lv_style_set_text_color(&style_btn, lv_color_black());
-  lv_style_set_width(&style_btn, lv_pct(110));
-
-  static const lv_style_prop_t style_prop[] =
-      {
-          LV_STYLE_WIDTH,
-          LV_STYLE_PROP_INV};
-  static lv_style_transition_dsc_t trans;
-  lv_style_transition_dsc_init(
-      &trans,
-      style_prop,
-      lv_anim_path_overshoot,
-      200,
-      0,
-      NULL);
-
-  lv_style_set_transition(&style_btn, &trans);
-  LV_IMG_DECLARE(ui_img_battery_png); // assets/battery.png
-  LV_IMG_DECLARE(ui_img_gyro_png);    // assets/gyro.png
-  LV_IMG_DECLARE(ui_img_press_png);   // assets/press.png
-  LV_IMG_DECLARE(ui_img_sdcard_png);  // assets/sdcard.png
-  LV_IMG_DECLARE(ui_img_setting_png); // assets/setting.png
-  LV_IMG_DECLARE(ui_img_time_png);    // assets/time.png
-  LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
-                                      // 生命周期钩子
-
-  // 定义结构体
-
-  struct ButtonData
-  {
-    char *title;
-    lv_img_dsc_t *img;
-    char *text_descs[];
-  };
-
-  const struct ButtonData button_data[7] = {
-      {"电池信息", &ui_img_battery_png},
-      {"陀螺仪", &ui_img_gyro_png},
-      {"压力传感器", &ui_img_press_png},
-      {"储存卡", &ui_img_sdcard_png},
-      {"设置", &ui_img_setting_png},
-      {"RTC时钟", &ui_img_time_png},
-      {"WiFi", &ui_img_wifi_png},
-  };
-
-  uint32_t i;
-  for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
-  {
-    lv_obj_t *btn = lv_btn_create(cont);
-    lv_obj_set_width(btn, lv_pct(50));
-    lv_obj_set_height(btn, lv_pct(90));
-    lv_obj_add_style(btn, &style_btn, LV_STATE_USER_1);
-    lv_obj_set_style_bg_opa(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_t *label = lv_label_create(btn);
-    lv_obj_add_style(label, &font_style_youyuan_21, 0);
-    lv_label_set_text(label, button_data[i].title);
-    lv_obj_set_align(label, LV_ALIGN_TOP_MID);
-    lv_obj_set_style_pad_left(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_t *img = lv_img_create(btn);
-    lv_img_set_src(img, button_data[i].img);
-    lv_obj_set_width(img, LV_SIZE_CONTENT);  /// 64
-    lv_obj_set_height(img, LV_SIZE_CONTENT); /// 64
-    lv_obj_set_align(img, LV_ALIGN_LEFT_MID);
-    lv_obj_align(img, LV_ALIGN_LEFT_MID, 18, -10);
-
-    lv_obj_t *boxarea = lv_obj_create(btn);
-    lv_obj_set_align(boxarea, LV_ALIGN_RIGHT_MID);
-    lv_obj_align(boxarea, LV_ALIGN_RIGHT_MID, -15, 10);
-    lv_obj_set_height(boxarea, 260); /// 64
-    lv_obj_add_event_cb(boxarea, boxarea_event_cb, LV_EVENT_ALL, NULL);
-  }
-
-  /*---------------------------------------- 指定中心显示界面 ----------------------------------------*/
-  lv_coord_t mid_btn_index = (lv_obj_get_child_cnt(cont) - 1) / 2; // 如果界面为偶数，将中间数向下取整的界面设置为中间界面
-  lv_coord_t child_cnt = lv_obj_get_child_cnt(cont);               // 获取子界面的数量
-  int roll_direction = mid_btn_index - mid_btn_index;              // 确定滚动方向
-
-  /* 通过循环将指定界面移到中心位置 */
-  for (lv_coord_t i = 0; i < LV_ABS(roll_direction); i++)
-  {
-    if (roll_direction > 0)
-    {
-      lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0); // 将最后一个界面的索引更改为 0 （移至第一个界面）
-    }
-    else
-    {
-      lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1); // 将第一个界面的索引值改为最大值（移至最后一个界面）
-    }
-  }
-
-  /*当按钮数为偶数时，确保按钮居中*/
-  lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF); // 滚动到一个对象，直到它在其父对象上可见
-  lv_obj_add_state(lv_obj_get_child(cont, mid_btn_index), LV_STATE_USER_1);
-}
-
 static void scroll_event_cb(lv_event_t *e)
 {
   lv_obj_t *cont = lv_event_get_target(e);
 
   lv_area_t cont_a;
   lv_obj_get_coords(cont, &cont_a);
-  lv_coord_t cont_x_center = cont_a.x1 + lv_area_get_width(&cont_a) / 2;
+  lv_coord_t cont_y_center = cont_a.y1 + lv_area_get_height(&cont_a) / 2;
 
   lv_coord_t r = lv_obj_get_width(cont) * 7 / 10;
   uint32_t i;
@@ -299,33 +103,87 @@ static void scroll_event_cb(lv_event_t *e)
     lv_area_t child_a;
     lv_obj_get_coords(child, &child_a);
 
-    lv_coord_t child_x_center = child_a.x1 + lv_area_get_width(&child_a) / 2;
+    lv_coord_t child_y_center = child_a.y1 + lv_area_get_height(&child_a) / 2;
 
-    lv_coord_t diff_x = child_x_center - cont_x_center;
-    diff_x = LV_ABS(diff_x);
+    lv_coord_t diff_y = child_y_center - cont_y_center;
+    diff_y = LV_ABS(diff_y);
 
     /*Get the x of diff_y on a circle.*/
     lv_coord_t x;
     /*If diff_y is out of the circle use the last point of the circle (the radius)*/
-    if (diff_x >= r)
+    if (diff_y >= r)
     {
       x = r;
     }
     else
     {
       /*Use Pythagoras theorem to get x from radius and y*/
-      uint32_t x_sqr = r * r - diff_x * diff_x;
+      uint32_t x_sqr = r * r - diff_y * diff_y;
       lv_sqrt_res_t res;
       lv_sqrt(x_sqr, &res, 0x8000); /*Use lvgl's built in sqrt root function*/
       x = r - res.i;
     }
 
     /*Translate the item by the calculated X coordinate*/
-    lv_obj_set_style_translate_y(child, x, 0);
+    lv_obj_set_style_translate_x(child, x, 0);
 
     /*Use some opacity with larger translations*/
     // lv_opa_t opa = lv_map(x, 0, r, LV_OPA_TRANSP, LV_OPA_COVER);
     // lv_obj_set_style_opa(child, LV_OPA_COVER - opa, 0);
+  }
+}
+
+/**
+ * @brief 滚动结束后的事件
+ * @param event
+ */
+static void scroll_end_event(lv_event_t *e)
+{
+  lv_obj_t *cont = lv_event_get_target(e); // 获取事件的初始对象
+
+  /* 获取事件的事件代码 */
+  if (lv_event_get_code(e) == LV_EVENT_SCROLL_END)
+  {
+
+    /* 判断是否在滚动中 */
+    // if (lv_obj_is_scrolling(cont))
+    // {
+    //   printf("在滚动中\n");
+    //   return;
+    // }
+
+    lv_coord_t child_cnt = lv_obj_get_child_cnt(cont); // 获取子界面的数量
+    lv_coord_t mid_btn_index = (child_cnt - 1) / 2;    // 中间界面的位置
+    lv_area_t cont_a;
+    lv_obj_get_coords(cont, &cont_a);
+    lv_coord_t cont_y_center = cont_a.y1 + lv_area_get_height(&cont_a) / 2;
+    for (lv_coord_t i = 0; i < child_cnt; i++)
+    {
+      lv_obj_t *child = lv_obj_get_child(cont, i);
+      lv_area_t child_a;
+      lv_obj_get_coords(child, &child_a);
+      lv_coord_t child_y_center = child_a.y1 + lv_area_get_height(&child_a) / 2;
+      if (child_y_center == cont_y_center)
+      {
+        lv_coord_t current_btn_index = lv_obj_get_index(child);
+        lv_coord_t move_btn_quantity = LV_ABS(current_btn_index - mid_btn_index);
+        for (lv_coord_t j = 0; j < move_btn_quantity; j++)
+        {
+          /* 向上滑动 */
+          if (current_btn_index < mid_btn_index)
+          {
+            lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0); 
+          }
+          /* 向下滑动 */
+          if (current_btn_index > mid_btn_index)
+          {
+            lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1); 
+          }
+        }
+         lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF);
+        break;
+      }
+    }
   }
 }
 
@@ -367,16 +225,22 @@ void home_menu()
   lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES - 25);
   lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 25);
 
-  lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
+  lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
 
   lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_SCROLL, NULL); // 为了方便实现，先把滚动的动画屏蔽
-                                                                     //  lv_obj_add_event_cb(cont, scroll_end_event, LV_EVENT_SCROLL_END, NULL);
+  lv_obj_add_event_cb(cont, scroll_end_event, LV_EVENT_SCROLL_END, NULL);
 
   // lv_obj_set_style_radius(cont, LV_RADIUS_CIRCLE, 0);
   lv_obj_set_style_clip_corner(cont, true, 0);
-  lv_obj_set_scroll_dir(cont, LV_DIR_HOR);
-  lv_obj_set_scroll_snap_x(cont, LV_SCROLL_SNAP_CENTER);
+  lv_obj_set_scroll_dir(cont, LV_DIR_VER);
+  lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER);
   lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
+
+  // lv_obj_t *label = lv_label_create(cont);
+  // lv_obj_add_style(label, &font_style_youyuan_21, 0);
+  // lv_label_set_text(label, "标题");
+  // lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), LV_STATE_DEFAULT);
+  // lv_obj_set_align(label, LV_ALIGN_TOP_MID);
 
   uint32_t i;
   for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
@@ -384,13 +248,10 @@ void home_menu()
     lv_obj_t *btn = lv_btn_create(cont);
     lv_obj_set_width(btn, lv_pct(40));
     lv_obj_set_height(btn, lv_pct(40));
-    lv_obj_set_style_border_width(btn, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(btn, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    // lv_obj_t *label = lv_label_create(btn);
-    // lv_obj_add_style(label, &font_style_youyuan_21, 0);
-    // lv_label_set_text(label, button_data[i].title);
-    // lv_obj_set_align(label, LV_ALIGN_TOP_MID);
+
     lv_obj_t *img = lv_img_create(btn);
     lv_img_set_src(img, button_data[i].img);
     lv_obj_set_width(img, LV_SIZE_CONTENT);  /// 64
