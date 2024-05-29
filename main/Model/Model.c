@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-10 21:44:38
+ * @LastEditTime: 2024-05-29 17:54:07
  */
 
 #include "Model.h"
@@ -24,9 +24,11 @@ void Model_receive_message_task(void *pvParameters)
       if(flag == RESUME_TASK){
         printf("恢复任务\n");
         statusbar_task_resume();
+        lvgl_task_resume();
       } else {
         printf("挂起任务\n");
         statusbar_task_suspend();
+        lvgl_task_suspend();
       }
     }
     vTaskDelay(300 / portTICK_PERIOD_MS);
@@ -35,6 +37,7 @@ void Model_receive_message_task(void *pvParameters)
 
 void Model_init(void)
 {
+  lvgl_task_init();
   statusbar_viewmodel_init();
   Queue_init();
   xTaskCreate(Model_receive_message_task, "Model_receive_message_task", 1024 * 2, NULL, 2, NULL);

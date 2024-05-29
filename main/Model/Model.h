@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 16:52:50
+ * @LastEditTime: 2024-05-29 17:55:02
  */
 
 #ifndef MODEL_H
@@ -30,9 +30,21 @@ extern "C" {
 #define QUEUE_ITEM_SIZE 10
 
 
+#define LVGL_TASK_MAX_DELAY_MS 500
+#define LVGL_TASK_MIN_DELAY_MS 1
+#define LVGL_TASK_STACK_SIZE (480 * 1024) // 使用外部内存 我他妈直接给480k
+#define LVGL_TASK_PRIORITY 5
+
+
 void statusbar_viewmodel_init(void);
 void statusbar_task_suspend(void);
 void statusbar_task_resume(void);
+
+void lvgl_task_init(void);
+void lvgl_task_suspend(void);
+void lvgl_task_resume(void);
+
+
 void Model_init(void);
 
 

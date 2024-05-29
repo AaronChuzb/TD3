@@ -117,10 +117,6 @@ extern "C"
 #define PIN_NUM_TOUCH_INT (GPIO_NUM_17)
 
 #define LVGL_TICK_PERIOD_MS 2
-#define LVGL_TASK_MAX_DELAY_MS 500
-#define LVGL_TASK_MIN_DELAY_MS 1
-#define LVGL_TASK_STACK_SIZE (480 * 1024) // 使用外部内存 我他妈直接给480k
-#define LVGL_TASK_PRIORITY 5
 
 #define SUSPEND_TASK 0
 #define RESUME_TASK 1

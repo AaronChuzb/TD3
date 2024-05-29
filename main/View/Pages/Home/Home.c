@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-29 17:16:25
+ * @LastEditTime: 2024-05-29 17:25:37
  */
 
 #include "Home.h"
@@ -172,15 +172,15 @@ static void scroll_end_event(lv_event_t *e)
           /* 向上滑动 */
           if (current_btn_index < mid_btn_index)
           {
-            lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0); 
+            lv_obj_move_to_index(lv_obj_get_child(cont, child_cnt - 1), 0);
           }
           /* 向下滑动 */
           if (current_btn_index > mid_btn_index)
           {
-            lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1); 
+            lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1);
           }
         }
-         lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF);
+        lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF);
         break;
       }
     }
@@ -338,6 +338,7 @@ static void Destroy(void)
 
 static void Method(void *btn, int event)
 {
+  
 }
 
 void Home_Init()
