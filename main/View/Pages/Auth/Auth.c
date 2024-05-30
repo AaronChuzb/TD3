@@ -225,6 +225,7 @@ static void Update(void)
 
 static void Destroy(void)
 {
+  lv_async_call(lv_obj_clean, Auth.PageContent);
 }
 
 static void Method(void *btn, int event)

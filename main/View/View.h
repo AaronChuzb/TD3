@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-25 22:24:33
+ * @LastEditTime: 2024-05-30 16:30:32
  */
 
 
@@ -24,6 +24,7 @@ extern "C" {
 #include "StartUp.h"
 #include "Auth.h"
 #include "Home.h"
+#include "Clock.h"
 
 //本文件是用于挂载自定义字体的文件
 void init_view(void);

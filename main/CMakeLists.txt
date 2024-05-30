@@ -9,6 +9,7 @@ idf_component_register(
   "View/Pages/StartUp"
   "View/Pages/Auth"
   "View/Pages/Home"
+  "View/Pages/Clock"
           
   INCLUDE_DIRS 
   "."
@@ -20,5 +21,6 @@ idf_component_register(
   "View/Pages/StartUp"
   "View/Pages/Auth"
   "View/Pages/Home"
+  "View/Pages/Clock"
 )
 fatfs_create_spiflash_image(storage ../storage FLASH_IN_PROJECT)

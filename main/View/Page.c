@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-26 22:54:34
+ * @LastEditTime: 2024-05-30 19:09:16
  */
 #include "Page.h"
 
@@ -131,7 +131,7 @@ bool Page_Push(char *name)
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
     
-    lv_async_call(my_screen_clean_up, old_page.PageContent);
+    // lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   isChanging = false;
   // 添加手势监听
@@ -182,7 +182,7 @@ bool Page_Replace(char *name)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    lv_async_call(my_screen_clean_up, old_page.PageContent);
+    // lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   lv_scr_load(cur_page.PageContent);
 
@@ -229,7 +229,7 @@ bool Page_Back(uint16_t delt)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    lv_async_call(my_screen_clean_up, old_page.PageContent);
+    // lv_async_call(my_screen_clean_up, old_page.PageContent);
   }
   isChanging = false;
   // 添加手势监听

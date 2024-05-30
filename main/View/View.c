@@ -1,13 +1,14 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-25 22:23:39
+ * @LastEditTime: 2024-05-30 16:56:46
  */
 #include "View/View.h"
 
 
 void init_view(void)
 {
+  // 加载字体
   lv_custom_fonts();
   // 页面框架初始化
   Page_Init();
@@ -15,6 +16,7 @@ void init_view(void)
   StartUp_Init();
   Auth_Init();
   Home_Init();
+  Clock_Init();
 
 
   Page_Replace("StartUp");
