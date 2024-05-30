@@ -19,6 +19,7 @@ void lv_custom_fonts(void);
 
 extern lv_style_t font_style_youyuan_21;
 extern lv_style_t font_style_gigi_72;
+extern lv_style_t font_style_youshebiaotihei_24;
 
 #ifdef __cplusplus
 } /* extern "C" */
