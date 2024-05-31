@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:30:18
+ * @LastEditTime: 2024-05-31 11:39:29
  */
 
 #include "StartUp.h"
@@ -258,10 +258,10 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  // if (lv_obj_is_valid(StartUp.PageContent))
-  // {
-  //   lv_async_call(lv_obj_clean, StartUp.PageContent);
-  // }
+  if (lv_obj_is_valid(StartUp.PageContent))
+  {
+    lv_async_call(lv_obj_clean, StartUp.PageContent);
+  }
 }
 
 static void Method(void *btn, int event)

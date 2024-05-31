@@ -1,13 +1,13 @@
 /*
  * @Date: 2024-05-29 17:33:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-29 17:54:49
+ * @LastEditTime: 2024-05-31 11:48:35
  */
 #include "Model.h"
 TaskHandle_t lvgl_task_handle;
 static SemaphoreHandle_t lvgl_mux = NULL;
 
-static bool lvgl_lock(int timeout_ms)
+ bool lvgl_lock(int timeout_ms)
 {
   assert(lvgl_mux && "bsp_display_start must be called first");
 
@@ -15,7 +15,7 @@ static bool lvgl_lock(int timeout_ms)
   return xSemaphoreTake(lvgl_mux, timeout_ticks) == pdTRUE;
 }
 
-static void lvgl_unlock(void)
+void lvgl_unlock(void)
 {
   assert(lvgl_mux && "bsp_display_start must be called first");
   xSemaphoreGive(lvgl_mux);
@@ -32,7 +32,7 @@ static void lvgl_port_task(void *arg)
     {
       task_delay_ms = lv_timer_handler();
       // Release the mutex
-      
+
       lvgl_unlock();
     }
     if (task_delay_ms > LVGL_TASK_MAX_DELAY_MS)

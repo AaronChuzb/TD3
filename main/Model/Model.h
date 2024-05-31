@@ -1,14 +1,15 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 10:58:40
+ * @LastEditTime: 2024-05-31 11:47:22
  */
 
 #ifndef MODEL_H
 #define MODEL_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
@@ -29,26 +30,22 @@ extern "C" {
 #define QUEUE_LENGTH 5
 #define QUEUE_ITEM_SIZE 10
 
-
 #define LVGL_TASK_MAX_DELAY_MS 500
 #define LVGL_TASK_MIN_DELAY_MS 1
 #define LVGL_TASK_STACK_SIZE (480 * 1024) // 使用外部内存 我他妈直接给480k
 #define LVGL_TASK_PRIORITY 5
 
+  void statusbar_viewmodel_init(void);
+  void statusbar_task_suspend(void);
+  void statusbar_task_resume(void);
 
-void statusbar_viewmodel_init(void);
-void statusbar_task_suspend(void);
-void statusbar_task_resume(void);
+  void lvgl_task_init(void);
+  void lvgl_task_suspend(void);
+  void lvgl_task_resume(void);
+  bool lvgl_lock(int timeout_ms);
+  void lvgl_unlock(void);
 
-void lvgl_task_init(void);
-void lvgl_task_suspend(void);
-void lvgl_task_resume(void);
-
-
-void Model_init(void);
-
-
-
+  void Model_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

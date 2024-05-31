@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:31:20
+ * @LastEditTime: 2024-05-31 11:45:54
  */
 #include "Page.h"
 
@@ -127,13 +127,6 @@ bool Page_Push(char *name)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
-    // lv_timer_set_repeat_count(timer, 1);
-
-    if (lv_obj_is_valid(old_page.PageContent))
-    {
-      lv_async_call(lv_obj_clean, old_page.PageContent);
-    }
   }
   lv_scr_load(cur_page.PageContent);
   isChanging = false;
@@ -183,12 +176,6 @@ bool Page_Replace(char *name)
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
-    // lv_timer_set_repeat_count(timer, 1);
-    if (lv_obj_is_valid(old_page.PageContent))
-    {
-      lv_async_call(lv_obj_clean, old_page.PageContent);
-    }
   }
   lv_scr_load(cur_page.PageContent);
 
@@ -225,20 +212,11 @@ bool Page_Back(uint16_t delt)
     status_bar_init(cur_page.PageContent);
     status_bar_in();
   }
-
-  // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, false);
-
   if (old_page.Destroy != NULL)
   {
     // 清空旧页面的事件
     lv_obj_remove_event_cb(old_page.PageContent, gesture_event);
     old_page.Destroy();
-    // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
-    // lv_timer_set_repeat_count(timer, 1);
-    if (lv_obj_is_valid(old_page.PageContent))
-    {
-      lv_async_call(lv_obj_clean, old_page.PageContent);
-    }
   }
   lv_scr_load(cur_page.PageContent);
   isChanging = false;

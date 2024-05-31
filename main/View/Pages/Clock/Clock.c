@@ -18,10 +18,10 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  // if (lv_obj_is_valid(Clock.PageContent))
-  // {
-  //   lv_async_call(lv_obj_clean, Clock.PageContent);
-  // }
+  if (lv_obj_is_valid(Clock.PageContent))
+  {
+    lv_async_call(lv_obj_clean, Clock.PageContent);
+  }
 }
 
 static void Method(void *btn, int event)
