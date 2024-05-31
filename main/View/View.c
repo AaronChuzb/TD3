@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-30 16:56:46
+ * @LastEditTime: 2024-05-31 15:49:09
  */
 #include "View/View.h"
 
@@ -19,7 +19,7 @@ void init_view(void)
   Clock_Init();
 
 
-  Page_Replace("StartUp");
+  Page_Replace("Home");
   // lv_obj_t *label = lv_label_create(lv_scr_act());
 
   // lv_label_set_text(label, "你好");
