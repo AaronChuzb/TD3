@@ -8,13 +8,8 @@
 
 struct PageType Clock;
 
-
 static void Created()
 {
-
-  
-
-  
 }
 
 static void Update(void)
@@ -23,7 +18,10 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  lv_async_call(lv_obj_clean, Clock.PageContent);
+  // if (lv_obj_is_valid(Clock.PageContent))
+  // {
+  //   lv_async_call(lv_obj_clean, Clock.PageContent);
+  // }
 }
 
 static void Method(void *btn, int event)

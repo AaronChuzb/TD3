@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-29 17:55:02
+ * @LastEditTime: 2024-05-31 10:58:40
  */
 
 #ifndef MODEL_H
@@ -23,8 +23,8 @@ extern "C" {
 #include "freertos/queue.h"
 
 #include "HAL.h"
-
 #include "Message.h"
+#include "Page.h"
 
 #define QUEUE_LENGTH 5
 #define QUEUE_ITEM_SIZE 10

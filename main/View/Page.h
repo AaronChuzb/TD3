@@ -58,6 +58,7 @@ bool Page_Back(uint16_t delt);                // 返回页数
 bool Page_refresh();
 lv_obj_t *create_new_screen();
 void Page_Update();
+bool isPageChanging();
 
 
 

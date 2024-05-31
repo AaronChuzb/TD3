@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-25 22:21:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-26 23:29:48
+ * @LastEditTime: 2024-05-31 11:29:55
  */
 /*
  * @Date: 2024-04-05 21:31:50
@@ -225,7 +225,10 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  lv_async_call(lv_obj_clean, Auth.PageContent);
+  // if (lv_obj_is_valid(Auth.PageContent))
+  // {
+  //   lv_async_call(lv_obj_clean, Auth.PageContent);
+  // }
 }
 
 static void Method(void *btn, int event)

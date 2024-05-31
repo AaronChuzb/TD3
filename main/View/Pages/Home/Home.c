@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-30 19:02:01
+ * @LastEditTime: 2024-05-31 11:30:07
  */
 
 #include "Home.h"
@@ -309,7 +309,10 @@ static void Update(void)
 static void Destroy(void)
 {
   // ;
-  lv_async_call(lv_obj_clean, Home.PageContent);
+  // if (lv_obj_is_valid(Home.PageContent))
+  // {
+  //   lv_async_call(lv_obj_clean, Home.PageContent);
+  // }
   
 }
 

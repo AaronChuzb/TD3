@@ -18,6 +18,7 @@ extern "C" {
 #endif
 
 #include "Message.h"
+#include "Page.h"
 
 void status_bar_style_init();
 void status_bar_init(lv_obj_t *pageContent);

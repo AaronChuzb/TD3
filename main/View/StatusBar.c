@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-21 21:37:48
+ * @LastEditTime: 2024-05-31 11:26:01
  */
 
 #include "StatusBar.h"
@@ -95,45 +95,53 @@ void status_bar_out(void)
 
 static void msg_event_cb(lv_event_t *e)
 {
-  lv_obj_t *label = lv_event_get_target(e);
-  lv_msg_t *m = lv_event_get_msg(e);
-  switch (lv_msg_get_id(m))
+  printf("%d", isPageChanging());
+  if (isPageChanging())
   {
-  case MSG_SDCARD_MOUNT:
-    sdcard_status = lv_msg_get_payload(m);
-    lv_label_set_text(label, sdcard_status);
-    break;
-  case MSG_CHARGE_SET:
-    lv_label_set_text(label, lv_msg_get_payload(m));
-    break;
-  case MSG_BAT_SET:
-    battery_str = lv_msg_get_payload(m);
-    lv_label_set_text(label, battery_str);
-    if(strcmp(battery_str, LV_SYMBOL_BATTERY_FULL) ==  0 ){
-      lv_obj_set_style_text_color(label, lv_color_hex(0x61b865), LV_PART_MAIN);
-    } else if (strcmp(battery_str, LV_SYMBOL_BATTERY_2) == 0 || strcmp(battery_str, LV_SYMBOL_BATTERY_1) == 0) {
-      lv_obj_set_style_text_color(label, lv_color_hex(0xffcd44), LV_PART_MAIN);
-    } else {
-      lv_obj_set_style_text_color(label, lv_color_hex(0xff0000), LV_PART_MAIN);
-
+    lv_obj_t *label = lv_event_get_target(e);
+    lv_msg_t *m = lv_event_get_msg(e);
+    switch (lv_msg_get_id(m))
+    {
+    case MSG_SDCARD_MOUNT:
+      sdcard_status = lv_msg_get_payload(m);
+      lv_label_set_text(label, sdcard_status);
+      break;
+    case MSG_CHARGE_SET:
+      lv_label_set_text(label, lv_msg_get_payload(m));
+      break;
+    case MSG_BAT_SET:
+      battery_str = lv_msg_get_payload(m);
+      lv_label_set_text(label, battery_str);
+      if (strcmp(battery_str, LV_SYMBOL_BATTERY_FULL) == 0)
+      {
+        lv_obj_set_style_text_color(label, lv_color_hex(0x61b865), LV_PART_MAIN);
+      }
+      else if (strcmp(battery_str, LV_SYMBOL_BATTERY_2) == 0 || strcmp(battery_str, LV_SYMBOL_BATTERY_1) == 0)
+      {
+        lv_obj_set_style_text_color(label, lv_color_hex(0xffcd44), LV_PART_MAIN);
+      }
+      else
+      {
+        lv_obj_set_style_text_color(label, lv_color_hex(0xff0000), LV_PART_MAIN);
+      }
+      break;
+    case MSG_TIME_SET:
+      time_str = lv_msg_get_payload(m);
+      lv_label_set_text(label, time_str);
+      break;
+    case MSG_WIFI_IS_CONNECTED:
+      wifi_status = LV_SYMBOL_WIFI;
+      lv_label_set_text(label, LV_SYMBOL_WIFI);
+      lv_obj_set_size(label_wifi, 30, 20);
+      break;
+    case MSG_WIFI_NOT_CONNECTED:
+      wifi_status = "";
+      lv_label_set_text(label, "");
+      // lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_GREEN), 0);
+      break;
+    default:
+      break;
     }
-    break;
-  case MSG_TIME_SET:
-    time_str = lv_msg_get_payload(m);
-    lv_label_set_text(label, time_str);
-    break;
-  case MSG_WIFI_IS_CONNECTED:
-    wifi_status = LV_SYMBOL_WIFI;
-    lv_label_set_text(label, LV_SYMBOL_WIFI);
-    lv_obj_set_size(label_wifi, 30, 20);
-    break;
-  case MSG_WIFI_NOT_CONNECTED:
-    wifi_status = "";
-    lv_label_set_text(label, "");
-    // lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_GREEN), 0);
-    break;
-  default:
-    break;
   }
 }
 
@@ -184,7 +192,6 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_add_event_cb(label_sdcard, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_SDCARD_MOUNT, label_sdcard, NULL);
-  
 
   // 时间模块
   label_time = lv_label_create(panel);
@@ -193,7 +200,6 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_add_event_cb(label_time, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_TIME_SET, label_time, NULL);
-  
 
   // 电量模块
   lv_obj_t *label_bat_group = lv_label_create(panel);
@@ -205,10 +211,8 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_set_flex_align(label_bat_group, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
   // lv_obj_set_align(label_bat_group, LV_ALIGN_CENTER);
 
-
-
   label_batchar = lv_label_create(label_bat_group);
- 
+
   lv_label_set_text(label_batchar, "");
   // 设置消息回调
   lv_obj_add_event_cb(label_batchar, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
@@ -231,7 +235,6 @@ void status_bar_init(lv_obj_t *pageContent)
   // lv_anim_set_early_apply(&charge_opacity, true);
   // lv_anim_start(&charge_opacity);
 
-
   label_level = lv_label_create(label_bat_group);
   lv_label_set_text(label_level, battery_str);
 
@@ -239,6 +242,4 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_add_event_cb(label_level, msg_event_cb, LV_EVENT_MSG_RECEIVED, NULL);
   // 订阅消息
   lv_msg_subsribe_obj(MSG_BAT_SET, label_level, NULL);
-
-  
 }

@@ -1,19 +1,19 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-27 00:03:26
+ * @LastEditTime: 2024-05-31 11:25:54
  */
 
 #include "Model.h"
 
-TaskHandle_t tash_update_statusbar_handle;
+TaskHandle_t task_update_statusbar_handle;
 
 inline float _getMin(float a, float b)
 {
   return ((a) < (b) ? (a) : (b));
 }
 
-void tash_update_statusbar(void *pvParameters)
+void task_update_statusbar(void *pvParameters)
 {
   char msg[20];
   char msg_battery[20];
@@ -83,7 +83,6 @@ void event_handle_cb(void *s, lv_msg_t *m)
   switch (lv_msg_get_id(m))
   {
   case MSG_CONNECT_WIFI:
-
     xTaskCreate(connect_wifi, "connect_wifi", 1024 * 5, NULL, 1, NULL);
     break;
   case MSG_GET_SRAM:
@@ -96,19 +95,19 @@ void event_handle_cb(void *s, lv_msg_t *m)
 
 void statusbar_viewmodel_init(void)
 {
-  // xTaskCreate(tash_update_statusbar, "tash_update_statusbar", 1024 * 10, NULL, 1, &tash_update_statusbar_handle);
+  // xTaskCreate(task_update_statusbar, "task_update_statusbar", 1024 * 10, NULL, 1, &task_update_statusbar_handle);
   // 使用外部内存
-  xTaskCreateWithCaps(tash_update_statusbar, "tash_update_statusbar", 20 * 1024, NULL, 1, &tash_update_statusbar_handle, MALLOC_CAP_SPIRAM);
+  xTaskCreateWithCaps(task_update_statusbar, "task_update_statusbar", 20 * 1024, NULL, 1, &task_update_statusbar_handle, MALLOC_CAP_SPIRAM);
   lv_msg_subsribe(MSG_CONNECT_WIFI, event_handle_cb, NULL);
   lv_msg_subsribe(MSG_GET_SRAM, event_handle_cb, NULL);
 }
 
 void statusbar_task_suspend(void)
 {
-  vTaskSuspend(tash_update_statusbar_handle);
+  vTaskSuspend(task_update_statusbar_handle);
 }
 
 void statusbar_task_resume(void)
 {
-  vTaskResume(tash_update_statusbar_handle);
+  vTaskResume(task_update_statusbar_handle);
 }

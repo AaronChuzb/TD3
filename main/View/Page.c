@@ -1,7 +1,7 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-30 19:09:16
+ * @LastEditTime: 2024-05-31 11:31:20
  */
 #include "Page.h"
 
@@ -26,9 +26,9 @@ void obj_clean_event_cb(lv_timer_t *timer)
   lv_timer_reset(timer);
 }
 
-void my_screen_clean_up(void * scr)
+void my_screen_clean_up(void *scr)
 {
-  lv_obj_clean(scr);  
+  lv_obj_clean(scr);
 }
 
 static void gesture_event(lv_event_t *e)
@@ -121,7 +121,6 @@ bool Page_Push(char *name)
     status_bar_init(cur_page.PageContent);
     status_bar_in();
   }
-  lv_scr_load(cur_page.PageContent);
 
   if (old_page.Destroy != NULL)
   {
@@ -130,9 +129,13 @@ bool Page_Push(char *name)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    
-    // lv_async_call(my_screen_clean_up, old_page.PageContent);
+
+    if (lv_obj_is_valid(old_page.PageContent))
+    {
+      lv_async_call(lv_obj_clean, old_page.PageContent);
+    }
   }
+  lv_scr_load(cur_page.PageContent);
   isChanging = false;
   // 添加手势监听
   lv_obj_add_event_cb(cur_page.PageContent, gesture_event, LV_EVENT_GESTURE, NULL);
@@ -182,7 +185,10 @@ bool Page_Replace(char *name)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    // lv_async_call(my_screen_clean_up, old_page.PageContent);
+    if (lv_obj_is_valid(old_page.PageContent))
+    {
+      lv_async_call(lv_obj_clean, old_page.PageContent);
+    }
   }
   lv_scr_load(cur_page.PageContent);
 
@@ -219,7 +225,7 @@ bool Page_Back(uint16_t delt)
     status_bar_init(cur_page.PageContent);
     status_bar_in();
   }
-  lv_scr_load(cur_page.PageContent);
+
   // lv_scr_load_anim(cur_page.PageContent, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, false);
 
   if (old_page.Destroy != NULL)
@@ -229,8 +235,12 @@ bool Page_Back(uint16_t delt)
     old_page.Destroy();
     // timer = lv_timer_create(obj_clean_event_cb, 300, old_page.PageContent);
     // lv_timer_set_repeat_count(timer, 1);
-    // lv_async_call(my_screen_clean_up, old_page.PageContent);
+    if (lv_obj_is_valid(old_page.PageContent))
+    {
+      lv_async_call(lv_obj_clean, old_page.PageContent);
+    }
   }
+  lv_scr_load(cur_page.PageContent);
   isChanging = false;
   // 添加手势监听
   lv_obj_add_event_cb(cur_page.PageContent, gesture_event, LV_EVENT_GESTURE, NULL);
@@ -256,4 +266,9 @@ void Page_Update()
   {
     cur_page.Update();
   }
+}
+
+bool isPageChanging()
+{
+  return isChanging;
 }

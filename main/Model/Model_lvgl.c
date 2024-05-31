@@ -32,6 +32,7 @@ static void lvgl_port_task(void *arg)
     {
       task_delay_ms = lv_timer_handler();
       // Release the mutex
+      
       lvgl_unlock();
     }
     if (task_delay_ms > LVGL_TASK_MAX_DELAY_MS)
