@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-02-19 20:21:54
+ * @LastEditTime: 2024-05-31 22:35:00
  */
 #pragma once
 
@@ -88,6 +88,7 @@ float qmc5883l_raw_to_azimuth();
 int qmc5883l_azimuth_smooth_output();
 char *qmc5883l_azimuth_to_direction();
 void init_qmc5883l();
+
  
 
 #ifdef __cplusplus

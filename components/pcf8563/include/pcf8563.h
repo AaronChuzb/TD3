@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-08 13:18:50
+ * @LastEditTime: 2024-05-31 22:37:49
  */
 #pragma once
 
@@ -22,6 +22,7 @@ extern "C"
 
 #define REG_ID 0x51
 
+bool initialized_pcf8563();
 void init_pcf8563();
 esp_err_t pcf8563_set_time(struct tm *time);
 esp_err_t pcf8563_get_time(struct tm *time);

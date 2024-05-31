@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:47:22
+ * @LastEditTime: 2024-05-31 22:21:28
  */
 
 #ifndef MODEL_H
@@ -44,6 +44,9 @@ extern "C"
   void lvgl_task_resume(void);
   bool lvgl_lock(int timeout_ms);
   void lvgl_unlock(void);
+
+
+  void time_model_init();
 
   void Model_init(void);
 

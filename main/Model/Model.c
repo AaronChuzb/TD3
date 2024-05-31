@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-29 17:54:07
+ * @LastEditTime: 2024-05-31 22:21:48
  */
 
 #include "Model.h"
@@ -39,6 +39,7 @@ void Model_init(void)
 {
   lvgl_task_init();
   statusbar_viewmodel_init();
+  time_model_init();
   Queue_init();
   xTaskCreate(Model_receive_message_task, "Model_receive_message_task", 1024 * 2, NULL, 2, NULL);
 }

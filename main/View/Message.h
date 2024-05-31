@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-27 00:02:48
+ * @LastEditTime: 2024-05-31 22:18:53
  */
 
 
@@ -36,6 +36,9 @@ extern "C" {
 #define MSG_DISCONNECT_WIFI 12
 
 #define MSG_GET_SRAM 13
+
+#define MSG_GET_TIME 14
+#define MSG_SET_TIME 15
 
 #ifdef __cplusplus
 } /* extern "C" */

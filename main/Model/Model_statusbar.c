@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:25:54
+ * @LastEditTime: 2024-05-31 22:39:44
  */
 
 #include "Model.h"
@@ -82,7 +82,7 @@ void connect_wifi(void *pvParameters)
   vTaskDelete(NULL);
 }
 
-void event_handle_cb(void *s, lv_msg_t *m)
+static void event_handle_cb(void *s, lv_msg_t *m)
 {
   LV_UNUSED(s);
   switch (lv_msg_get_id(m))
