@@ -46,12 +46,27 @@ int32_t _ui_anim_callback_get_image_angle(lv_anim_t *a)
   if (lv_obj_is_valid(usr->target))
   {
     return lv_img_get_angle(usr->target);
-  } else {
+  }
+  else
+  {
     return 0;
   }
 }
 
+static void convert_time_to_angle(int hours, int minutes, int seconds)
+{
+  // 计算时针角度
+  int hour_angle = (hours % 12) * 300 + (minutes * 300 / 60);
+  lv_img_set_angle(ui_hour, hour_angle);
 
+  // 计算分针角度
+  int minute_angle = minutes * 60 + (seconds * 60 / 60);
+  lv_img_set_angle(ui_min, minute_angle);
+
+  // 计算秒针角度
+  int second_angle = seconds * 60;
+  lv_img_set_angle(ui_sec, second_angle);
+}
 
 void time_Animation(lv_obj_t *TargetObject, int delay, long duration, int value)
 {
