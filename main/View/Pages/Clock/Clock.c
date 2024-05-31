@@ -114,7 +114,7 @@ static void Created()
   // sec_Animation(ui_sec, 0);
   time_Animation(ui_sec, 0, 60000, 3600);
   time_Animation(ui_min, 0, 60000 * 60, 3600);
-  time_Animation(ui_hour, 0, 60000 * 60 * 60, 3600);
+  time_Animation(ui_hour, 0, 60000 * 60 * 12, 3600);
 }
 
 static void Update(void)
