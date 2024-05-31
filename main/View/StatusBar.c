@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:26:01
+ * @LastEditTime: 2024-05-31 11:35:00
  */
 
 #include "StatusBar.h"
@@ -95,8 +95,8 @@ void status_bar_out(void)
 
 static void msg_event_cb(lv_event_t *e)
 {
-  printf("%d", isPageChanging());
-  if (isPageChanging())
+  // printf("%d", isPageChanging());
+  if (!isPageChanging())
   {
     lv_obj_t *label = lv_event_get_target(e);
     lv_msg_t *m = lv_event_get_msg(e);
