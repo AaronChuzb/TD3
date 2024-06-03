@@ -2,6 +2,10 @@
 
 <img src="image/README/1712408203453.png" width="400px" />
 
+# 介绍视频
+
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1853047000&bvid=BV1cp421R78N&cid=1508688648&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
 # TD3 项目配置
 
 1. 基于 `esp-idf5.1.2`版本开发，后续可能会更换威更新的 idf 版本
