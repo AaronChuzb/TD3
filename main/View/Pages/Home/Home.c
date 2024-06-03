@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 14:41:27
+ * @LastEditTime: 2024-06-03 16:42:19
  */
 
 #include "Home.h"
@@ -18,6 +18,7 @@ lv_obj_t *obj5;
 int current_index = 0;
 
 lv_obj_t *title_roller;
+static lv_obj_t *sub_title;
 
 LV_IMG_DECLARE(ui_img_battery_png);
 LV_IMG_DECLARE(ui_img_gyro_png);
@@ -33,20 +34,21 @@ LV_FONT_DECLARE(lv_youshebiaotihei_24)
 struct ButtonData
 {
   char *title;
+  char *sub_title;
   lv_img_dsc_t *img;
   char *path;
 };
 
 const struct ButtonData button_data[9] = {
-    {"电池信息", &ui_img_battery_png, ""},
-    {"陀螺仪", &ui_img_gyro_png, ""},
-    {"气压计", &ui_img_press_png, ""},
-    {"储存卡", &ui_img_sdcard_png, ""},
-    {"实时时钟", &ui_img_time_png, "Clock"},
-    {"系统设置", &ui_img_setting_png, ""},
-    {"网络配置", &ui_img_net_png, ""},
-    {"天气查询", &ui_img_weather_png, ""},
-    {"MIDI音乐", &ui_img_music_png, ""},
+    {"电池信息", "查看来自AXP173电源管理芯片的数据,包括电压电流库仑计数据等.\n可以手动重置库仑计数据.", &ui_img_battery_png, ""},
+    {"陀螺仪", "查看陀螺仪数据", &ui_img_gyro_png, ""},
+    {"气压计", "查看来自BMP280的大气压数据,和相对高度的变化.", &ui_img_press_png, ""},
+    {"储存卡", "查看内存卡数据文件列表.", &ui_img_sdcard_png, ""},
+    {"实时时钟", "查看当前时间,同步网络时间.\n设定定时任务,如番茄时钟等.", &ui_img_time_png, "Clock"},
+    {"系统设置", "查看系统版本,设置亮度,设置背光时间,设置天气城市,设置天气更新频率.", &ui_img_setting_png, ""},
+    {"网络配置", "配置WiFi.", &ui_img_net_png, ""},
+    {"天气查询", "查看当前设定的城市的天气.", &ui_img_weather_png, ""},
+    {"MIDI音乐", "播放mid格式的音乐...\n功能开发中", &ui_img_music_png, ""},
 };
 
 static void boxarea_event_cb(lv_event_t *e)
@@ -87,10 +89,11 @@ static void scroll_event_cb(lv_event_t *e)
     // 离得越进 缩放越明显
     lv_coord_t zoom = 325 - diff_y;
     // printf("zoom: %d\n", zoom);
-    if(zoom <= 256){
+    if (zoom <= 256)
+    {
       zoom = 256;
     }
-    
+
     // uint32_t x_sqr = r * r - diff_y * diff_y;
     // lv_sqrt_res_t res;
     // lv_sqrt(x_sqr, &res, 0x8000);
@@ -157,7 +160,7 @@ static void scroll_end_event(lv_event_t *e)
         lv_obj_t *text = lv_obj_get_child(btn, 0);
         char *index_str = lv_label_get_text(text);
         current_index = atoi(index_str);
-
+        lv_label_set_text(sub_title, button_data[current_index].sub_title);
         lv_roller_set_selected(title_roller, current_index, LV_ANIM_ON);
         lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF);
 
@@ -215,8 +218,16 @@ void home_menu()
                         LV_ROLLER_MODE_INFINITE);
 
   // lv_obj_center(title_roller);
-  lv_obj_align(title_roller, LV_ALIGN_TOP_LEFT, 10, 10);
+  lv_obj_align(title_roller, LV_ALIGN_TOP_LEFT, 5, 20);
   lv_roller_set_visible_row_count(title_roller, 1);
+
+  sub_title = lv_label_create(box);
+  lv_obj_add_style(sub_title, &font_style_dingdingjinbu_14, LV_PART_MAIN);
+  lv_obj_set_size(sub_title, LV_HOR_RES / 2 - 30, LV_HOR_RES - 70);
+  lv_label_set_text(sub_title, "");
+  lv_label_set_long_mode(sub_title, LV_LABEL_LONG_WRAP);
+  lv_obj_set_style_text_color(sub_title, lv_color_hex(0xabb2bf), LV_PART_MAIN);
+  lv_obj_align(sub_title, LV_ALIGN_TOP_LEFT, 2, 60);
 
   uint32_t i;
   for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
