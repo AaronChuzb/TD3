@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:39:21
+ * @LastEditTime: 2024-06-03 14:41:27
  */
 
 #include "Home.h"
@@ -15,8 +15,9 @@ struct PageType Home;
 lv_obj_t *obj1;
 lv_obj_t *obj5;
 
-lv_obj_t *content_title;
 int current_index = 0;
+
+lv_obj_t *title_roller;
 
 LV_IMG_DECLARE(ui_img_battery_png);
 LV_IMG_DECLARE(ui_img_gyro_png);
@@ -27,6 +28,7 @@ LV_IMG_DECLARE(ui_img_time_png);
 LV_IMG_DECLARE(ui_img_net_png);
 LV_IMG_DECLARE(ui_img_weather_png);
 LV_IMG_DECLARE(ui_img_music_png);
+LV_FONT_DECLARE(lv_youshebiaotihei_24)
 
 struct ButtonData
 {
@@ -49,12 +51,7 @@ const struct ButtonData button_data[9] = {
 
 static void boxarea_event_cb(lv_event_t *e)
 {
-  // lv_obj_t *box = lv_event_get_target(e); // 获取事件的初始对象
   lv_event_code_t code = lv_event_get_code(e);
-  // if (lv_obj_is_scrolling(box))
-  // {
-  //   return;
-  // }
   if (code == LV_EVENT_CLICKED)
   { // 点击事件
     printf("%s", button_data[current_index].path);
@@ -71,32 +68,37 @@ static void scroll_event_cb(lv_event_t *e)
   lv_obj_t *cont = lv_event_get_target(e);
   lv_area_t cont_a;
   lv_obj_get_coords(cont, &cont_a);
+  // 滚动区域y轴中点
   lv_coord_t cont_y_center = cont_a.y1 + lv_area_get_height(&cont_a) / 2;
-  lv_coord_t r = lv_obj_get_width(cont) * 7 / 10;
-  uint32_t i;
+  lv_coord_t r = lv_obj_get_width(cont) * 7 / 20;
+  // 滚动子元素数量
   uint32_t child_cnt = lv_obj_get_child_cnt(cont);
-  lv_coord_t mid_btn_index = (child_cnt - 1) / 2;
-  for (i = 0; i < child_cnt; i++)
+
+  for (uint32_t i = 0; i < child_cnt; i++)
   {
     lv_obj_t *child = lv_obj_get_child(cont, i);
+    lv_obj_t *img = lv_obj_get_child(child, 1);
     lv_area_t child_a;
     lv_obj_get_coords(child, &child_a);
     lv_coord_t child_y_center = child_a.y1 + lv_area_get_height(&child_a) / 2;
     lv_coord_t diff_y = child_y_center - cont_y_center;
+    // 距离中心点位置
     diff_y = LV_ABS(diff_y);
-    lv_coord_t x;
-    if (diff_y >= r)
-    {
-      x = r;
+    // 离得越进 缩放越明显
+    lv_coord_t zoom = 325 - diff_y;
+    // printf("zoom: %d\n", zoom);
+    if(zoom <= 256){
+      zoom = 256;
     }
-    else
-    {
-      uint32_t x_sqr = r * r - diff_y * diff_y;
-      lv_sqrt_res_t res;
-      lv_sqrt(x_sqr, &res, 0x8000);
-      x = r - res.i - 20;
-    }
-    lv_obj_set_style_translate_x(child, x, 0);
+    
+    // uint32_t x_sqr = r * r - diff_y * diff_y;
+    // lv_sqrt_res_t res;
+    // lv_sqrt(x_sqr, &res, 0x8000);
+    // zoom = r - res.i;
+    lv_img_set_zoom(img, zoom);
+    // lv_obj_set_style_translate_x(child, x, 0);
+    // lv_obj_t *img = lv_obj_get_child(btn, 1);
+    // lv_img_set_zoom(img, 300);
 
     /*Use some opacity with larger translations*/
     // lv_opa_t opa = lv_map(x, 0, r, LV_OPA_TRANSP, LV_OPA_COVER);
@@ -137,7 +139,6 @@ static void scroll_end_event(lv_event_t *e)
       if (child_y_center == cont_y_center)
       {
         lv_coord_t current_btn_index = lv_obj_get_index(child);
-        // printf("current_btn_index:%d", current_btn_index);
         lv_coord_t move_btn_quantity = LV_ABS(current_btn_index - mid_btn_index);
         for (lv_coord_t j = 0; j < move_btn_quantity; j++)
         {
@@ -156,8 +157,10 @@ static void scroll_end_event(lv_event_t *e)
         lv_obj_t *text = lv_obj_get_child(btn, 0);
         char *index_str = lv_label_get_text(text);
         current_index = atoi(index_str);
-        lv_label_set_text(content_title, button_data[current_index].title);
+
+        lv_roller_set_selected(title_roller, current_index, LV_ANIM_ON);
         lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_OFF);
+
         break;
       }
     }
@@ -171,15 +174,14 @@ void home_menu()
   lv_obj_set_style_bg_color(cont, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-  lv_obj_set_size(cont, LV_HOR_RES, LV_VER_RES - 25);
-  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 25);
+  lv_obj_set_size(cont, LV_HOR_RES / 2, LV_VER_RES - 25);
+  lv_obj_align(cont, LV_ALIGN_TOP_LEFT, 0, 25);
 
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
 
   lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_SCROLL, NULL); // 为了方便实现，先把滚动的动画屏蔽
   lv_obj_add_event_cb(cont, scroll_end_event, LV_EVENT_SCROLL_END, NULL);
 
-  // lv_obj_set_style_radius(cont, LV_RADIUS_CIRCLE, 0);
   lv_obj_set_style_clip_corner(cont, true, 0);
   lv_obj_set_scroll_dir(cont, LV_DIR_VER);
   lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER);
@@ -192,22 +194,35 @@ void home_menu()
   lv_obj_set_style_bg_color(box, lv_color_hex(0x292831), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_add_event_cb(box, boxarea_event_cb, LV_EVENT_ALL, NULL);
 
-  lv_obj_t *title_box = lv_obj_create(box);
-  lv_obj_remove_style_all(title_box);
-  lv_obj_align(title_box, LV_ALIGN_TOP_LEFT, -15, 10);
-  lv_obj_set_size(title_box, LV_HOR_RES / 2, 30);
+  title_roller = lv_roller_create(box);
+  lv_obj_set_style_bg_opa(title_roller, LV_OPA_TRANSP, LV_PART_SELECTED);
+  lv_obj_set_style_pad_all(title_roller, 0, LV_PART_MAIN);
+  lv_obj_set_style_border_width(title_roller, 0, LV_PART_MAIN);
+  lv_obj_set_style_text_color(title_roller, lv_color_white(), LV_PART_MAIN);
+  lv_obj_set_style_text_font(title_roller, &lv_youshebiaotihei_24, LV_PART_SELECTED);
+  lv_obj_clear_flag(title_roller, LV_OBJ_FLAG_SCROLLABLE);
 
-  content_title = lv_label_create(title_box);
-  lv_obj_add_style(content_title, &font_style_youshebiaotihei_24, 0);
-  lv_label_set_text(content_title, "");
-  lv_obj_set_style_text_color(content_title, lv_color_hex(0xffffff), LV_STATE_DEFAULT);
-  lv_obj_set_align(content_title, LV_ALIGN_CENTER);
+  lv_roller_set_options(title_roller,
+                        "电池信息\n"
+                        "陀螺仪\n"
+                        "气压计\n"
+                        "储存卡\n"
+                        "实时时钟\n"
+                        "系统设置\n"
+                        "网络配置\n"
+                        "天气查询\n"
+                        "MIDI音乐",
+                        LV_ROLLER_MODE_INFINITE);
+
+  // lv_obj_center(title_roller);
+  lv_obj_align(title_roller, LV_ALIGN_TOP_LEFT, 10, 10);
+  lv_roller_set_visible_row_count(title_roller, 1);
 
   uint32_t i;
   for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
   {
     lv_obj_t *btn = lv_btn_create(cont);
-    lv_obj_set_width(btn, lv_pct(28));
+    lv_obj_set_width(btn, lv_pct(100));
     lv_obj_set_height(btn, lv_pct(40));
     lv_obj_set_style_border_width(btn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_border_color(btn, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -224,7 +239,7 @@ void home_menu()
     lv_obj_set_width(img, LV_SIZE_CONTENT);  /// 64
     lv_obj_set_height(img, LV_SIZE_CONTENT); /// 64
     lv_obj_set_align(img, LV_ALIGN_CENTER);
-    lv_obj_align(img, LV_ALIGN_LEFT_MID, 0, 0);
+    // lv_obj_align(img, LV_ALIGN_LEFT_MID, 0, 0);
   }
 
   lv_coord_t mid_btn_index = (lv_obj_get_child_cnt(cont) - 1) / 2;
@@ -243,6 +258,7 @@ void home_menu()
     }
   }
   lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_ON);
+  lv_roller_set_selected(title_roller, mid_btn_index, LV_ANIM_ON);
 }
 
 static void Created()
@@ -251,6 +267,8 @@ static void Created()
   lv_obj_clear_flag(Home.PageContent, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_clip_corner(Home.PageContent, true, 0);
   home_menu();
+
+  // lv_example_roller_30();
 
   // lv_obj_t *arc = lv_arc_create(Home.PageContent);
   // lv_obj_set_size(arc, 150, 150);
@@ -313,7 +331,6 @@ static void Destroy(void)
   {
     lv_async_call(lv_obj_clean, Home.PageContent);
   }
-  
 }
 
 static void Method(void *btn, int event)

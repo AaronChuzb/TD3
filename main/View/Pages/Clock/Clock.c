@@ -71,7 +71,7 @@ static void convert_time_to_angle(int hours, int minutes, int seconds)
   lv_img_set_angle(ui_sec, second_angle);
 }
 
-void time_Animation(lv_obj_t *TargetObject, int delay, long duration, int value)
+void time_Animation(lv_obj_t *TargetObject, int delay, uint32_t duration, int value)
 {
   ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
   PropertyAnimation_0_user_data->target = TargetObject;
@@ -119,72 +119,100 @@ static void event_handle_cb(void *s, lv_msg_t *m)
 #define CENTER_Y (SCREEN_HEIGHT / 2) + 10
 #define RADIUS 150
 #define NUMBERS 12
-void create_clock_labels(lv_obj_t * parent) {
-    for (int i = 1; i <= NUMBERS; i++) {
-        // 计算数字角度
-        float angle = (360.0 / NUMBERS) * i;
-        // 角度转换为弧度
-        float radian = (angle - 90) * M_PI / 180.0;
+void create_clock_labels(lv_obj_t *parent)
+{
+  for (int i = 1; i <= NUMBERS; i++)
+  {
+    // 计算数字角度
+    float angle = (360.0 / NUMBERS) * i;
+    // 角度转换为弧度
+    float radian = (angle - 90) * M_PI / 180.0;
 
-        // 计算数字位置
-        int num_x = CENTER_X + (int)(RADIUS * cos(radian));
-        int num_y = CENTER_Y + (int)(RADIUS * sin(radian));
+    // 计算数字位置
+    int num_x = CENTER_X + (int)(RADIUS * cos(radian));
+    int num_y = CENTER_Y + (int)(RADIUS * sin(radian));
 
-        // 创建标签
-        lv_obj_t * label = lv_label_create(parent);
+    // 创建标签
+    lv_obj_t *label = lv_label_create(parent);
 
-        // 设置标签文本
-        char num_str[3];
-        snprintf(num_str, sizeof(num_str), "%d", i);
-        lv_label_set_text(label, num_str);
+    // 设置标签文本
+    char num_str[3];
+    snprintf(num_str, sizeof(num_str), "%d", i);
+    lv_label_set_text(label, num_str);
 
-        // 设置标签位置
-        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);  // 确保文本居中对齐
-        lv_obj_align(label, LV_ALIGN_CENTER, num_x - CENTER_X, num_y - CENTER_Y);
-    }
+    // 设置标签位置
+    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0); // 确保文本居中对齐
+    lv_obj_align(label, LV_ALIGN_CENTER, num_x - CENTER_X, num_y - CENTER_Y);
+  }
 }
 
-void create_clock_labels_and_dots(lv_obj_t * parent) {
-    for (int i = 1; i <= NUMBERS; i++) {
-        // 计算角度
-        float angle = (360.0 / NUMBERS) * i;
-        // 角度转换为弧度
-        float radian = (angle - 90) * M_PI / 180.0;
+void create_clock_labels_and_dots(lv_obj_t *parent)
+{
+  for (int i = 1; i <= NUMBERS; i++)
+  {
+    // 计算角度
+    float angle = (360.0 / NUMBERS) * i;
+    // 角度转换为弧度
+    float radian = (angle - 90) * M_PI / 180.0;
 
-        // 计算位置
-        int pos_x = CENTER_X + (int)(RADIUS * cos(radian));
-        int pos_y = CENTER_Y + (int)(RADIUS * sin(radian));
+    // 计算位置
+    int pos_x = CENTER_X + (int)(RADIUS * cos(radian));
+    int pos_y = CENTER_Y + (int)(RADIUS * sin(radian));
 
-        // 创建标签或点
-        if (i == 3 || i == 6 || i == 9 || i == 12) {
-            // 创建标签
-            lv_obj_t * label = lv_label_create(parent);
-            lv_obj_add_style(label, &font_style_youshebiaotihei_24, 0);
+    // 创建标签或点
+    if (i == 3 || i == 6 || i == 9 || i == 12)
+    {
+      // 创建标签
+      lv_obj_t *label = lv_label_create(parent);
+      lv_obj_add_style(label, &font_style_youshebiaotihei_24, 0);
 
-            // 设置标签文本
-            char num_str[3];
-            snprintf(num_str, sizeof(num_str), "%d", i == 12 ? 12 : i);
-            lv_label_set_text(label, num_str);
+      // 设置标签文本
+      char num_str[3];
+      snprintf(num_str, sizeof(num_str), "%d", i == 12 ? 12 : i);
+      lv_label_set_text(label, num_str);
 
-            // 设置标签位置
-            lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);  // 确保文本居中对齐
-            lv_obj_align(label, LV_ALIGN_CENTER, pos_x - CENTER_X, pos_y - CENTER_Y);
-        } else {
-            // 创建点（小圆点）
-            lv_obj_t * dot = lv_obj_create(parent);
-            lv_obj_set_size(dot, 5, 5); // 设置点的大小
-            lv_obj_set_style_radius(dot, 5, 0); // 使点为圆形
-            lv_obj_set_style_bg_color(dot, lv_palette_main(LV_PALETTE_RED), 0); // 设置点的颜色
-
-            // 设置点的位置
-            lv_obj_align(dot, LV_ALIGN_CENTER, pos_x - CENTER_X, pos_y - CENTER_Y);
-        }
+      // 设置标签位置
+      lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0); // 确保文本居中对齐
+      lv_obj_align(label, LV_ALIGN_CENTER, pos_x - CENTER_X, pos_y - CENTER_Y);
     }
-}
+    else
+    {
+      // 创建点（小圆点）
+      lv_obj_t *dot = lv_obj_create(parent);
+      lv_obj_set_size(dot, 5, 5);                                         // 设置点的大小
+      lv_obj_set_style_radius(dot, 5, 0);                                 // 使点为圆形
+      lv_obj_set_style_bg_color(dot, lv_palette_main(LV_PALETTE_RED), 0); // 设置点的颜色
 
+      // 设置点的位置
+      lv_obj_align(dot, LV_ALIGN_CENTER, pos_x - CENTER_X, pos_y - CENTER_Y);
+    }
+  }
+}
 
 static void Created()
 {
+
+  ui_hour = lv_img_create(Clock.PageContent);
+  lv_img_set_src(ui_hour, &ui_img_clockwise_hour_png);
+  lv_obj_set_width(ui_hour, LV_SIZE_CONTENT);  /// 1
+  lv_obj_set_height(ui_hour, LV_SIZE_CONTENT); /// 1
+  lv_obj_set_x(ui_hour, 0);
+  lv_obj_set_y(ui_hour, -25);
+  lv_obj_set_align(ui_hour, LV_ALIGN_CENTER);
+  lv_obj_add_flag(ui_hour, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
+  lv_obj_clear_flag(ui_hour, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+  lv_img_set_pivot(ui_hour, 9, 93);
+
+  ui_min = lv_img_create(Clock.PageContent);
+  lv_img_set_src(ui_min, &ui_img_clockwise_min_png);
+  lv_obj_set_width(ui_min, LV_SIZE_CONTENT);  /// 1
+  lv_obj_set_height(ui_min, LV_SIZE_CONTENT); /// 1
+  lv_obj_set_x(ui_min, 0);
+  lv_obj_set_y(ui_min, -55);
+  lv_obj_set_align(ui_min, LV_ALIGN_CENTER);
+  lv_obj_add_flag(ui_min, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
+  lv_obj_clear_flag(ui_min, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+  lv_img_set_pivot(ui_min, 9, 153);
 
   create_clock_labels_and_dots(Clock.PageContent);
   ui_sec = lv_img_create(Clock.PageContent);
@@ -199,34 +227,14 @@ static void Created()
   lv_img_set_pivot(ui_sec, 15, 155);
   lv_img_set_angle(ui_sec, 0);
 
-  ui_min = lv_img_create(Clock.PageContent);
-  lv_img_set_src(ui_min, &ui_img_clockwise_min_png);
-  lv_obj_set_width(ui_min, LV_SIZE_CONTENT);  /// 1
-  lv_obj_set_height(ui_min, LV_SIZE_CONTENT); /// 1
-  lv_obj_set_x(ui_min, 0);
-  lv_obj_set_y(ui_min, -55);
-  lv_obj_set_align(ui_min, LV_ALIGN_CENTER);
-  lv_obj_add_flag(ui_min, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
-  lv_obj_clear_flag(ui_min, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-  lv_img_set_pivot(ui_min, 9, 153);
-
-  ui_hour = lv_img_create(Clock.PageContent);
-  lv_img_set_src(ui_hour, &ui_img_clockwise_hour_png);
-  lv_obj_set_width(ui_hour, LV_SIZE_CONTENT);  /// 1
-  lv_obj_set_height(ui_hour, LV_SIZE_CONTENT); /// 1
-  lv_obj_set_x(ui_hour, 0);
-  lv_obj_set_y(ui_hour, -25);
-  lv_obj_set_align(ui_hour, LV_ALIGN_CENTER);
-  lv_obj_add_flag(ui_hour, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
-  lv_obj_clear_flag(ui_hour, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-  lv_img_set_pivot(ui_hour, 9, 93);
   // 获取一遍时间
   lv_msg_subsribe(MSG_SET_TIME, event_handle_cb, NULL);
   lv_msg_send(MSG_GET_TIME, NULL);
   // sec_Animation(ui_sec, 0);
+
+  time_Animation(ui_hour, 0, 43200000, 3600);
+  time_Animation(ui_min, 0, 3600000, 3600);
   time_Animation(ui_sec, 0, 60000, 3600);
-  time_Animation(ui_min, 0, 60000 * 60, 3600);
-  time_Animation(ui_hour, 0, 60000 * 60 * 12, 3600);
 }
 
 static void Update(void)

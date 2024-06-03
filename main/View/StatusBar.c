@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:46:24
+ * @LastEditTime: 2024-06-03 14:43:34
  */
 
 #include "StatusBar.h"
@@ -158,6 +158,7 @@ void status_bar_init(lv_obj_t *pageContent)
   lv_obj_set_flex_align(panel, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
   lv_obj_set_style_pad_left(panel, 30, 0);
   lv_obj_set_style_pad_right(panel, 30, 0);
+  lv_obj_clear_flag(panel, LV_OBJ_FLAG_SCROLLABLE);
 
   // 硬件模块
   lv_obj_t *label_wifi_group = lv_label_create(panel);
