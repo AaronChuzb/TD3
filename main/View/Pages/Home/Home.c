@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 16:42:19
+ * @LastEditTime: 2024-06-03 17:28:46
  */
 
 #include "Home.h"
@@ -42,7 +42,7 @@ struct ButtonData
 const struct ButtonData button_data[9] = {
     {"电池信息", "查看来自AXP173电源管理芯片的数据,包括电压电流库仑计数据等.\n可以手动重置库仑计数据.", &ui_img_battery_png, ""},
     {"陀螺仪", "查看陀螺仪数据", &ui_img_gyro_png, ""},
-    {"气压计", "查看来自BMP280的大气压数据,和相对高度的变化.", &ui_img_press_png, ""},
+    {"气压计", "查看来自BMP280的大气压数据,和相对高度的变化.", &ui_img_press_png, "Pressure"},
     {"储存卡", "查看内存卡数据文件列表.", &ui_img_sdcard_png, ""},
     {"实时时钟", "查看当前时间,同步网络时间.\n设定定时任务,如番茄时钟等.", &ui_img_time_png, "Clock"},
     {"系统设置", "查看系统版本,设置亮度,设置背光时间,设置天气城市,设置天气更新频率.", &ui_img_setting_png, ""},
@@ -193,7 +193,7 @@ void home_menu()
   lv_obj_t *box = lv_btn_create(Home.PageContent);
   lv_obj_align(box, LV_ALIGN_RIGHT_MID, LV_HOR_RES / 2, 12);
   lv_obj_set_size(box, LV_HOR_RES, LV_HOR_RES);
-  lv_obj_set_style_radius(box, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+  lv_obj_set_style_radius(box, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_color(box, lv_color_hex(0x292831), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_add_event_cb(box, boxarea_event_cb, LV_EVENT_ALL, NULL);
 
