@@ -9,7 +9,7 @@
 # TD3 项目配置
 
 1. 基于 `esp-idf5.1.2`版本开发，后续可能会更换威更新的 idf 版本
-2. `lvgl`版本为 `8.3.11`，后续可能会升级到 9
+2. `lvgl`版本为 `8.3.11`，后续可能会升级到 `9`
 
 ## 环境配置
 
@@ -33,9 +33,8 @@
 
 ## menuconfig 内容配置
 
-1. 先点击左下角![1712058290376](image/README/1712058290376.png)弹出!
-
-[1712058337887](image/README/1712058337887.png)
+1. 先点击左下角![1712058290376](image/README/1712058290376.png)弹出
+![1712058337887](image/README/1712058337887.png)
 
 
 2. 点击保存随后会自动生成 `sdkconfig`文件
@@ -65,10 +64,9 @@
 ├─main
 │   │  CMakeLists.txt
 │   │  main.c
-│   ├─Controller // 控制层接收消息队列数据，更新UI
 │   ├─HAL   // 硬件抽象层提供硬件的接口
 │   ├─Model // 模型层主要处理数据，创建消息队列，创建采集任务
-│   └─View  // mvc结构中view层主要放生成的UI
+│   └─View  // mvvm结构中viewmodel层主要放生成的UI
 │  .gitignore
 │  CMakeLists.txt
 │  partitions.csv
@@ -113,58 +111,45 @@
 其中.c 文件需要遵循标准模板如下：
 
 ```
-#include "View/Pages/Home/Home.h"
+#include "Setting.h"
 
-// 声明页面结构体
-
-struct PageType Home;
-
-static void event_btn1_handler(lv_event_t *e)
-{
-  lv_event_code_t code = lv_event_get_code(e); // 获取回调事件
-  if (code == LV_EVENT_CLICKED)
-  { // 点击事件
-    // Page_Push("Settings");
-    // Page_Push("Settings");
-  }
-}
+PageType *Setting;
 
 
 static void Created()
 {
-  lv_obj_t * obj1;
-  obj1 = lv_obj_create(Home.PageContent);
-  lv_obj_set_size(obj1, 100, 150);
-  lv_obj_set_pos(obj1, 5, 35);
-  lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
+
+  
 }
 
 static void Update(void)
 {
-
 }
 
 static void Destroy(void)
 {
-
+  if (lv_obj_is_valid(Setting->PageContent))
+  {
+    lv_async_call(lv_obj_clean, Setting->PageContent);
+  }
 }
 
 static void Method(void *btn, int event)
 {
-
 }
 
-void Home_Init()
+void Setting_Init()
 {
-  strcpy(Home.name, "Home");
-  Home.show_status_bar = 1;
-  Home.BeforeEnter = NULL;
-  Home.Created = Created;
-  Home.Update = Update;
-  Home.Destroy = Destroy;
-  Home.Method = Method;
-  Home.PageContent = create_new_screen();
-  Page_Register(Home);
+  Setting = lv_mem_alloc(sizeof(PageType));
+  strcpy(Setting->name, "Setting");
+  Setting->show_status_bar = 1;
+  Setting->BeforeEnter = NULL;
+  Setting->Created = Created;
+  Setting->Update = Update;
+  Setting->Destroy = Destroy;
+  Setting->Method = Method;
+  Setting->PageContent = create_new_screen();
+  Page_Register(*Setting);
 }
 ```
 
@@ -173,17 +158,17 @@ void Home_Init()
 .h 文件就比较简单,同样是将 Home 全部换成自己的，然后条件编译那里的大写 HOME 也改掉就行。
 
 ```
-#ifndef HOME_H
-#define HOME_H
+#ifndef SETTING_H
+#define SETTING_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "View/Page.h"
+#include "Page.h"
 
 
-void Home_Init();
+void Setting_Init();
 
 
 #ifdef __cplusplus
