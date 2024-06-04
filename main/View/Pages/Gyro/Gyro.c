@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 11:25:05
+ * @LastEditTime: 2024-06-04 17:28:31
  */
 
 #include "Gyro.h"
@@ -12,6 +12,7 @@ static void event_cb(lv_event_t *e)
 {
   lv_obj_t *obj = lv_event_get_current_target(e);
   printf("%s", lv_msgbox_get_active_btn_text(obj));
+  lv_msgbox_close(obj);
   Page_Back(1);
 }
 

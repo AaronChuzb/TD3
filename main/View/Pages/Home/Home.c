@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 10:47:04
+ * @LastEditTime: 2024-06-04 17:24:55
  */
 
 #include "Home.h"
@@ -40,14 +40,14 @@ struct ButtonData
 };
 
 const struct ButtonData button_data[9] = {
-    {"电池信息", "查看来自AXP173电源管理芯片的数据,包括电压电流库仑计数据等.\n可以手动重置库仑计数据.", &ui_img_battery_png, ""},
-    {"陀螺仪", "查看陀螺仪数据", &ui_img_gyro_png, ""},
+    {"电池信息", "查看来自AXP173电源管理芯片的数据,包括电压电流库仑计数据等.\n可以手动重置库仑计数据.", &ui_img_battery_png, "Battery"},
+    {"陀螺仪", "查看陀螺仪数据", &ui_img_gyro_png, "Gyro"},
     {"气压计", "查看来自BMP280的大气压数据,和相对高度的变化.", &ui_img_press_png, "Pressure"},
-    {"储存卡", "查看内存卡数据文件列表.", &ui_img_sdcard_png, ""},
+    {"储存卡", "查看内存卡数据文件列表.", &ui_img_sdcard_png, "Files"},
     {"实时时钟", "查看当前时间,同步网络时间.\n设定定时任务,如番茄时钟等.", &ui_img_time_png, "Clock"},
-    {"系统设置", "查看系统版本,设置亮度,设置背光时间,设置天气城市,设置天气更新频率.", &ui_img_setting_png, ""},
+    {"系统设置", "查看系统版本,设置亮度,设置背光时间,设置天气城市,设置天气更新频率.", &ui_img_setting_png, "Setting"},
     {"网络配置", "配置WiFi.", &ui_img_net_png, ""},
-    {"天气查询", "查看当前设定的城市的天气.", &ui_img_weather_png, ""},
+    {"天气查询", "查看当前设定的城市的天气.", &ui_img_weather_png, "Weather"},
     {"MIDI音乐", "播放mid格式的音乐...\n功能开发中", &ui_img_music_png, ""},
 };
 
