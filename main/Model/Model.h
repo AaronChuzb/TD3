@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:21:28
+ * @LastEditTime: 2024-06-04 17:20:14
  */
 
 #ifndef MODEL_H
@@ -22,6 +22,8 @@ extern "C"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
+
+#include "cJSON.h"
 
 #include "HAL.h"
 #include "Message.h"
@@ -45,8 +47,16 @@ extern "C"
   bool lvgl_lock(int timeout_ms);
   void lvgl_unlock(void);
 
-
   void time_model_init();
+
+  void cJSON_Init();
+  void load_config2ram();
+  char *get_config_item_char(char *key);
+  bool update_config_item_char(char *key, char *value);
+  int get_config_item_int(char *key);
+  bool update_config_item_int(char *key, int value);
+  bool get_config_item_bool(char *key);
+  bool update_config_item_bool(char *key, bool value);
 
   void Model_init(void);
 

@@ -41,25 +41,25 @@ void init_falsh(void)
   //   }
   // };
 
-  const char *file_key = "/spifats/key.txt";
-  ESP_LOGI(TAG, "打开文件 %s", file_key);
-  FILE *file = fopen(file_key, "r");
-  // file = fopen(file_hello, "r");
-  if (file == NULL)
-  {
-    ESP_LOGE(TAG, "打开失败");
-    return;
-  }
-  char line[64];
-  fgets(line, sizeof(line), file);
-  fclose(file);
+  // const char *file_key = "/spifats/key.txt";
+  // ESP_LOGI(TAG, "打开文件 %s", file_key);
+  // FILE *file = fopen(file_key, "r");
+  // // file = fopen(file_hello, "r");
+  // if (file == NULL)
+  // {
+  //   ESP_LOGE(TAG, "打开失败");
+  //   return;
+  // }
+  // char line[64];
+  // fgets(line, sizeof(line), file);
+  // fclose(file);
 
-  char *pos = strchr(line, '\n');
-  if (pos)
-  {
-    *pos = '\0';
-  }
-  ESP_LOGI(TAG, "读出内容: '%s'", line);
+  // char *pos = strchr(line, '\n');
+  // if (pos)
+  // {
+  //   *pos = '\0';
+  // }
+  // ESP_LOGI(TAG, "读出内容: '%s'", line);
 }
 
 esp_err_t spifats_unmount(void)
