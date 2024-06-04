@@ -1,12 +1,12 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:39:29
+ * @LastEditTime: 2024-06-04 11:25:30
  */
 
 #include "StartUp.h"
 
-struct PageType StartUp;
+PageType *StartUp;
 
 lv_obj_t *title_left;
 lv_obj_t *title_right;
@@ -193,9 +193,9 @@ void my_timer(lv_timer_t * timer)
 static void Created()
 {
 
-  lv_obj_clear_flag(StartUp.PageContent, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+  lv_obj_clear_flag(StartUp->PageContent, LV_OBJ_FLAG_SCROLLABLE); /// Flags
 
-  title_left = lv_label_create(StartUp.PageContent);
+  title_left = lv_label_create(StartUp->PageContent);
   lv_obj_set_width(title_left, 60);
   lv_obj_set_height(title_left, LV_SIZE_CONTENT); /// 1
   lv_obj_set_x(title_left, -195);
@@ -205,7 +205,7 @@ static void Created()
   lv_obj_set_style_text_align(title_left, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_text_font(title_left, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-  sub_title = lv_label_create(StartUp.PageContent);
+  sub_title = lv_label_create(StartUp->PageContent);
   lv_obj_set_width(sub_title, LV_SIZE_CONTENT);  /// 1
   lv_obj_set_height(sub_title, LV_SIZE_CONTENT); /// 1
   lv_obj_set_x(sub_title, 0);
@@ -213,7 +213,7 @@ static void Created()
   lv_obj_set_align(sub_title, LV_ALIGN_CENTER);
   lv_label_set_text(sub_title, "c o m m u n i t y");
 
-  title_right = lv_label_create(StartUp.PageContent);
+  title_right = lv_label_create(StartUp->PageContent);
   lv_obj_set_width(title_right, LV_SIZE_CONTENT);  /// 1
   lv_obj_set_height(title_right, LV_SIZE_CONTENT); /// 1
   lv_obj_set_x(title_right, 195);
@@ -229,7 +229,7 @@ static void Created()
   lv_obj_set_style_pad_top(title_right, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_pad_bottom(title_right, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-  progress = lv_bar_create(StartUp.PageContent);
+  progress = lv_bar_create(StartUp->PageContent);
   lv_obj_set_height(progress, 20);
   lv_obj_set_width(progress, lv_pct(100));
   lv_obj_set_align(progress, LV_ALIGN_BOTTOM_MID);
@@ -249,7 +249,7 @@ static void Created()
   lv_timer_t * timer = lv_timer_create(my_timer, 3000,  NULL);
   lv_timer_set_repeat_count(timer, 1);
 
-  // lv_obj_add_event_cb(StartUp.PageContent, ui_event_Screen1, LV_EVENT_ALL, NULL);
+  // lv_obj_add_event_cb(StartUp->PageContent, ui_event_Screen1, LV_EVENT_ALL, NULL);
 }
 
 static void Update(void)
@@ -258,9 +258,9 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  if (lv_obj_is_valid(StartUp.PageContent))
+  if (lv_obj_is_valid(StartUp->PageContent))
   {
-    lv_async_call(lv_obj_clean, StartUp.PageContent);
+    lv_async_call(lv_obj_clean, StartUp->PageContent);
   }
 }
 
@@ -270,13 +270,14 @@ static void Method(void *btn, int event)
 
 void StartUp_Init()
 {
-  strcpy(StartUp.name, "StartUp");
-  StartUp.show_status_bar = 0;
-  StartUp.BeforeEnter = NULL;
-  StartUp.Created = Created;
-  StartUp.Update = Update;
-  StartUp.Destroy = Destroy;
-  StartUp.Method = Method;
-  StartUp.PageContent = create_new_screen();
-  Page_Register(StartUp);
+  StartUp = lv_mem_alloc(sizeof(PageType));
+  strcpy(StartUp->name, "StartUp");
+  StartUp->show_status_bar = 0;
+  StartUp->BeforeEnter = NULL;
+  StartUp->Created = Created;
+  StartUp->Update = Update;
+  StartUp->Destroy = Destroy;
+  StartUp->Method = Method;
+  StartUp->PageContent = create_new_screen();
+  Page_Register(*StartUp);
 }

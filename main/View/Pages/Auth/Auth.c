@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-25 22:21:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 10:39:06
+ * @LastEditTime: 2024-06-04 10:45:36
  */
 /*
  * @Date: 2024-04-05 21:31:50
@@ -16,7 +16,7 @@
 // char *pwd = "";
 char pwd[9];
 
-struct PageType Auth;
+PageType *Auth;
 
 lv_obj_t *obj2;
 lv_obj_t *ta;
@@ -149,11 +149,11 @@ static void msg_event_cb(lv_event_t *e)
 static void Created()
 {
 
-  // lv_obj_set_scrollable(Auth.PageContent, true); // 允许页面滚动
-  lv_obj_set_scrollbar_mode(Auth.PageContent, LV_SCROLLBAR_MODE_OFF);
+  // lv_obj_set_scrollable(Auth->PageContent, true); // 允许页面滚动
+  lv_obj_set_scrollbar_mode(Auth->PageContent, LV_SCROLLBAR_MODE_OFF);
   
 
-  // lv_obj_t *page_bg = lv_img_create(Auth.PageContent);
+  // lv_obj_t *page_bg = lv_img_create(Auth->PageContent);
   // lv_img_set_src(page_bg, &background);
   // lv_obj_set_width(page_bg, LV_SIZE_CONTENT);  /// 1
   // lv_obj_set_height(page_bg, LV_SIZE_CONTENT); /// 1
@@ -162,13 +162,13 @@ static void Created()
   // lv_obj_clear_flag(page_bg, LV_OBJ_FLAG_SCROLLABLE);
   // lv_obj_set_y(page_bg, -30);
   // lv_img_set_zoom(page_bg, 155);                     /// Flags
-  // obj2 = lv_obj_create(Auth.PageContent);
+  // obj2 = lv_obj_create(Auth->PageContent);
   // lv_obj_set_size(obj2, 100, 150);
   // lv_obj_set_pos(obj2, -100, 35);
   // lv_obj_add_event_cb(obj2, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
   // button_anim_in();
-  lv_obj_t *label = lv_label_create(Auth.PageContent);
+  lv_obj_t *label = lv_label_create(Auth->PageContent);
   lv_label_set_text(label, "00:00:00:00:00:00");
   // lv_obj_add_style(label, &font_style_youyuan_21, 0);
   lv_obj_set_style_text_font(label, &lv_font_montserrat_18, 0);
@@ -178,12 +178,12 @@ static void Created()
   // 订阅消息
   lv_msg_subsribe_obj(MSG_MAC_SET, label, NULL);
 
-  keyboard = lv_keyboard_create(Auth.PageContent); // 创建键盘矩阵部件
+  keyboard = lv_keyboard_create(Auth->PageContent); // 创建键盘矩阵部件
   lv_obj_set_pos(keyboard, 0, LV_VER_RES);
   lv_obj_add_event_cb(keyboard, lv_keyboard_def_event, LV_EVENT_READY, NULL);
 
   // 知识点2：关联文本框
-  ta = lv_textarea_create(Auth.PageContent); // 创建文本区域部件
+  ta = lv_textarea_create(Auth->PageContent); // 创建文本区域部件
   lv_obj_set_size(ta, 310, 50);
   lv_keyboard_set_textarea(keyboard, ta); // 关联键盘和文本区域部件
 
@@ -225,9 +225,9 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  if (lv_obj_is_valid(Auth.PageContent))
+  if (lv_obj_is_valid(Auth->PageContent))
   {
-    lv_async_call(lv_obj_clean, Auth.PageContent);
+    lv_async_call(lv_obj_clean, Auth->PageContent);
   }
 }
 
@@ -237,13 +237,14 @@ static void Method(void *btn, int event)
 
 void Auth_Init()
 {
-  strcpy(Auth.name, "Auth");
-  Auth.show_status_bar = 1;
-  Auth.BeforeEnter = NULL;
-  Auth.Created = Created;
-  Auth.Update = Update;
-  Auth.Destroy = Destroy;
-  Auth.Method = Method;
-  Auth.PageContent = create_new_screen();
-  Page_Register(Auth);
+  Auth = lv_mem_alloc(sizeof(PageType));
+  strcpy(Auth->name, "Auth");
+  Auth->show_status_bar = 1;
+  Auth->BeforeEnter = NULL;
+  Auth->Created = Created;
+  Auth->Update = Update;
+  Auth->Destroy = Destroy;
+  Auth->Method = Method;
+  Auth->PageContent = create_new_screen();
+  Page_Register(*Auth);
 }

@@ -1,17 +1,18 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 10:44:30
+ * @LastEditTime: 2024-06-04 11:24:55
  */
 
-#include "Pressure.h"
+#include "Files.h"
 
-PageType *Pressure;
+PageType *Files;
 
 static void event_cb(lv_event_t *e)
 {
   lv_obj_t *obj = lv_event_get_current_target(e);
   printf("%s", lv_msgbox_get_active_btn_text(obj));
+  Page_Back(1);
 }
 
 static void Created()
@@ -31,9 +32,9 @@ static void Update(void)
 
 static void Destroy(void)
 {
-  if (lv_obj_is_valid(Pressure->PageContent))
+  if (lv_obj_is_valid(Files->PageContent))
   {
-    lv_async_call(lv_obj_clean, Pressure->PageContent);
+    lv_async_call(lv_obj_clean, Files->PageContent);
   }
 }
 
@@ -41,16 +42,16 @@ static void Method(void *btn, int event)
 {
 }
 
-void Pressure_Init()
+void Files_Init()
 {
-  Pressure = lv_mem_alloc(sizeof(PageType));
-  strcpy(Pressure->name, "Pressure");
-  Pressure->show_status_bar = 1;
-  Pressure->BeforeEnter = NULL;
-  Pressure->Created = Created;
-  Pressure->Update = Update;
-  Pressure->Destroy = Destroy;
-  Pressure->Method = Method;
-  Pressure->PageContent = create_new_screen();
-  Page_Register(*Pressure);
+  Files = lv_mem_alloc(sizeof(PageType));
+  strcpy(Files->name, "Files");
+  Files->show_status_bar = 1;
+  Files->BeforeEnter = NULL;
+  Files->Created = Created;
+  Files->Update = Update;
+  Files->Destroy = Destroy;
+  Files->Method = Method;
+  Files->PageContent = create_new_screen();
+  Page_Register(*Files);
 }

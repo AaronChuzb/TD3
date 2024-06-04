@@ -7,7 +7,7 @@
 #include "Clock.h"
 #include <math.h>
 
-struct PageType Clock;
+PageType *Clock;
 
 LV_IMG_DECLARE(ui_img_clockwise_sec_png);  // assets/clockwise_sec.png
 LV_IMG_DECLARE(ui_img_clockwise_min_png);  // assets/clockwise_min.png
@@ -192,7 +192,7 @@ void create_clock_labels_and_dots(lv_obj_t *parent)
 static void Created()
 {
 
-  ui_hour = lv_img_create(Clock.PageContent);
+  ui_hour = lv_img_create(Clock->PageContent);
   lv_img_set_src(ui_hour, &ui_img_clockwise_hour_png);
   lv_obj_set_width(ui_hour, LV_SIZE_CONTENT);  /// 1
   lv_obj_set_height(ui_hour, LV_SIZE_CONTENT); /// 1
@@ -203,7 +203,7 @@ static void Created()
   lv_obj_clear_flag(ui_hour, LV_OBJ_FLAG_SCROLLABLE); /// Flags
   lv_img_set_pivot(ui_hour, 9, 93);
 
-  ui_min = lv_img_create(Clock.PageContent);
+  ui_min = lv_img_create(Clock->PageContent);
   lv_img_set_src(ui_min, &ui_img_clockwise_min_png);
   lv_obj_set_width(ui_min, LV_SIZE_CONTENT);  /// 1
   lv_obj_set_height(ui_min, LV_SIZE_CONTENT); /// 1
@@ -214,8 +214,8 @@ static void Created()
   lv_obj_clear_flag(ui_min, LV_OBJ_FLAG_SCROLLABLE); /// Flags
   lv_img_set_pivot(ui_min, 9, 153);
 
-  create_clock_labels_and_dots(Clock.PageContent);
-  ui_sec = lv_img_create(Clock.PageContent);
+  create_clock_labels_and_dots(Clock->PageContent);
+  ui_sec = lv_img_create(Clock->PageContent);
   lv_img_set_src(ui_sec, &ui_img_clockwise_sec_png);
   lv_obj_set_width(ui_sec, LV_SIZE_CONTENT);  /// 1
   lv_obj_set_height(ui_sec, LV_SIZE_CONTENT); /// 1
@@ -244,9 +244,9 @@ static void Update(void)
 static void Destroy(void)
 {
   // lv_anim_del(&PropertyAnimation_0, NULL);
-  if (lv_obj_is_valid(Clock.PageContent))
+  if (lv_obj_is_valid(Clock->PageContent))
   {
-    lv_async_call(lv_obj_clean, Clock.PageContent);
+    lv_async_call(lv_obj_clean, Clock->PageContent);
   }
 }
 
@@ -256,13 +256,14 @@ static void Method(void *btn, int event)
 
 void Clock_Init()
 {
-  strcpy(Clock.name, "Clock");
-  Clock.show_status_bar = 1;
-  Clock.BeforeEnter = NULL;
-  Clock.Created = Created;
-  Clock.Update = Update;
-  Clock.Destroy = Destroy;
-  Clock.Method = Method;
-  Clock.PageContent = create_new_screen();
-  Page_Register(Clock);
+  Clock = lv_mem_alloc(sizeof(PageType));
+  strcpy(Clock->name, "Clock");
+  Clock->show_status_bar = 1;
+  Clock->BeforeEnter = NULL;
+  Clock->Created = Created;
+  Clock->Update = Update;
+  Clock->Destroy = Destroy;
+  Clock->Method = Method;
+  Clock->PageContent = create_new_screen();
+  Page_Register(*Clock);
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 17:31:42
+ * @LastEditTime: 2024-06-04 13:50:40
  */
 #include "View/View.h"
 
@@ -18,9 +18,14 @@ void init_view(void)
   Home_Init();
   Clock_Init();
   Pressure_Init();
+  Setting_Init();
+  Gyro_Init();
+  Files_Init();
+  Battery_Init();
+  Weather_Init();
 
 
-  Page_Replace("Pressure");
+  Page_Replace("Home");
   // lv_obj_t *label = lv_label_create(lv_scr_act());
 
   // lv_label_set_text(label, "你好");

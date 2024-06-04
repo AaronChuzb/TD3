@@ -1,17 +1,17 @@
 ﻿/*
  * @Date: 2024-04-05 21:08:09
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 11:45:54
+ * @LastEditTime: 2024-06-04 10:39:16
  */
 #include "Page.h"
 
-struct PageType new_page, old_page, cur_page; // 新页面，旧页面，默认页面
+PageType new_page, old_page, cur_page; // 新页面，旧页面，默认页面
 
-struct PageType PageList[10];  // 页面列表
-struct PageType PageStack[10]; // 页面堆栈
-uint16_t PageNum = 10;         // 页面数量
-uint16_t StackTop;             // 栈顶
-bool isChanging;               // 页面切换中
+PageType PageList[16];  // 页面列表
+PageType PageStack[16]; // 页面堆栈
+uint16_t PageNum = 16;  // 页面数量
+uint16_t StackTop;      // 栈顶
+bool isChanging;        // 页面切换中
 
 uint16_t page_index = 0;
 
@@ -74,7 +74,7 @@ void Page_Init()
 }
 
 // 注册页面
-bool Page_Register(struct PageType Page)
+bool Page_Register(PageType Page)
 {
   printf("Page register: %s\n", Page.name);
   PageList[page_index] = Page;
@@ -86,7 +86,7 @@ bool Page_Register(struct PageType Page)
 bool Page_Push(char *name)
 {
   printf("Page push: %s\n", name);
-  struct PageType page;
+  PageType page;
   // 在路由表中查找改页面，未找到跳转失败。
   for (int i = 0; i < PageNum; i++)
   {
@@ -139,7 +139,7 @@ bool Page_Push(char *name)
 bool Page_Replace(char *name)
 {
   printf("Page replace: %s\n", name);
-  struct PageType page;
+  PageType page;
   // 在路由表中查找改页面，未找到跳转失败。
   for (int i = 0; i < PageNum; i++)
   {

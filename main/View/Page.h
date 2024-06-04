@@ -2,7 +2,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-13 21:04:31
+ * @LastEditTime: 2024-06-04 10:34:14
  */
 #ifndef PAGE_H
 #define PAGE_H
@@ -38,7 +38,7 @@ LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
 typedef void (*EventHook)(void);
 // 回调钩子
 typedef void (*CallBack)(void *, int);
-struct PageType // 页面结构体
+typedef struct _page_type // 页面结构体
 {
   char name[32];         // 页面名称
   int show_status_bar;   // 是否显示状态栏
@@ -48,10 +48,10 @@ struct PageType // 页面结构体
   EventHook Update;      // 页面更新
   EventHook Destroy;     // 页面销毁
   CallBack Method;       // 页面事件回调
-};
+} PageType;
 
 void Page_Init();       // 页面管理框架初始化
-bool Page_Register(struct PageType Page);            // 注册页面
+bool Page_Register(PageType Page);            // 注册页面
 bool Page_Push(char *name);                   // 页面跳转
 bool Page_Replace(char *name);                // 页面跳转
 bool Page_Back(uint16_t delt);                // 返回页数

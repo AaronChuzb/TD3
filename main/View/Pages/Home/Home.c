@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 17:28:46
+ * @LastEditTime: 2024-06-04 10:47:04
  */
 
 #include "Home.h"
@@ -10,7 +10,7 @@
 
 // 声明页面结构体
 
-struct PageType Home;
+PageType *Home;
 
 lv_obj_t *obj1;
 lv_obj_t *obj5;
@@ -172,7 +172,7 @@ static void scroll_end_event(lv_event_t *e)
 
 void home_menu()
 {
-  lv_obj_t *cont = lv_obj_create(Home.PageContent);
+  lv_obj_t *cont = lv_obj_create(Home->PageContent);
   lv_obj_set_style_radius(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_color(cont, lv_color_hex(0x101418), LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -190,7 +190,7 @@ void home_menu()
   lv_obj_set_scroll_snap_y(cont, LV_SCROLL_SNAP_CENTER);
   lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
 
-  lv_obj_t *box = lv_btn_create(Home.PageContent);
+  lv_obj_t *box = lv_btn_create(Home->PageContent);
   lv_obj_align(box, LV_ALIGN_RIGHT_MID, LV_HOR_RES / 2, 12);
   lv_obj_set_size(box, LV_HOR_RES, LV_HOR_RES);
   lv_obj_set_style_radius(box, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -274,14 +274,14 @@ void home_menu()
 
 static void Created()
 {
-  lv_obj_set_scrollbar_mode(Home.PageContent, LV_SCROLLBAR_MODE_OFF);
-  lv_obj_clear_flag(Home.PageContent, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_style_clip_corner(Home.PageContent, true, 0);
+  lv_obj_set_scrollbar_mode(Home->PageContent, LV_SCROLLBAR_MODE_OFF);
+  lv_obj_clear_flag(Home->PageContent, LV_OBJ_FLAG_SCROLLABLE);
+  lv_obj_set_style_clip_corner(Home->PageContent, true, 0);
   home_menu();
 
   // lv_example_roller_30();
 
-  // lv_obj_t *arc = lv_arc_create(Home.PageContent);
+  // lv_obj_t *arc = lv_arc_create(Home->PageContent);
   // lv_obj_set_size(arc, 150, 150);
   // lv_arc_set_rotation(arc, 200);
   // lv_arc_set_bg_angles(arc, 0, 45);
@@ -290,7 +290,7 @@ static void Created()
   // lv_obj_clear_flag(arc, LV_OBJ_FLAG_CLICKABLE);
   // lv_obj_set_pos(arc, 10, 25);
   // lv_obj_center(arc);
-  // lv_obj_t *page_bg = lv_img_create(Home.PageContent);
+  // lv_obj_t *page_bg = lv_img_create(Home->PageContent);
   // lv_img_set_src(page_bg, &background);
   // lv_obj_set_width(page_bg, LV_SIZE_CONTENT);  /// 1
   // lv_obj_set_height(page_bg, LV_SIZE_CONTENT); /// 1
@@ -300,17 +300,17 @@ static void Created()
   // lv_obj_set_y(page_bg, -30);
   // lv_img_set_zoom(page_bg, 155);
 
-  // obj1 = lv_obj_create(Home.PageContent);
+  // obj1 = lv_obj_create(Home->PageContent);
   // lv_obj_set_size(obj1, 100, 150);
   // lv_obj_set_pos(obj1, 5, -150);
   // lv_obj_add_event_cb(obj1, event_btn1_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
-  // obj5 = lv_obj_create(Home.PageContent);
+  // obj5 = lv_obj_create(Home->PageContent);
   // lv_obj_set_size(obj5, 100, 150);
   // lv_obj_set_pos(obj5, 200, 35);
   // lv_obj_add_event_cb(obj5, event_btn2_handler, LV_EVENT_ALL, NULL); /*设置btn1回调函数*/
 
-  // lv_obj_t *label = lv_label_create(Home.PageContent);
+  // lv_obj_t *label = lv_label_create(Home->PageContent);
   // lv_label_set_text(label, time_str);
   // lv_obj_add_style(label, &font_style_gigi_72, 0);
   // lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, -50);
@@ -324,7 +324,7 @@ static void Created()
 
   //   lv_obj_t* img;
 
-  // img = lv_img_create(Home.PageContent);
+  // img = lv_img_create(Home->PageContent);
   //   /* Assuming a File system is attached to letter 'A'
   //    * E.g. set LV_USE_FS_STDIO 'A' in lv_conf.h */
   //   lv_img_set_src(img, "S:/png/1.png");
@@ -338,9 +338,9 @@ static void Update(void)
 static void Destroy(void)
 {
   // ;
-  if (lv_obj_is_valid(Home.PageContent))
+  if (lv_obj_is_valid(Home->PageContent))
   {
-    lv_async_call(lv_obj_clean, Home.PageContent);
+    lv_async_call(lv_obj_clean, Home->PageContent);
   }
 }
 
@@ -350,13 +350,14 @@ static void Method(void *btn, int event)
 
 void Home_Init()
 {
-  strcpy(Home.name, "Home");
-  Home.show_status_bar = 1;
-  Home.BeforeEnter = NULL;
-  Home.Created = Created;
-  Home.Update = Update;
-  Home.Destroy = Destroy;
-  Home.Method = Method;
-  Home.PageContent = create_new_screen();
-  Page_Register(Home);
+  Home = lv_mem_alloc(sizeof(PageType));
+  strcpy(Home->name, "Home");
+  Home->show_status_bar = 1;
+  Home->BeforeEnter = NULL;
+  Home->Created = Created;
+  Home->Update = Update;
+  Home->Destroy = Destroy;
+  Home->Method = Method;
+  Home->PageContent = create_new_screen();
+  Page_Register(*Home);
 }

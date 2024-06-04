@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:40
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 17:25:30
+ * @LastEditTime: 2024-06-04 13:49:16
  */
 
 
@@ -26,6 +26,11 @@ extern "C" {
 #include "Home.h"
 #include "Clock.h"
 #include "Pressure.h"
+#include "Setting.h"
+#include "Gyro.h"
+#include "Files.h"
+#include "Battery.h"
+#include "Weather.h"
 
 //本文件是用于挂载自定义字体的文件
 void init_view(void);
