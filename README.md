@@ -76,7 +76,7 @@
 │  sdkconfig.temp
 ```
 
-## flash download tools 烧录
+## flash download tools 烧录（不需要bin文件烧录请忽略）
 
 1. 单独的 bin 文件烧录方式
 
@@ -180,7 +180,7 @@ void Setting_Init();
 
 2. 修改 `main\CMakeLists.txt`添加 `"View/Pages/xxx"`其中 xxx 为你的页面目录名，至于为什么不写一个统一的 cmake 文件需要时遵循 idf 的项目标准，其实时不会，对就是“不会”。
 
-# 项目开发过程的问题记录
+# 项目开发过程的问题记录（复刻无需关注）
 
 ## lvgl 使用 fatfs
 
