@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 17:24:55
+ * @LastEditTime: 2024-06-04 19:21:06
  */
 
 #include "Home.h"
@@ -15,7 +15,7 @@ PageType *Home;
 lv_obj_t *obj1;
 lv_obj_t *obj5;
 
-int current_index = 0;
+int current_index = 5;
 
 lv_obj_t *title_roller;
 static lv_obj_t *sub_title;
@@ -268,8 +268,8 @@ void home_menu()
       lv_obj_move_to_index(lv_obj_get_child(cont, 0), child_cnt - 1);
     }
   }
-  lv_obj_scroll_to_view(lv_obj_get_child(cont, mid_btn_index), LV_ANIM_ON);
-  lv_roller_set_selected(title_roller, mid_btn_index, LV_ANIM_ON);
+  lv_obj_scroll_to_view(lv_obj_get_child(cont, current_index), LV_ANIM_ON);
+  lv_roller_set_selected(title_roller, current_index, LV_ANIM_ON);
 }
 
 static void Created()

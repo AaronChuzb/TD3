@@ -14,20 +14,20 @@ void app_main()
   HAL_init();
   Model_init();
   load_config2ram();
-  get_config_item_char("version");
-  update_config_item_char("version", "2.0.0");
-  load_config2ram();
-  get_config_item_char("version");
+  // get_config_item_char("version");
+  // update_config_item_char("version", "2.0.0");
+  // load_config2ram();
+  // get_config_item_char("version");
 
-  get_config_item_int("size");
-  update_config_item_int("size", 20);
-  load_config2ram();
-  get_config_item_int("size");
+  // get_config_item_int("size");
+  // update_config_item_int("size", 20);
+  // load_config2ram();
+  // get_config_item_int("size");
   
-  get_config_item_bool("isBool");
-  update_config_item_bool("isBool", false);
-  load_config2ram();
-  get_config_item_bool("isBool");
+  // get_config_item_bool("isBool");
+  // update_config_item_bool("isBool", false);
+  // load_config2ram();
+  // get_config_item_bool("isBool");
 
   // init_tone();
   
