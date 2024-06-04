@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:21:48
+ * @LastEditTime: 2024-06-04 14:38:30
  */
 
 #include "Model.h"
@@ -37,7 +37,7 @@ void Model_receive_message_task(void *pvParameters)
 
 void Model_init(void)
 {
-  lvgl_task_init();
+  // lvgl_task_init();
   statusbar_viewmodel_init();
   time_model_init();
   Queue_init();

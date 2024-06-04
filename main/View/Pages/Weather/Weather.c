@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 13:48:28
+ * @LastEditTime: 2024-06-04 14:33:59
  */
 
 #include "Weather.h"
@@ -44,6 +44,7 @@ static void Method(void *btn, int event)
 
 void Weather_Init()
 {
+  Weather = lv_mem_alloc(sizeof(PageType));
   strcpy(Weather->name, "Weather");
   Weather->show_status_bar = 1;
   Weather->BeforeEnter = NULL;

@@ -19,6 +19,7 @@ set(EXTRA_COMPONENT_DIRS
   "components/lsm6ds3"
   "components/beep"
   "components/pcf8563"
+  "components/cJSON"
 )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)

@@ -1,10 +1,9 @@
 #include "HAL.h"
 
-
 static const char *TAG = "HAL";
 
-
-void get_sram_size() {
+void get_sram_size()
+{
   // 获取剩余内存大小
   int freeHeap = esp_get_free_heap_size();
   int psramFreeH = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
@@ -15,14 +14,30 @@ void get_sram_size() {
   printf("PSRAM free size: %d bytes\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
   ESP_LOGI("HAL", "内部内存剩余: %d Kbytes", inside);
 }
+
+void *custom_malloc(size_t size)
+{
+  return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+}
+
+void custom_free(void *ptr)
+{
+  heap_caps_free(ptr);
+}
+
+static void cJSON_Init()
+{
+  cJSON_Hooks hooks;
+  hooks.malloc_fn = custom_malloc;
+  hooks.free_fn = custom_free;
+  cJSON_InitHooks(&hooks);
+}
+
 void HAL_init()
 {
-  init_blk();
+  cJSON_Init();
+  // init_blk();
   init_uarts();
-  init_lcd();
-  // 由于需要挂载字库到PSRAM所以先初始化SDMMC
-  init_sdmmc();
-  init_lvgl_port();
 
   init_i2c();
   init_bmp280();
@@ -38,7 +53,6 @@ void HAL_init()
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // init_wifi();
   // sntp_setlocaltime();
-  
 
   uint8_t mac[6];
   // 获取MAC地址
@@ -61,7 +75,23 @@ void HAL_init()
   init_falsh();
   get_sram_size();
 
-  
-  
-  
+  const char* json_str = "{\"name\":\"John\",\"age\":30,\"city\":\"New York\"}";
+  cJSON *parsed_json = cJSON_Parse(json_str);
+  if (parsed_json != NULL)
+  {
+    const char* name = cJSON_GetObjectItem(parsed_json, "name")->valuestring;
+     printf("Name: %s\n", name);
+    // 解析成功，可以继续操作解析后的JSON数据
+    // ...
+    cJSON_Delete(parsed_json); // 释放内存
+  }
+}
+
+void Pre_HAL_Init()
+{
+  init_blk();
+  init_lcd();
+  // 由于需要挂载字库到PSRAM所以先初始化SDMMC
+  init_sdmmc();
+  init_lvgl_port();
 }

@@ -9,6 +9,8 @@ static const char *TAG = "main";
 
 void app_main()
 {
+  Pre_HAL_Init();
+  lvgl_task_init();
   HAL_init();
   Model_init();
   // init_tone();

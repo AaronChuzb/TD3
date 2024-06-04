@@ -68,6 +68,8 @@ extern "C"
 #include "View.h"
 #include "Message.h"
 
+#include "cJSON.h"
+
 
 
 // #define EXAMPLE_MAX_CHAR_SIZE    128
@@ -130,6 +132,7 @@ extern "C"
 
   // HAL
   void HAL_init();
+  void Pre_HAL_Init();
   void get_sram_size();
 
   // SDMMC
