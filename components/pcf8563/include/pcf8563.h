@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:37:49
+ * @LastEditTime: 2024-06-04 10:05:54
  */
 #pragma once
 
@@ -20,7 +20,7 @@ extern "C"
 #include <time.h>
 // #include <sys/time.h>
 
-#define REG_ID 0x51
+#define PCF_REG_ID 0x51
 
 bool initialized_pcf8563();
 void init_pcf8563();

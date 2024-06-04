@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:35:00
+ * @LastEditTime: 2024-06-04 10:06:06
  */
 #pragma once
 
@@ -17,7 +17,7 @@ extern "C"
 #include "i2c.h"
 #include <esp_log.h>
 
-#define REG_ID  0x0D
+#define QMC_REG_ID  0x0D
 
 typedef enum
 {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 22:28:32
+ * @LastEditTime: 2024-06-04 10:05:02
  */
 #include "bmp280.h"
 #include <math.h>
@@ -76,7 +76,7 @@ float bmp280_compute_pressure(void)
  */
 esp_err_t bmp280_restart()
 {
-  esp_err_t ret = i2c_write_byte(REG_ID, 0xE0, 0xB6);
+  esp_err_t ret = i2c_write_byte(BMP_REG_ID, 0xE0, 0xB6);
   return ret;
 }
 
@@ -88,7 +88,7 @@ esp_err_t bmp280_read_param()
 {
   esp_err_t ret;
   uint8_t buff[26] = {0};
-  ret = i2c_read_data(REG_ID, 0x88, buff, 26);
+  ret = i2c_read_data(BMP_REG_ID, 0x88, buff, 26);
   if (ret != ESP_OK)
   {
     ESP_LOGI(TAG, "读取修正参数失败");
@@ -116,7 +116,7 @@ esp_err_t bmp280_read_param()
  */
 esp_err_t bmp280_measure_cmd()
 {
-  esp_err_t ret = i2c_write_byte(REG_ID, 0xF4, 0x56);
+  esp_err_t ret = i2c_write_byte(BMP_REG_ID, 0xF4, 0x56);
   return ret;
 }
 
@@ -130,9 +130,9 @@ esp_err_t bmp280_read_data()
   esp_err_t ret;
   uint8_t buffT[3] = {0};
   uint8_t buffP[3] = {0};
-  ret = i2c_read_data(REG_ID, 0xFA, buffT, 3);
+  ret = i2c_read_data(BMP_REG_ID, 0xFA, buffT, 3);
   BMP280.adc_T = (buffT[0] << 12) | (buffT[1] << 4) | (buffT[0] >> 4);
-  ret = i2c_read_data(REG_ID, 0xF7, buffP, 3);
+  ret = i2c_read_data(BMP_REG_ID, 0xF7, buffP, 3);
   BMP280.adc_P = (buffP[0] << 12) | (buffP[1] << 4) | (buffP[0] >> 4);
   float temperature = bmp_compute_temperature();
   float pressure = bmp280_compute_pressure();
@@ -149,7 +149,7 @@ esp_err_t bmp280_read_data()
  */
 void init_bmp280()
 {
-  if (i2c_check_dev(REG_ID) != ESP_OK)
+  if (i2c_check_dev(BMP_REG_ID) != ESP_OK)
   {
     ESP_LOGI(TAG, "检测不到I2C地址0x76, BMP280初始化失败");
   }
@@ -159,9 +159,9 @@ void init_bmp280()
     bmp280_restart();
     vTaskDelay(50 / portTICK_PERIOD_MS);
     // 0x55： 0b01010101 16倍气压过采样，2倍温度过采样，force mode
-    i2c_write_byte(REG_ID, 0xF4, 0x55);
+    i2c_write_byte(BMP_REG_ID, 0xF4, 0x55);
     // 0x10： 0b00010000 使用force mode不关心采样间隔时间，全填0，滤波器使用16倍，不使用SPI模式不关心，写0
-    i2c_write_byte(REG_ID, 0xF5, 0x10);
+    i2c_write_byte(BMP_REG_ID, 0xF5, 0x10);
     bmp280_read_param();
     vTaskDelay(50 / portTICK_PERIOD_MS);
     bmp280_read_data();

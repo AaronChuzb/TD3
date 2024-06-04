@@ -16,7 +16,7 @@ extern "C"
 #include <stdio.h>
 #include "i2c.h"
 
-#define REG_ID 0x76
+#define BMP_REG_ID 0x76
 
 esp_err_t bmp280_restart();
 esp_err_t bmp280_read_param();

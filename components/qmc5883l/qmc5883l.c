@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-20 21:32:05
+ * @LastEditTime: 2024-06-04 10:06:16
  */
 #include "qmc5883l.h"
 #include <math.h>
@@ -26,7 +26,7 @@ static const char *TAG = "QMC5883L";
 esp_err_t qmc5883l_restart()
 {
   esp_err_t ret;
-  ret = i2c_write_byte(REG_ID, 0x0A, 0x80);
+  ret = i2c_write_byte(QMC_REG_ID, 0x0A, 0x80);
   return ret;
 }
 
@@ -35,7 +35,7 @@ esp_err_t qmc5883l_set_mode(qmc5883l_mode_t mode)
 {
   esp_err_t ret;
   uint8_t v = 0;
-  ret = i2c_write_byte(REG_ID, 0x09, (v & 0xfe) | mode);
+  ret = i2c_write_byte(QMC_REG_ID, 0x09, (v & 0xfe) | mode);
   ESP_LOGI(TAG, "设置模式：%s\n", ((v & 0xfe) | mode) == 1 ? "连续测量模式" : "待命模式");
   return ret;
 }
@@ -44,8 +44,8 @@ esp_err_t qmc5883l_get_mode()
 {
   esp_err_t ret;
   uint8_t buff[1];
-  // buff = i2c_read_8bit(REG_ID, 0x09);
-  ret = i2c_read_data(REG_ID, 0x09, buff, 1);
+  // buff = i2c_read_8bit(QMC_REG_ID, 0x09);
+  ret = i2c_read_data(QMC_REG_ID, 0x09, buff, 1);
   // printf("测量模式：%d\n", buff[0] & 1);
   return ret;
 }
@@ -56,8 +56,8 @@ esp_err_t qmc5883l_set_config(qmc5883l_mode_t mode, qmc5883l_odr_t odr, qmc5883l
   CHECK_ARG(odr <= QMC5883L_DR_200 && osr <= QMC5883L_OSR_512 && rng <= QMC5883L_RNG_8);
   uint8_t v = 0;
   range = rng;
-  ret = i2c_write_byte(REG_ID, 0x0B, 0x01); // Define set/reset period
-  ret = i2c_write_byte(REG_ID, 0x09, ((v & 0xfe) | mode) | ((odr & 3) << 2) | ((rng & 1) << 4) | ((osr & 3) << 6));
+  ret = i2c_write_byte(QMC_REG_ID, 0x0B, 0x01); // Define set/reset period
+  ret = i2c_write_byte(QMC_REG_ID, 0x09, ((v & 0xfe) | mode) | ((odr & 3) << 2) | ((rng & 1) << 4) | ((osr & 3) << 6));
   ESP_LOGI(TAG, "配置输出数据速率：%s", (odr == QMC5883L_DR_10 ? "10Hz" : (odr == QMC5883L_DR_50 ? "50Hz": (odr == QMC5883L_DR_100 ? "100Hz": "200Hz"))));
   ESP_LOGI(TAG, "配置过采样率：%s", (osr == QMC5883L_OSR_64 ? "64 samples" : (osr == QMC5883L_OSR_128 ? "128 samples": (osr == QMC5883L_OSR_256 ? "256 samples": "512 samples"))));
   ESP_LOGI(TAG, "设置模式：%s", ((v & 0xfe) | mode) == 1 ? "连续测量模式" : "待命模式");
@@ -73,7 +73,7 @@ esp_err_t qmc5883l_set_config(qmc5883l_mode_t mode, qmc5883l_odr_t odr, qmc5883l
 esp_err_t qmc5883l_get_raw_data(qmc5883l_raw_data_t *raw)
 {
   CHECK_ARG(raw);
-  esp_err_t ret = i2c_read_data(REG_ID, 0x00, raw, 6);
+  esp_err_t ret = i2c_read_data(QMC_REG_ID, 0x00, raw, 6);
   if (ret != ESP_OK)
     ESP_LOGE(TAG, "无法读取数据 %d", ret);
   return ret;
@@ -181,7 +181,7 @@ void init_qmc5883l()
 {
   // 多设备共用一组i2c设置个延时再去初始化
   vTaskDelay(50 / portTICK_PERIOD_MS);
-  if (i2c_check_dev(REG_ID) != ESP_OK)
+  if (i2c_check_dev(QMC_REG_ID) != ESP_OK)
   {
     ESP_LOGI(TAG, "检测不到I2C地址0x0D, QMC5883L初始化失败");
   }

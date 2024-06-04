@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:15:45
+ * @LastEditTime: 2024-06-04 10:05:57
  */
 #include "pcf8563.h"
 
@@ -10,7 +10,7 @@ static const char *TAG = "PCF8563";
 
 bool initialized_pcf8563()
 {
-  return i2c_check_dev(REG_ID) == ESP_OK;
+  return i2c_check_dev(PCF_REG_ID) == ESP_OK;
 }
 
 esp_err_t pcf8563_reset()
@@ -18,14 +18,14 @@ esp_err_t pcf8563_reset()
   uint8_t data[2];
   data[0] = 0;
   data[1] = 0;
-  i2c_write_byte(REG_ID, 0x00, 0);
-  i2c_write_byte(REG_ID, 0x01, 0);
+  i2c_write_byte(PCF_REG_ID, 0x00, 0);
+  i2c_write_byte(PCF_REG_ID, 0x01, 0);
   return ESP_OK;
 }
 
 void init_pcf8563()
 {
-  if (i2c_check_dev(REG_ID) != ESP_OK)
+  if (i2c_check_dev(PCF_REG_ID) != ESP_OK)
   {
     ESP_LOGI(TAG, "检测不到I2C地址0x51, PCF8563初始化失败");
   }
@@ -54,7 +54,7 @@ esp_err_t pcf8563_set_time(struct tm *time)
   data[4] = dec2bcd(time->tm_wday);    // tm_wday is 0 to 6
   data[5] = dec2bcd(time->tm_mon); // tm_mon is 0 to 11
   data[6] = dec2bcd(time->tm_year);
-  esp_err_t err = i2c_write_data(REG_ID, 0x02, data, sizeof(data));
+  esp_err_t err = i2c_write_data(PCF_REG_ID, 0x02, data, sizeof(data));
   return err;
 }
 
@@ -63,7 +63,7 @@ esp_err_t pcf8563_get_time(struct tm *time)
 
   uint8_t data[7];
   /* read time */
-  esp_err_t res = i2c_read_data(REG_ID, 0x02, data, sizeof(data));
+  esp_err_t res = i2c_read_data(PCF_REG_ID, 0x02, data, sizeof(data));
   if (res != ESP_OK)
     return res;
   time->tm_sec = bcd2dec(data[0] & 0x7F);

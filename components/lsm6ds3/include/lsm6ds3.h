@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-31 16:12:11
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-03-25 21:27:21
+ * @LastEditTime: 2024-06-04 10:05:29
  */
 #pragma once
 
@@ -16,7 +16,7 @@ extern "C"
 #include <stdio.h>
 #include "i2c.h"
 
-#define REG_ID 0x6A
+#define LSM_REG_ID 0x6A
 
   // esp_err_t bmp280_restart();
   // esp_err_t bmp280_read_param();
