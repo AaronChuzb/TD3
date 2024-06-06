@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 17:20:14
+ * @LastEditTime: 2024-06-06 22:31:32
  */
 
 #ifndef MODEL_H
@@ -49,6 +49,8 @@ extern "C"
 
   void time_model_init();
 
+  void battery_model_init(void);
+
   void cJSON_Init();
   void load_config2ram();
   char *get_config_item_char(char *key);
@@ -57,6 +59,9 @@ extern "C"
   bool update_config_item_int(char *key, int value);
   bool get_config_item_bool(char *key);
   bool update_config_item_bool(char *key, bool value);
+
+
+  
 
   void Model_init(void);
 

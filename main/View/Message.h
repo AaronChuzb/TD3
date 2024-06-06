@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:18:53
+ * @LastEditTime: 2024-06-06 21:48:17
  */
 
 
@@ -39,6 +39,10 @@ extern "C" {
 
 #define MSG_GET_TIME 14
 #define MSG_SET_TIME 15
+
+#define MSG_BATTERY_GET_DATA_EVENT 16
+#define MSG_BATTERY_DESTROY_EVENT 17
+#define MSG_BATTERY_DATA 18
 
 #ifdef __cplusplus
 } /* extern "C" */

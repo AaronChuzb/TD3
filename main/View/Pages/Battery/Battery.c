@@ -1,42 +1,42 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 15:35:31
+ * @LastEditTime: 2024-06-06 22:42:26
  */
 
 #include "Battery.h"
 
 PageType *Battery;
 
-LV_IMG_DECLARE(ui_img_voltage_png);    // assets/voltage.png
-LV_IMG_DECLARE(ui_img_current_png);    // assets/current.png
-LV_IMG_DECLARE(ui_img_charge_png);    // assets/charge.png
-LV_IMG_DECLARE(ui_img_coulomb_png);    // assets/coulomb.png
+LV_IMG_DECLARE(ui_img_voltage_png); // assets/voltage.png
+LV_IMG_DECLARE(ui_img_current_png); // assets/current.png
+LV_IMG_DECLARE(ui_img_charge_png);  // assets/charge.png
+LV_IMG_DECLARE(ui_img_coulomb_png); // assets/coulomb.png
 
 LV_FONT_DECLARE(lv_dingdingjinbu_14)
 
-static lv_obj_t * ui_votagebox;
-static lv_obj_t * ui_votageicon;
-static lv_obj_t * ui_votagetitle;
-static lv_obj_t * ui_votagevalue;
-static lv_obj_t * ui_currentbox;
-static lv_obj_t * ui_currenticon;
-static lv_obj_t * ui_currentvalue;
-static lv_obj_t * ui_currenttitle;
-static lv_obj_t * ui_chargebox;
-static lv_obj_t * ui_chargeicon;
-static lv_obj_t * ui_chargevalue;
-static lv_obj_t * ui_chargetitle;
-static lv_obj_t * ui_coulombbox;
-static lv_obj_t * ui_coulombicon;
-static lv_obj_t * ui_coulombvalue;
-static lv_obj_t * ui_coulombtitle;
-static lv_obj_t * ui_Panel5;
-static lv_obj_t * ui_resetcoulomb;
-static lv_obj_t * ui_Label10;
-static lv_obj_t * ui_stopcharge;
-static lv_obj_t * ui_Label11;
-static lv_obj_t * ui_Label12;
+static lv_obj_t *ui_votagebox;
+static lv_obj_t *ui_votageicon;
+static lv_obj_t *ui_votagetitle;
+static lv_obj_t *ui_votagevalue;
+static lv_obj_t *ui_currentbox;
+static lv_obj_t *ui_currenticon;
+static lv_obj_t *ui_currentvalue;
+static lv_obj_t *ui_currenttitle;
+static lv_obj_t *ui_chargebox;
+static lv_obj_t *ui_chargeicon;
+static lv_obj_t *ui_chargevalue;
+static lv_obj_t *ui_chargetitle;
+static lv_obj_t *ui_coulombbox;
+static lv_obj_t *ui_coulombicon;
+static lv_obj_t *ui_coulombvalue;
+static lv_obj_t *ui_coulombtitle;
+static lv_obj_t *ui_Panel5;
+static lv_obj_t *ui_resetcoulomb;
+static lv_obj_t *ui_Label10;
+static lv_obj_t *ui_stopcharge;
+static lv_obj_t *ui_Label11;
+static lv_obj_t *ui_Label12;
 
 static void event_cb(lv_event_t *e)
 {
@@ -44,6 +44,42 @@ static void event_cb(lv_event_t *e)
   printf("%s", lv_msgbox_get_active_btn_text(obj));
   lv_msgbox_close(obj);
   Page_Back(1);
+}
+
+typedef struct
+{
+  float battery_voltage;
+  float battery_current;
+  bool battery_charge;
+  float battery_coulomb;
+} battery_data_t;
+
+static void event_handle_cb(void *s, lv_msg_t *m)
+{
+  LV_UNUSED(s);
+  switch (lv_msg_get_id(m))
+  {
+  case MSG_BATTERY_DATA:
+    battery_data_t *data = lv_msg_get_payload(m);
+    // printf("battery_voltage:%f\n", data->battery_voltage);
+    char votage[10];
+    sprintf(votage, "%.2fV", data->battery_voltage);
+    lv_label_set_text(ui_votagevalue, votage);
+    char current[10];
+    sprintf(current, "%.2fmA", data->battery_current);
+    lv_label_set_text(ui_currentvalue, current);
+    char coulomb[10];
+    sprintf(coulomb, "%.2fmAh", data->battery_coulomb);
+    lv_label_set_text(ui_coulombvalue, coulomb);
+    if(data->battery_charge){
+      lv_label_set_text(ui_chargevalue, "是");
+    } else {
+      lv_label_set_text(ui_chargevalue, "否");
+    }
+    break;
+  default:
+    break;
+  }
 }
 
 static void Created()
@@ -241,6 +277,11 @@ static void Created()
   lv_label_set_long_mode(ui_Label12, LV_LABEL_LONG_SCROLL_CIRCULAR);
   lv_label_set_text(ui_Label12, "重置库仑计将会使库仑计数据归零，请在电量即将耗尽时操作。");
   lv_obj_set_style_text_font(ui_Label12, &lv_dingdingjinbu_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+  lv_msg_subsribe(MSG_BATTERY_DATA, event_handle_cb, NULL);
+
+  // 发送消息创建获取任务
+  lv_msg_send(MSG_BATTERY_GET_DATA_EVENT, NULL);
 }
 
 static void Update(void)
@@ -249,6 +290,7 @@ static void Update(void)
 
 static void Destroy(void)
 {
+  lv_msg_send(MSG_BATTERY_DESTROY_EVENT, NULL);
   if (lv_obj_is_valid(Battery->PageContent))
   {
     lv_async_call(lv_obj_clean, Battery->PageContent);

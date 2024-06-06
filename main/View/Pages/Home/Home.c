@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:31:50
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 14:19:33
+ * @LastEditTime: 2024-06-06 21:45:57
  */
 
 #include "Home.h"
@@ -178,7 +178,7 @@ void home_menu()
   lv_obj_set_style_bg_opa(cont, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_size(cont, LV_HOR_RES / 2, LV_VER_RES - 25);
-  lv_obj_align(cont, LV_ALIGN_TOP_LEFT, 0, 25);
+  lv_obj_align(cont, LV_ALIGN_TOP_RIGHT, 0, 25);
 
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
 
@@ -191,7 +191,7 @@ void home_menu()
   lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
 
   lv_obj_t *box = lv_btn_create(Home->PageContent);
-  lv_obj_align(box, LV_ALIGN_RIGHT_MID, LV_HOR_RES / 2, 12);
+  lv_obj_align(box, LV_ALIGN_LEFT_MID, -LV_HOR_RES / 2, 12);
   lv_obj_set_size(box, LV_HOR_RES, LV_HOR_RES);
   lv_obj_set_style_radius(box, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
   lv_obj_set_style_bg_color(box, lv_color_hex(0x292831), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -218,7 +218,7 @@ void home_menu()
                         LV_ROLLER_MODE_INFINITE);
 
   // lv_obj_center(title_roller);
-  lv_obj_align(title_roller, LV_ALIGN_TOP_LEFT, 5, 20);
+  lv_obj_align(title_roller, LV_ALIGN_TOP_RIGHT, -5, 20);
   lv_roller_set_visible_row_count(title_roller, 1);
 
   sub_title = lv_label_create(box);
@@ -227,7 +227,7 @@ void home_menu()
   lv_label_set_text(sub_title, "");
   lv_label_set_long_mode(sub_title, LV_LABEL_LONG_WRAP);
   lv_obj_set_style_text_color(sub_title, lv_color_hex(0xabb2bf), LV_PART_MAIN);
-  lv_obj_align(sub_title, LV_ALIGN_TOP_LEFT, 2, 60);
+  lv_obj_align(sub_title, LV_ALIGN_TOP_RIGHT, 5, 60);
 
   uint32_t i;
   for (i = 0; i < sizeof(button_data) / sizeof(button_data[0]); i++)
