@@ -8,6 +8,7 @@ extern "C"
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -123,9 +124,6 @@ extern "C"
 #define SUSPEND_TASK 0
 #define RESUME_TASK 1
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 /* Attributes State Machine */
