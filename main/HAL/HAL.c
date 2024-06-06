@@ -20,7 +20,7 @@ void get_sram_size()
 void HAL_init()
 {
   // init_blk();
-  init_uarts();
+  // init_uarts();
 
   init_i2c();
   init_bmp280();
@@ -36,6 +36,7 @@ void HAL_init()
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // init_wifi();
   // sntp_setlocaltime();
+  // hal_ble_init();
 
   uint8_t mac[6];
   // 获取MAC地址

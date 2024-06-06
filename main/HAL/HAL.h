@@ -123,6 +123,36 @@ extern "C"
 #define SUSPEND_TASK 0
 #define RESUME_TASK 1
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+/* Attributes State Machine */
+enum
+{
+    IDX_SVC,
+    IDX_CHAR_A,
+    IDX_CHAR_VAL_A,
+    IDX_CHAR_CFG_A,
+
+    IDX_CHAR_LED,
+    IDX_CHAR_VAL_LED,
+
+    IDX_CHAR_TEMP,
+    IDX_CHAR_VAL_TEMP,
+    IDX_CHAR_CFG_TEMP,
+
+    IDX_CHAR_B,
+    IDX_CHAR_VAL_B,
+
+    IDX_CHAR_C,
+    IDX_CHAR_VAL_C,
+
+    HRS_IDX_NB,
+};
+
+
 #ifndef ft_open                                                                                                                                 // 自定义 FATFS打开文件使用， ftopen(fd, path, FA_READ)
 #define ft_open(fd, path, mode) (fd = heap_caps_malloc(sizeof(FIL), MALLOC_CAP_SPIRAM), (f_open(fd, (path), mode) == 0) ? (0) : (free(fd), -1)) // 自带申请一个内存 并且打开失败时自动释放内存
 #endif
@@ -164,6 +194,9 @@ extern "C"
 
   // UART
   void init_uarts(void);
+
+  // BLE
+  void hal_ble_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/
