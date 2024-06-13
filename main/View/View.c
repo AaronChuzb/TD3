@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 14:19:50
+ * @LastEditTime: 2024-06-13 10:37:22
  */
 #include "View/View.h"
 
@@ -25,7 +25,7 @@ void init_view(void)
   Weather_Init();
 
 
-  Page_Replace("Home");
+  Page_Replace("Gyro");
   // lv_obj_t *label = lv_label_create(lv_scr_act());
 
   // lv_label_set_text(label, "你好");
