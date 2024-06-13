@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-13 10:37:22
+ * @LastEditTime: 2024-06-13 16:06:28
  */
 #include "View/View.h"
 
@@ -25,7 +25,7 @@ void init_view(void)
   Weather_Init();
 
 
-  Page_Replace("Gyro");
+  Page_Replace("Home");
   // lv_obj_t *label = lv_label_create(lv_scr_act());
 
   // lv_label_set_text(label, "你好");
@@ -42,3 +42,5 @@ void init_view(void)
   // lv_obj_t *lottie = lv_rlottie_create_from_raw(lv_scr_act(), 120, 120, lv_example_rlottie_approve);
   // lv_obj_center(lottie);
 }
+
+

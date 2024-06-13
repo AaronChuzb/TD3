@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 21:48:17
+ * @LastEditTime: 2024-06-13 14:23:27
  */
 
 
@@ -43,6 +43,12 @@ extern "C" {
 #define MSG_BATTERY_GET_DATA_EVENT 16
 #define MSG_BATTERY_DESTROY_EVENT 17
 #define MSG_BATTERY_DATA 18
+
+
+#define MSG_GYRO_GET_DATA_EVENT 19
+#define MSG_GYRO_DESTROY_EVENT 20
+#define MSG_GYRO_DATA 21
+
 
 #ifdef __cplusplus
 } /* extern "C" */
