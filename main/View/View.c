@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 14:19:50
+ * @LastEditTime: 2024-06-13 16:06:28
  */
 #include "View/View.h"
 
@@ -42,3 +42,5 @@ void init_view(void)
   // lv_obj_t *lottie = lv_rlottie_create_from_raw(lv_scr_act(), 120, 120, lv_example_rlottie_approve);
   // lv_obj_center(lottie);
 }
+
+

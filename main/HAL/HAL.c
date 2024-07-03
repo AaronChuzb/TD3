@@ -21,6 +21,11 @@ void HAL_init()
 {
   // init_blk();
   // init_uarts();
+  init_blk();
+  init_lcd();
+  // 由于需要挂载字库到PSRAM所以先初始化SDMMC
+  init_sdmmc();
+  init_lvgl_port();
 
   init_i2c();
   init_bmp280();
@@ -63,9 +68,5 @@ void HAL_init()
 
 void Pre_HAL_Init()
 {
-  init_blk();
-  init_lcd();
-  // 由于需要挂载字库到PSRAM所以先初始化SDMMC
-  init_sdmmc();
-  init_lvgl_port();
+  
 }

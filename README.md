@@ -4,7 +4,10 @@
 
 # 介绍视频
 
-<iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=1853047000&bvid=BV1cp421R78N&cid=1508688648&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+<img src="image/README/content.gif" width="400px" />
+
+[B站早期视频](https://player.bilibili.com/player.html?isOutside=true&aid=1853047000&bvid=BV1cp421R78N&cid=1508688648&p=1)
+
 
 # TD3 项目配置
 

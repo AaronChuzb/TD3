@@ -9,9 +9,10 @@ static const char *TAG = "main";
 
 void app_main()
 {
-  Pre_HAL_Init();
-  lvgl_task_init();
+  // Pre_HAL_Init();
   HAL_init();
+  lvgl_task_init();
+  
   Model_init();
   load_config2ram();
   // get_config_item_char("version");
@@ -31,15 +32,16 @@ void app_main()
 
   // init_tone();
   
-  // while (1)
-  // {
-  //   // if(is_sd_present()){
-  //   //   printf("sd card is present\n");
-  //   // } else {
-  //   //   printf("sd card is not present\n");
+  while (1)
+  {
+    // if(is_sd_present()){
+    //   printf("sd card is present\n");
+    // } else {
+    //   printf("sd card is not present\n");
 
-  //   // }
-  //   // get_sram_size();
-  //   vTaskDelay(1000 / portTICK_PERIOD_MS);
-  // }
+    // }
+    // get_sram_size();
+    Page_Update();
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
 }

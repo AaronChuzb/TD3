@@ -1,13 +1,15 @@
 /*
  * @Date: 2024-02-01 15:45:05
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-04 10:05:37
+ * @LastEditTime: 2024-06-17 16:56:50
  */
 #include "lsm6ds3.h"
-// #include <math.h>
+#include <math.h>
 
 static const char *TAG = "LSM6DS3";
-#define PI 3.14159265358979323846
+float const PI = 3.14159265F;
+
+gyro_data_t gyro_data;
 
 /**
  * @description: 获取芯片id
@@ -27,7 +29,8 @@ esp_err_t lsm6ds3_get_temp()
   uint8_t data[2];
   esp_err_t ret = i2c_read_data(LSM_REG_ID, 0x20, data, 2);
   temperature = (float)(((int16_t)(data[1] << 8) | data[0]) * 0.0625) + 25.0;
-  ESP_LOGI(TAG, "补偿温度: %.1f", temperature);
+  // ESP_LOGI(TAG, "补偿温度: %.1f", temperature);
+  gyro_data.temp = temperature;
   return ret;
 }
 
@@ -41,7 +44,10 @@ esp_err_t lsm6ds3_get_gyroscope()
   gx = (float)(((int16_t)(data[1] << 8) | data[0]) * g_fact);
   gy = (float)(((int16_t)(data[3] << 8) | data[2]) * g_fact);
   gz = (float)(((int16_t)(data[5] << 8) | data[4]) * g_fact);
-  ESP_LOGI(TAG, "加速度数据: gx: %.1f, gy: %.1f, gz: %.1f", gx, gy, gz);
+  // ESP_LOGI(TAG, "数据: gx: %.1f, gy: %.1f, gz: %.1f", gx, gy, gz);
+  gyro_data.gx = gx;
+  gyro_data.gy = gy;
+  gyro_data.gz = gz;
   return ret;
 }
 
@@ -54,38 +60,46 @@ esp_err_t lsm6ds3_get_accelerometer()
   ax = (float)(((int16_t)(data[1] << 8) | data[0]) * x_fact);
   ay = (float)(((int16_t)(data[3] << 8) | data[2]) * x_fact);
   az = (float)(((int16_t)(data[5] << 8) | data[4]) * x_fact);
-  ESP_LOGI(TAG, "陀螺仪数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
+  // ESP_LOGI(TAG, "数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
+
+  gyro_data.ax = ax;
+  gyro_data.ay = ay;
+  gyro_data.az = az;
   return ret;
 }
 
-
-
-float lsm6ds3_get_accelerometer_x() {
-  float x_fact = 0.00006103515625;
-  float ax;
-  uint8_t data[2];
-  esp_err_t ret = i2c_read_data(LSM_REG_ID, 0x28, data, 2);
-  ax = (float)(((int16_t)(data[1] << 8) | data[0]) * x_fact);
-  // ESP_LOGI(TAG, "加速度数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
-  return ax;
+void lsm6ds3_get_orientation()
+{
+  float roll, pitch, yaw;
+  roll = (float)atan2(gyro_data.ay, gyro_data.az);
+  if (gyro_data.ay * sin(roll) + gyro_data.az * cos(roll) == 0)
+  {
+    pitch = gyro_data.ax > 0 ? (PI / 2) : (-PI / 2);
+  }
+  else
+  {
+    pitch = (float)atan(-gyro_data.ax / (gyro_data.ay * sin(roll) + gyro_data.az * cos(roll)));
+  }
+  roll 	 = - roll * 180.0 / PI;
+	pitch 	 =   pitch * 180.0 / PI;
+  gyro_data.roll = roll;
+  gyro_data.pitch = pitch;
 }
 
-float lsm6ds3_get_accelerometer_y() {
-  float x_fact = 0.00006103515625;
-  float ay; 
-  uint8_t data[4];
-  esp_err_t ret = i2c_read_data(LSM_REG_ID, 0x28, data, 4);
-  ay = (float)(((int16_t)(data[3] << 8) | data[2]) * x_fact);
-  // ESP_LOGI(TAG, "加速度数据: ax: %.1f, ay: %.1f, az: %.1f", ax, ay, az);
-  return ay;
+gyro_data_t lsm6ds3_get_all_data()
+{
+  lsm6ds3_get_temp();
+  lsm6ds3_get_gyroscope();
+  lsm6ds3_get_accelerometer();
+  lsm6ds3_get_orientation();
+  return gyro_data;
 }
-
 
 /**
  * @description: 初始化
  * @return {*}
  */
-void                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     init_lsm6ds3()
+void init_lsm6ds3()
 {
   // 多设备共用一组i2c设置个延时再去初始化
   // vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -109,9 +123,5 @@ void                                                                            
 
     i2c_write_byte(LSM_REG_ID, 0x10, 0x40);
     i2c_write_byte(LSM_REG_ID, 0x11, 0x40);
-
-    lsm6ds3_get_temp();
-    lsm6ds3_get_gyroscope();
-    lsm6ds3_get_accelerometer();
   }
 }

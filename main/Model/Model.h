@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:52:59
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 22:31:32
+ * @LastEditTime: 2024-06-13 14:44:30
  */
 
 #ifndef MODEL_H
@@ -50,6 +50,8 @@ extern "C"
   void time_model_init();
 
   void battery_model_init(void);
+
+  void gyro_model_init(void);
 
   void cJSON_Init();
   void load_config2ram();

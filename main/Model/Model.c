@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 09:59:02
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-06 22:30:25
+ * @LastEditTime: 2024-06-13 14:44:40
  */
 
 #include "Model.h"
@@ -41,6 +41,7 @@ void Model_init(void)
   statusbar_viewmodel_init();
   time_model_init();
   battery_model_init();
+  gyro_model_init();
   Queue_init();
   xTaskCreate(Model_receive_message_task, "Model_receive_message_task", 1024 * 2, NULL, 2, NULL);
 }

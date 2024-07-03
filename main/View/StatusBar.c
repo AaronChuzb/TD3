@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:43:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-03 14:43:34
+ * @LastEditTime: 2024-06-14 10:57:25
  */
 
 #include "StatusBar.h"
@@ -115,7 +115,7 @@ static void msg_event_cb(lv_event_t *e)
       {
         lv_obj_set_style_text_color(label, lv_color_hex(0x61b865), LV_PART_MAIN);
       }
-      else if (strcmp(battery_str, LV_SYMBOL_BATTERY_2) == 0 || strcmp(battery_str, LV_SYMBOL_BATTERY_1) == 0)
+      else if (strcmp(battery_str, LV_SYMBOL_BATTERY_2) == 0 || strcmp(battery_str, LV_SYMBOL_BATTERY_1) == 0 || strcmp(battery_str, LV_SYMBOL_BATTERY_3) == 0)
       {
         lv_obj_set_style_text_color(label, lv_color_hex(0xffcd44), LV_PART_MAIN);
       }
