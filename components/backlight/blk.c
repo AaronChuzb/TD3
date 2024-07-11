@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-09 17:13:35
+ * @LastEditTime: 2024-07-11 17:54:03
  */
 #include "blk.h"
 
@@ -34,7 +34,7 @@ void init_blk()
 
 void setBackLightLevel(int level)
 {
-  int value = clamp(level, 0, 15);
+  int value = clamp(level, 1, 16);
   int i, num_clk, num_clk_to, num_clk_from;
   if (value == 0)
   {
@@ -47,13 +47,13 @@ void setBackLightLevel(int level)
     if (current == 0)
     {
       gpio_set_level(BACKLIGHT_GPIO, 1);
-      current = 15;
+      current = 16;
     }
-    num_clk_from = 15 - current;
-    num_clk_to = 15 - value;
-    num_clk = (15 + num_clk_to - num_clk_from) % 15;
-    // printf("num_clk, %d", num_clk);
-    for (i = 0; i < num_clk; i++)
+    num_clk_from = 16 - current;
+    num_clk_to = 16 - value;
+    num_clk = (16 + num_clk_to - num_clk_from) % 16;
+    printf("num_clk, %d", num_clk);
+    for (i = 1; i <= num_clk; i++)
     {
       gpio_set_level(BACKLIGHT_GPIO, 0);
       gpio_set_level(BACKLIGHT_GPIO, 1);
