@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-07-11 17:54:03
+ * @LastEditTime: 2024-07-11 17:59:30
  */
 #include "blk.h"
 
@@ -34,7 +34,8 @@ void init_blk()
 
 void setBackLightLevel(int level)
 {
-  int value = clamp(level, 1, 16);
+  // 懒得单独写off函数了 直接用0来关闭
+  int value = clamp(level, 0, 16);
   int i, num_clk, num_clk_to, num_clk_from;
   if (value == 0)
   {
