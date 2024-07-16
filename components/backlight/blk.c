@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-02-01 18:31:36
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-07-11 17:59:30
+ * @LastEditTime: 2024-07-13 17:09:42
  */
 #include "blk.h"
 
@@ -58,7 +58,7 @@ void setBackLightLevel(int level)
     {
       gpio_set_level(BACKLIGHT_GPIO, 0);
       gpio_set_level(BACKLIGHT_GPIO, 1);
-      if (i == 0)
+      if (i == 1 && current == 16)
         esp_rom_delay_us(30);
     }
     current = value;
