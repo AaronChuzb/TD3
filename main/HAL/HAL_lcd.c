@@ -233,13 +233,13 @@ void init_lvgl_port()
   // alloc draw buffers used by LVGL
   // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
   // 只要开了DMA这里申请的内存都在片内
-  lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  lv_color_t *buf1 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf1);
-  lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 2 * sizeof(lv_color_t));
+  lv_color_t *buf2 = malloc(LCD_H_RES * LCD_V_RES / 4 * sizeof(lv_color_t));
   assert(buf2);
 
   // initialize LVGL draw buffers
-  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 2);
+  lv_disp_draw_buf_init(&disp_buf, buf1, buf2, LCD_H_RES * LCD_V_RES / 4);
 
   ESP_LOGI(TAG, "注册显示驱动至LVGL");
   lv_disp_drv_init(&disp_drv);

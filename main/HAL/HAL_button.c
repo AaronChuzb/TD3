@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-03 15:44:56
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-13 22:59:42
+ * @LastEditTime: 2024-07-16 14:57:21
  */
 
 #include "HAL.h"
@@ -37,6 +37,7 @@ int flag = 1;
  */
 void button_event_cb(void *arg, void *data)
 {
+  // sntp_setlocaltime();
   // esp_pm_config_t pm_config = {};
   // pm_config.max_freq_mhz = 40;
   // esp_err_t err = esp_pm_configure(&pm_config);

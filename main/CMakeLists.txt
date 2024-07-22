@@ -34,5 +34,7 @@ idf_component_register(
   "View/Pages/Files"
   "View/Pages/Battery"
   "View/Pages/Weather"
+
+  EMBED_TXTFILES ./Resource/root_cert.pem
 )
 fatfs_create_spiflash_image(storage ../storage FLASH_IN_PROJECT)

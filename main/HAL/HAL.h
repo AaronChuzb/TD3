@@ -32,6 +32,9 @@ extern "C"
 #include "sdmmc_cmd.h"
 #include "driver/sdmmc_host.h"
 
+#include "esp_tls.h"
+#include "esp_http_client.h"
+
 #include "esp_system.h"
 #include "esp_wifi.h"
 #include "esp_mac.h"
@@ -69,6 +72,8 @@ extern "C"
 #include "View.h"
 #include "Message.h"
 
+#include "cJSON.h"
+
 
 
 
@@ -89,7 +94,7 @@ extern "C"
 
   // WiFi
 
-#define WIFI_SSID "WYX"
+#define WIFI_SSID "AaronChu"
 #define WIFI_PASS "05210122"
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT BIT1
@@ -195,6 +200,10 @@ enum
 
   // BLE
   void hal_ble_init(void);
+
+  // HTTP
+  void http_native_request(void);
+  void http_process(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

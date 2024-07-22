@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-23 22:36:39
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-04-07 23:38:54
+ * @LastEditTime: 2024-07-19 09:41:21
  */
 #include "HAL.h"
 
@@ -71,7 +71,7 @@ void wifi_init_sta(void)
       .sta = {
           .ssid = WIFI_SSID,
           .password = WIFI_PASS,
-          .threshold.authmode = WIFI_AUTH_WPA2_PSK,
+          .threshold.authmode = WIFI_AUTH_WPA_WPA2_PSK,
       },
   };
   ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));

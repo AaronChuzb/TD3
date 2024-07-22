@@ -39,7 +39,8 @@ void HAL_init()
 
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  // init_wifi();
+  init_wifi();
+  
   // sntp_setlocaltime();
   // hal_ble_init();
 
