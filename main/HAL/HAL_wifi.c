@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-03-23 22:36:39
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-07-19 09:41:21
+ * @LastEditTime: 2024-07-23 16:47:45
  */
 #include "HAL.h"
 
@@ -74,6 +74,7 @@ void wifi_init_sta(void)
           .threshold.authmode = WIFI_AUTH_WPA_WPA2_PSK,
       },
   };
+  // ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_FLASH));
   ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
   ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
   ESP_ERROR_CHECK(esp_wifi_start());
@@ -115,7 +116,7 @@ void wifi_scan_task()
   nvs_flash_init();
   wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
   esp_wifi_init(&cfg);
-  esp_wifi_set_storage(WIFI_STORAGE_RAM);
+  esp_wifi_set_storage(WIFI_STORAGE_FLASH);
   esp_wifi_set_mode(WIFI_MODE_STA);
   esp_wifi_start();
 

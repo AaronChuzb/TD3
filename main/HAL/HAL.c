@@ -20,7 +20,7 @@ void get_sram_size()
 void HAL_init()
 {
   // init_blk();
-  // init_uarts();
+  // 
   init_blk();
   init_lcd();
   // 由于需要挂载字库到PSRAM所以先初始化SDMMC
@@ -39,7 +39,8 @@ void HAL_init()
 
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
-  init_wifi();
+  // init_wifi();
+  init_uarts();
   
   // sntp_setlocaltime();
   // hal_ble_init();

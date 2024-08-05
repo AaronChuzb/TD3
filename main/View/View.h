@@ -31,6 +31,8 @@ extern "C" {
 #include "Files.h"
 #include "Battery.h"
 #include "Weather.h"
+#include "Network.h"
+#include "Terminal.h"
 
 //本文件是用于挂载自定义字体的文件
 void init_view(void);

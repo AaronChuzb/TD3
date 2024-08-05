@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-07 23:49:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-13 14:23:27
+ * @LastEditTime: 2024-07-24 10:00:15
  */
 
 
@@ -48,6 +48,8 @@ extern "C" {
 #define MSG_GYRO_GET_DATA_EVENT 19
 #define MSG_GYRO_DESTROY_EVENT 20
 #define MSG_GYRO_DATA 21
+
+#define MSG_UART_DATA 22
 
 
 #ifdef __cplusplus

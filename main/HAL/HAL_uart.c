@@ -1,12 +1,15 @@
 /*
  * @Date: 2024-04-27 21:39:04
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-13 23:10:38
+ * @LastEditTime: 2024-07-24 11:06:41
  */
 
 #include "HAL.h"
+#include <string.h>
 
+// char *data_all_str;
 static const int RX_BUF_SIZE = 10240;
+char *data_str ;
 
 #define TXD_PIN (GPIO_NUM_43)
 #define RXD_PIN (GPIO_NUM_44)
@@ -24,7 +27,8 @@ static void rx_task(void *arg)
     {
       data[rxBytes] = 0;
       ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-      // ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+      sprintf(data_str, "%s", data);
+      lv_msg_send(MSG_UART_DATA, data_str);
     }
   }
   free(data);
@@ -32,6 +36,7 @@ static void rx_task(void *arg)
 
 void init_uarts(void)
 {
+  data_str = (char *)heap_caps_malloc(RX_BUF_SIZE + 1, MALLOC_CAP_SPIRAM);
   const uart_config_t uart_config = {
       .baud_rate = 115200,
       .data_bits = UART_DATA_8_BITS,

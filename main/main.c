@@ -16,8 +16,8 @@ void app_main()
   Model_init();
   load_config2ram();
   // http_native_request();
-  http_process();
-  get_sram_size();
+  // http_process();
+  // get_sram_size();
   // get_config_item_char("version");
   // update_config_item_char("version", "2.0.0");
   // load_config2ram();

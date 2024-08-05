@@ -16,6 +16,8 @@ idf_component_register(
   "View/Pages/Files"
   "View/Pages/Battery"
   "View/Pages/Weather"
+  "View/Pages/Network"
+  "View/Pages/Terminal"
           
   INCLUDE_DIRS 
   "."
@@ -34,6 +36,8 @@ idf_component_register(
   "View/Pages/Files"
   "View/Pages/Battery"
   "View/Pages/Weather"
+  "View/Pages/Network"
+  "View/Pages/Terminal"
 
   EMBED_TXTFILES ./Resource/root_cert.pem
 )

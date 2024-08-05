@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-05 21:06:24
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-06-13 16:06:28
+ * @LastEditTime: 2024-08-05 08:57:02
  */
 #include "View/View.h"
 
@@ -23,9 +23,11 @@ void init_view(void)
   Files_Init();
   Battery_Init();
   Weather_Init();
+  Network_Init();
+  Terminal_Init();
 
 
-  Page_Replace("Home");
+  Page_Replace("StartUp");
   // lv_obj_t *label = lv_label_create(lv_scr_act());
 
   // lv_label_set_text(label, "你好");
