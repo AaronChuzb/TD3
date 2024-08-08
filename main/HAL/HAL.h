@@ -133,25 +133,42 @@ extern "C"
 
 
 /* Attributes State Machine */
+// enum
+// {
+//     IDX_SVC,
+//     // IDX_CHAR_A,
+//     // IDX_CHAR_VAL_A,
+//     // IDX_CHAR_CFG_A,
+
+//     // IDX_CHAR_LED,
+//     // IDX_CHAR_VAL_LED,
+
+//     IDX_CHAR_TEMP,
+//     IDX_CHAR_VAL_TEMP,
+//     IDX_CHAR_CFG_TEMP,
+
+//     // IDX_CHAR_B,
+//     // IDX_CHAR_VAL_B,
+
+//     // IDX_CHAR_C,
+//     // IDX_CHAR_VAL_C,
+
+//     HRS_IDX_NB,
+// };
+///Attributes State Machine
 enum
 {
-    IDX_SVC,
-    // IDX_CHAR_A,
-    // IDX_CHAR_VAL_A,
-    // IDX_CHAR_CFG_A,
+    HRS_IDX_SVC,
 
-    // IDX_CHAR_LED,
-    // IDX_CHAR_VAL_LED,
+    HRS_IDX_HR_MEAS_CHAR,
+    HRS_IDX_HR_MEAS_VAL,
+    HRS_IDX_HR_MEAS_NTF_CFG,
 
-    IDX_CHAR_TEMP,
-    IDX_CHAR_VAL_TEMP,
-    IDX_CHAR_CFG_TEMP,
+    HRS_IDX_BOBY_SENSOR_LOC_CHAR,
+    HRS_IDX_BOBY_SENSOR_LOC_VAL,
 
-    // IDX_CHAR_B,
-    // IDX_CHAR_VAL_B,
-
-    // IDX_CHAR_C,
-    // IDX_CHAR_VAL_C,
+    HRS_IDX_HR_CTNL_PT_CHAR,
+    HRS_IDX_HR_CTNL_PT_VAL,
 
     HRS_IDX_NB,
 };
