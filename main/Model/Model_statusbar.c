@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-04-09 13:52:54
  * @LastEditors: AaronChu
- * @LastEditTime: 2024-05-31 22:39:44
+ * @LastEditTime: 2024-08-08 10:39:10
  */
 
 #include "Model.h"
@@ -78,7 +78,7 @@ void task_update_statusbar(void *pvParameters)
 void connect_wifi(void *pvParameters)
 {
   init_wifi();
-  get_sram_size();
+  // get_sram_size();
   vTaskDelete(NULL);
 }
 
@@ -91,7 +91,7 @@ static void event_handle_cb(void *s, lv_msg_t *m)
     xTaskCreate(connect_wifi, "connect_wifi", 1024 * 5, NULL, 1, NULL);
     break;
   case MSG_GET_SRAM:
-    get_sram_size();
+    // get_sram_size();
     break;
   default:
     break;

@@ -75,6 +75,7 @@ extern "C"
 #include "cJSON.h"
 
 
+#define USE_BLUETOOTH 1
 
 
 
@@ -135,22 +136,22 @@ extern "C"
 enum
 {
     IDX_SVC,
-    IDX_CHAR_A,
-    IDX_CHAR_VAL_A,
-    IDX_CHAR_CFG_A,
+    // IDX_CHAR_A,
+    // IDX_CHAR_VAL_A,
+    // IDX_CHAR_CFG_A,
 
-    IDX_CHAR_LED,
-    IDX_CHAR_VAL_LED,
+    // IDX_CHAR_LED,
+    // IDX_CHAR_VAL_LED,
 
     IDX_CHAR_TEMP,
     IDX_CHAR_VAL_TEMP,
     IDX_CHAR_CFG_TEMP,
 
-    IDX_CHAR_B,
-    IDX_CHAR_VAL_B,
+    // IDX_CHAR_B,
+    // IDX_CHAR_VAL_B,
 
-    IDX_CHAR_C,
-    IDX_CHAR_VAL_C,
+    // IDX_CHAR_C,
+    // IDX_CHAR_VAL_C,
 
     HRS_IDX_NB,
 };
@@ -166,7 +167,7 @@ enum
   // HAL
   void HAL_init();
   void Pre_HAL_Init();
-  void get_sram_size();
+  // void get_sram_size();
 
   // SDMMC
   void init_sdmmc();

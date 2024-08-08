@@ -2,7 +2,7 @@
 
 static const char *TAG = "HAL";
 
-void get_sram_size()
+static void get_sram_size()
 {
   // 获取剩余内存大小
   int freeHeap = esp_get_free_heap_size();
@@ -40,10 +40,10 @@ void HAL_init()
   //  vTaskDelay(6000 / portTICK_PERIOD_MS);
   // vTaskDelay(3000 / portTICK_PERIOD_MS);
   // init_wifi();
-  init_uarts();
+  // init_uarts();
   
   // sntp_setlocaltime();
-  // hal_ble_init();
+  hal_ble_init();
 
   uint8_t mac[6];
   // 获取MAC地址
