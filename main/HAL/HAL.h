@@ -131,46 +131,14 @@ extern "C"
   enum
   {
       IDX_SVC,
-      // IDX_CHAR_A,
-      // IDX_CHAR_VAL_A,
-      // IDX_CHAR_CFG_A,
-
-      // IDX_CHAR_LED,
-      // IDX_CHAR_VAL_LED,
 
       IDX_CHAR_TEMP,
       IDX_CHAR_VAL_TEMP,
       IDX_CHAR_CFG_TEMP,
-
-      // IDX_CHAR_B,
-      // IDX_CHAR_VAL_B,
-
-      // IDX_CHAR_C,
-      // IDX_CHAR_VAL_C,
-
+      
       HRS_IDX_NB,
   };
-  /// Attributes State Machine
-  // enum
-  // {
-  //   HRS_IDX_SVC,
 
-  //   // HRS_IDX_HR_MEAS_CHAR,
-  //   // HRS_IDX_HR_MEAS_VAL,
-  //   // HRS_IDX_HR_MEAS_NTF_CFG,
-
-  //   // HRS_IDX_BOBY_SENSOR_LOC_CHAR,
-  //   // HRS_IDX_BOBY_SENSOR_LOC_VAL,
-
-  //   IDX_CHAR_TEMP,
-  //   IDX_CHAR_VAL_TEMP,
-  //   IDX_CHAR_CFG_TEMP,
-
-  //   // HRS_IDX_HR_CTNL_PT_CHAR,
-  //   // HRS_IDX_HR_CTNL_PT_VAL,
-
-  //   HRS_IDX_NB,
-  // };
 
 #ifndef ft_open                                                                                                                                 // 自定义 FATFS打开文件使用， ftopen(fd, path, FA_READ)
 #define ft_open(fd, path, mode) (fd = heap_caps_malloc(sizeof(FIL), MALLOC_CAP_SPIRAM), (f_open(fd, (path), mode) == 0) ? (0) : (free(fd), -1)) // 自带申请一个内存 并且打开失败时自动释放内存
